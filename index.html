@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Copa Conejo - Bad Bunny Song Mashup</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Compara las mejores canciones de Bad Bunny de dos en dos y descubre cuál es tu favorita absoluta en este torneo interactivo.">
+  <meta name="keywords" content="Bad Bunny, Torneo, Canciones, Reggaeton, Un Verano Sin Ti, YHLQMDLG, Nadie Sabe, Música, Comparar">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Fondo dinámico con partículas -->
+  <div class="animated-bg"></div>
+  <div class="grid-overlay"></div>
+  
+  <!-- Contenedor para Confeti en la victoria -->
+  <div id="confetti-container" class="pointer-events-none"></div>
+
+  <!-- Header Principal -->
+  <header class="main-header">
+    <h1 class="logo-text">LA COPA CONEJO</h1>
+    <p class="subtitle">¿Cuál es la mejor canción del Conejo Malo?</p>
+  </header>
+
+  <!-- Contenedor Principal de la App -->
+  <main class="app-container">
+    
+    <!-- PANTALLA 0: Selección de Modo -->
+    <section id="mode-selection-screen" class="glass-panel text-center fade-in mb-8">
+      <h2 class="text-3xl font-bold mb-4 font-display neon-text uppercase tracking-widest" style="text-shadow: 0 0 10px rgba(255,255,255,0.5);">Elige tu Modo</h2>
+      <p class="text-gray-300 mb-8 max-w-md mx-auto">Selecciona la experiencia que quieres jugar. Puedes armar tu torneo por eras o jugar el setlist oficial del Tour 2025.</p>
+
+      <div class="flex flex-col gap-6 max-w-sm mx-auto">
+        <button id="btn-mode-classic" class="btn-primary flex flex-col items-center justify-center p-4">
+          <span class="text-xl mb-1">🏆 Torneo Clásico</span>
+          <span class="text-xs text-gray-200 font-normal opacity-80" style="text-transform: none;">Arma tu propio cuadro eliminatorio seleccionando eras.</span>
+        </button>
+        
+        <button id="btn-mode-survivor" class="btn-primary flex flex-col items-center justify-center p-4" style="background: linear-gradient(135deg, #ff4b2b, #ff416c);">
+          <span class="text-xl mb-1">🔥 Especial Tour 2025</span>
+          <span class="text-xs text-gray-200 font-normal opacity-80" style="text-transform: none;">Modo Supervivencia: Juegan 2, gana 1 y sigue en la pista!</span>
+        </button>
+        
+        <button id="btn-mode-quiz" class="btn-primary flex flex-col items-center justify-center p-4" style="background: linear-gradient(135deg, #11998e, #38ef7d);">
+          <span class="text-xl mb-1">⏱️ Trivia Velocidad (Blind)</span>
+          <span class="text-xs text-gray-200 font-normal opacity-80" style="text-transform: none;">Adivina la canción escuchando a ciegas lo más rápido posible.</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- PANTALLA 1: CONFIGURACIÓN -->
+    <section id="config-screen" class="glass-panel text-center hidden fade-in relative">
+      <button class="btn-back-to-menu absolute top-4 left-4 text-sm text-gray-400 hover:text-white transition-colors" onclick="location.reload()">
+        ← Volver
+      </button>
+      <h2 class="section-title mt-4">Elige el Tamaño del Torneo</h2>
+      <p class="text-gray-400 mb-6 text-sm">Enfréntalas 1v1 en eliminatorias directas hasta descubrir tu favorita.</p>
+      
+      <!-- Selector de tamaño -->
+      <div class="size-selector flex justify-center gap-4 mb-8">
+        <button type="button" class="btn-size" data-size="8">8 Canciones</button>
+        <button type="button" class="btn-size active" data-size="16">16 Canciones</button>
+        <button type="button" class="btn-size" data-size="32">32 Canciones</button>
+        <button type="button" class="btn-size" data-size="64">64 Canciones</button>
+      </div>
+
+      <!-- Selector de Eras / Álbumes -->
+      <h3 class="subsection-title">Selecciona las Eras / Álbumes a Incluir</h3>
+      <div class="album-selector-grid mb-8">
+        <label class="album-checkbox-card theme-dtmf">
+          <input type="checkbox" class="album-checkbox" value="dtmf" checked>
+          <span class="card-inner">
+            <span class="emoji">📸</span>
+            <span class="title">DeBÍ TiRAR MáS FOToS</span>
+            <span class="year">2025</span>
+          </span>
+        </label>
+
+        <label class="album-checkbox-card theme-uvst">
+          <input type="checkbox" class="album-checkbox" value="uvst" checked>
+          <span class="card-inner">
+            <span class="emoji">🏖️</span>
+            <span class="title">Un Verano Sin Ti</span>
+            <span class="year">2022</span>
+          </span>
+        </label>
+        
+        <label class="album-checkbox-card theme-yhlqmdlg">
+          <input type="checkbox" class="album-checkbox" value="yhlqmdlg" checked>
+          <span class="card-inner">
+            <span class="emoji">🛹</span>
+            <span class="title">YHLQMDLG</span>
+            <span class="year">2020</span>
+          </span>
+        </label>
+
+        <label class="album-checkbox-card theme-nadiesabe">
+          <input type="checkbox" class="album-checkbox" value="nadiesabe" checked>
+          <span class="card-inner">
+            <span class="emoji">🐎</span>
+            <span class="title">Nadie Sabe...</span>
+            <span class="year">2023</span>
+          </span>
+        </label>
+
+        <label class="album-checkbox-card theme-eutdm">
+          <input type="checkbox" class="album-checkbox" value="eutdm" checked>
+          <span class="card-inner">
+            <span class="emoji">🚛</span>
+            <span class="title">El Último Tour</span>
+            <span class="year">2020</span>
+          </span>
+        </label>
+
+        <label class="album-checkbox-card theme-x100pre">
+          <input type="checkbox" class="album-checkbox" value="x100pre" checked>
+          <span class="card-inner">
+            <span class="emoji">👁️‍🗨️</span>
+            <span class="title">X 100PRE</span>
+            <span class="year">2018</span>
+          </span>
+        </label>
+
+        <label class="album-checkbox-card theme-singles">
+          <input type="checkbox" class="album-checkbox" value="singles" checked>
+          <span class="card-inner">
+            <span class="emoji">😈</span>
+            <span class="title">Singles & Oasis</span>
+            <span class="year">Trap/Hits</span>
+          </span>
+        </label>
+      </div>
+
+      <!-- Estimación / Mensaje de Error -->
+      <div id="pool-count" class="text-sm font-semibold mb-2">0 canciones disponibles</div>
+      <div id="config-error" class="hidden error-badge mb-6"></div>
+
+      <!-- Botón Comenzar -->
+      <button id="btn-start" class="btn-primary w-full max-w-sm mb-12">
+        <span>INICIAR TORNEO</span>
+      </button>
+    </section>
+
+    <!-- PANTALLA 2: ARENA DE BATALLA -->
+    <section id="arena-screen" class="hidden relative">
+      <button class="btn-back-to-menu absolute top-0 left-0 sm:-left-4 text-sm text-gray-400 hover:text-white transition-colors z-50" onclick="location.reload()">
+        ← Menú
+      </button>
+      <!-- Pestañas del Torneo -->
+      <div id="nav-bracket" class="flex justify-center gap-2 mb-6 hidden">
+        <button id="tab-arena-btn" class="tab-btn active" onclick="switchTab('arena')">🏟️ La Arena (1v1)</button>
+        <button id="tab-bracket-btn" class="tab-btn" onclick="switchTab('bracket')">📊 Cuadro (Bracket)</button>
+      </div>
+
+      <!-- Contenido 1: Arena 1v1 -->
+      <div id="battle-arena-content" class="fade-in">
+        <!-- Cabecera del Matchup -->
+        <div class="matchup-header text-center mb-6">
+          <h2 id="round-title" class="round-title text-xl md:text-2xl font-extrabold tracking-wide uppercase text-white">Octavos de Final</h2>
+          <div id="match-progress" class="text-xs text-gray-400 uppercase tracking-widest mt-1">Enfrentamiento 1 de 8</div>
+          
+          <!-- Barra de progreso -->
+          <div class="progress-bar-container mx-auto mt-3">
+            <div id="progress-bar-fill" class="progress-bar-fill"></div>
+          </div>
+        </div>
+
+        <!-- Layout 1v1 -->
+        <div class="battle-ground-layout">
+          <!-- Canción Izquierda -->
+          <div id="card-left" class="song-card-wrapper">
+            <div class="card-badge">OPCIÓN A</div>
+            <div class="song-cover-container">
+              <span id="left-emoji" class="song-cover-emoji">🏖️</span>
+            </div>
+            <button id="btn-preview-left" class="btn-preview" type="button" title="Escuchar un poco">🎧</button>
+            <div class="song-info">
+              <h3 id="left-title" class="song-title">Tití Me Preguntó</h3>
+              <p id="left-album" class="song-album">Un Verano Sin Ti</p>
+              <span id="left-year" class="song-year">2022</span>
+            </div>
+            <button class="btn-vote">ELEGIR</button>
+          </div>
+
+          <!-- Divisor VS -->
+          <div class="vs-divider">
+            <div class="vs-circle">VS</div>
+          </div>
+
+          <!-- Canción Derecha -->
+          <div id="card-right" class="song-card-wrapper">
+            <div class="card-badge">OPCIÓN B</div>
+            <div class="song-cover-container">
+              <span id="right-emoji" class="song-cover-emoji">🛹</span>
+            </div>
+            <button id="btn-preview-right" class="btn-preview" type="button" title="Escuchar un poco">🎧</button>
+            <div class="song-info">
+              <h3 id="right-title" class="song-title">Safaera</h3>
+              <p id="right-album" class="song-album">YHLQMDLG</p>
+              <span id="right-year" class="song-year">2020</span>
+            </div>
+            <button class="btn-vote">ELEGIR</button>
+          </div>
+        </div>
+        
+        <p class="text-center text-xs text-gray-400 mt-6">Puedes usar las flechas ⬅️ ➡️ o teclas A/D para votar. Pulsa 🎧 para escuchar un fragmento.</p>
+      </div>
+
+      <!-- Contenido 2: Bracket/Cuadro Completo -->
+      <div id="bracket-view-content" class="hidden fade-in">
+        <div class="bracket-instructions text-center mb-4">
+          <p class="text-xs text-gray-400">Desliza horizontalmente para ver el cuadro completo del torneo.</p>
+        </div>
+        <div class="bracket-scroll-wrapper">
+          <div id="bracket-container" class="bracket-tree-layout">
+            <!-- Rellenado dinámicamente en JS -->
+          </div>
+          <div id="survivor-leaderboard" class="hidden flex flex-col gap-3 max-w-2xl mx-auto w-full pb-8"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANTALLA 3: CAMPEÓN Y RANKING -->
+    <section id="winner-screen" class="glass-panel text-center hidden fade-in">
+      <h2 class="winner-congrats-title">¡Tenemos Ganadora!</h2>
+      <p class="text-gray-400 mb-6 text-sm">Tu canción favorita absoluta de Bad Bunny es:</p>
+
+      <!-- Tarjeta del Ganador -->
+      <div id="winner-banner" class="winner-showcase-card mx-auto mb-8">
+        <div class="crown-badge">👑 CAMPEONA</div>
+        <div class="winner-cover-container">
+          <span id="winner-emoji" class="winner-cover-emoji">🥇</span>
+        </div>
+        <div class="winner-info text-left">
+          <h3 id="winner-title" class="winner-title">Ojitos Lindos</h3>
+          <p id="winner-album" class="winner-album">Un Verano Sin Ti</p>
+          <span id="winner-year" class="winner-year">2022</span>
+      </div>
+
+      <!-- Sección de Ranking (Top 8) -->
+      <div class="ranking-section max-w-lg mx-auto mb-8">
+        <h3 class="subsection-title mb-4">Tu Top de Canciones</h3>
+        <div id="ranking-list" class="flex flex-col gap-2">
+          <!-- Rellenado dinámicamente en JS -->
+        </div>
+      </div>
+
+      <!-- Botón Reiniciar -->
+      <button class="btn-primary btn-restart w-full max-w-sm">
+        <span>JUGAR DE NUEVO</span>
+      </button>
+    </section>
+
+    <!-- PANTALLA 4: TRIVIA / BLIND TEST -->
+    <section id="quiz-screen" class="glass-panel text-center hidden fade-in w-full max-w-3xl mx-auto relative">
+      <button class="btn-back-to-menu absolute -top-4 left-0 sm:-left-4 text-sm text-gray-400 hover:text-white transition-colors" onclick="location.reload()">
+        ← Abandonar
+      </button>
+      <div class="flex justify-between items-center mb-6 mt-4">
+        <h2 id="quiz-progress-text" class="text-xl font-bold uppercase tracking-widest text-white opacity-80">Pregunta 1/10</h2>
+        <div id="quiz-timer" class="text-2xl font-bold neon-text" style="color: #38ef7d;">30.0s</div>
+      </div>
+      
+      <!-- Visualizador Ciego -->
+      <div class="mb-10 mt-4 flex justify-center">
+        <div id="quiz-audio-visualizer" class="w-32 h-32 rounded-full flex items-center justify-center" style="background: radial-gradient(circle, #ff416c, #ff4b2b); box-shadow: 0 0 30px #ff4b2b; animation: pulse 1.5s infinite;">
+          <span class="text-5xl">🎧</span>
+        </div>
+      </div>
+      
+      <p class="text-gray-300 mb-6 font-medium">¿Qué canción está sonando?</p>
+      
+      <!-- Opciones -->
+      <div id="quiz-options-container" class="flex flex-col gap-3">
+        <!-- Rellenado en JS -->
+      </div>
+    </section>
+
+    <!-- PANTALLA 5: RESULTADOS TRIVIA -->
+    <section id="quiz-winner-screen" class="glass-panel text-center hidden fade-in w-full max-w-3xl mx-auto">
+      <h2 class="text-4xl font-bold mb-4 font-display neon-text uppercase tracking-widest" style="color: #38ef7d; text-shadow: 0 0 15px rgba(56, 239, 125, 0.6);">¡Trivia Completada!</h2>
+      
+      <div class="flex flex-col gap-4 my-8 p-6 rounded-2xl bg-black bg-opacity-40 border border-gray-700">
+        <div class="flex justify-between items-center text-xl">
+          <span class="text-gray-300">Aciertos:</span>
+          <span id="quiz-result-correct" class="font-bold text-white">8 / 10</span>
+        </div>
+        <div class="flex justify-between items-center text-xl">
+          <span class="text-gray-300">Tiempo Promedio:</span>
+          <span id="quiz-result-time" class="font-bold text-white">4.5s</span>
+        </div>
+        <div class="w-full h-px bg-gray-600 my-2"></div>
+        <div class="flex justify-between items-center text-3xl">
+          <span class="text-gray-300">Puntuación Total:</span>
+          <span id="quiz-result-score" class="font-bold neon-text" style="color: #ffd700;">12500</span>
+        </div>
+      </div>
+      
+      <div class="ranking-section max-w-lg mx-auto mb-8">
+        <h3 class="subsection-title mb-4">🏆 Mejores Puntuaciones</h3>
+        <div id="quiz-leaderboard-list" class="flex flex-col gap-2 text-left">
+          <!-- Rellenado dinámicamente -->
+        </div>
+      </div>
+      
+      <button class="btn-primary btn-restart w-full max-w-sm" style="background: linear-gradient(135deg, #11998e, #38ef7d);">
+        <span>VOLVER A JUGAR</span>
+      </button>
+    </section>
+
+  </main>
+
+  <footer class="main-footer">
+    <p>A disfrutaaaar 🐰🔥 Ningún conejo fue dañado en este proceso.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "seda",
+    "title": "SEDA (feat. Bryant Myers)",
+    "album": "Nadie Sabe Lo Que Va A Pasar Mañana",
+    "year": 2023,
+    "theme": "nadiesabe",
+    "emoji": "👔"
+  },
+  {
+    "id": "vou7y",
+    "title": "VOU7Y",
+    "album": "Nadie Sabe Lo Que Va A Pasar Mañana",
+    "year": 2023,
+    "theme": "nadiesabe",
+    "emoji": "✨"
+  },
+  {
+    "id": "baticano",
+    "title": "BATICANO",
+    "album": "Nadie Sabe Lo Que Va A Pasar Mañana",
+    "year": 2023,
+    "theme": "nadiesabe",
+    "emoji": "🦇"
+  },
+  {
+    "id": "gracias-por-nada",
+    "title": "GRACIAS POR NADA",
+    "album": "Nadie Sabe Lo Que Va A Pasar Mañana",
+    "year": 2023,
+    "theme": "nadiesabe",
+    "emoji": "🗑️"
+  }
+]

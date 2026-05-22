@@ -1,0 +1,596 @@
+const SONGS_DATABASE = [
+  {
+    id: "titi-me-pregunto",
+    title: "Tití Me Preguntó",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "🏖️",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ee/c1/61/eec16130-2d09-e5a6-891e-21178c56436a/mzaf_507894679185476986.plus.aac.p.m4a"
+  },
+  {
+    id: "me-porto-bonito",
+    title: "Me Porto Bonito (feat. Chencho Corleone)",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "🔥",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/9a/84/a2/9a84a2ea-eb19-12e2-2aaf-627fdee22545/mzaf_17649029454870883985.plus.aac.p.m4a"
+  },
+  {
+    id: "ojitos-lindos",
+    title: "Ojitos Lindos (feat. Bomba Estéreo)",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "👁️",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/72/ae/81/72ae81c2-4ef3-b998-40b6-563c0609509f/mzaf_12868850384306577273.plus.aac.p.m4a"
+  },
+  {
+    id: "efecto",
+    title: "Efecto",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "⚡",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4e/ec/7b/4eec7bd9-982c-bb39-4acb-77d724502e8a/mzaf_9582878707075648609.plus.aac.p.m4a"
+  },
+  {
+    id: "moscow-mule",
+    title: "Moscow Mule",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "🍹",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/9b/3a/85/9b3a85d7-3544-0a83-76cf-18dd022e143b/mzaf_2334221945359492587.plus.aac.p.m4a"
+  },
+  {
+    id: "neverita",
+    title: "Neverita",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "🕶️",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/23/26/dd/2326dd0b-f117-306c-8454-be8934ffb402/mzaf_18297346266039659444.plus.aac.p.m4a"
+  },
+  {
+    id: "despues-de-la-playa",
+    title: "Después de la Playa",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "🎷",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f6/c6/a0/f6c6a092-1690-3328-907d-280a8ba6adac/mzaf_4195200870757777362.plus.aac.p.m4a"
+  },
+  {
+    id: "tarot",
+    title: "Tarot (feat. Jhayco)",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "🃏",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/93/23/dd/9323ddbb-4a2c-249b-9e39-88703c567f41/mzaf_12486720115800977792.plus.aac.p.m4a"
+  },
+  {
+    id: "un-ratito",
+    title: "Un Ratito",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "⏳",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/43/b5/bc/43b5bce5-570b-785a-689b-93cd9a54dc66/mzaf_15429211941515184697.plus.aac.p.m4a"
+  },
+  {
+    id: "andrea",
+    title: "Andrea (feat. Buscabulla)",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "👒",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/05/a6/31/05a631fa-1b1b-34da-8142-d52aeb58eebf/mzaf_13202829663887568334.plus.aac.p.m4a"
+  },
+  {
+    id: "otro-atardecer",
+    title: "Otro Atardecer (feat. The Marías)",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "🌅",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3e/5f/85/3e5f858c-d5e2-76d2-f093-6e3e738b15af/mzaf_11064066927076408850.plus.aac.p.m4a"
+  },
+  {
+    id: "un-coco",
+    title: "Un Coco",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "🥥",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/23/fe/3c/23fe3c8e-f711-f1aa-09a7-0ee6d722ce0b/mzaf_12118970714648286716.plus.aac.p.m4a"
+  },
+  {
+    id: "dos-mil-16",
+    title: "Dos Mil 16",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "📼",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2c/34/81/2c3481a8-c0a1-ce8f-760c-da9debedc7a2/mzaf_4753365874605227736.plus.aac.p.m4a"
+  },
+  {
+    id: "el-apagon",
+    title: "El Apagón",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "⚡",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/88/1a/d2/881ad258-4d49-a5d0-3b35-1b318d527197/mzaf_3975222456564799946.plus.aac.p.m4a"
+  },
+  {
+    id: "aguacero",
+    title: "Aguacero",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "🌧️",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/98/fa/03/98fa0366-fd41-b3ee-2307-c1a5b6f68050/mzaf_4495795716019268936.plus.aac.p.m4a"
+  },
+  {
+    id: "ensename-a-bailar",
+    title: "Enséñame a Bailar",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "💃",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d2/5c/bc/d25cbc2c-9333-e77b-116b-97aa3df37dbd/mzaf_17984155223864039749.plus.aac.p.m4a"
+  },
+  {
+    id: "safaera",
+    title: "Safaera (feat. Jowell & Randy)",
+    album: "YHLQMDLG",
+    year: 2020,
+    theme: "yhlqmdlg",
+    emoji: "🛹",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/dd/ba/e3/ddbae3c9-29ea-d596-96ba-dd322272c5f6/mzaf_14005940560076990317.plus.aac.p.m4a"
+  },
+  {
+    id: "la-santa",
+    title: "La Santa (feat. Daddy Yankee)",
+    album: "YHLQMDLG",
+    year: 2020,
+    theme: "yhlqmdlg",
+    emoji: "😇",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ad/6e/c5/ad6ec577-7790-bba5-12cb-5f78c87e07f9/mzaf_4789972617466519274.plus.aac.p.m4a"
+  },
+  {
+    id: "si-veo-a-tu-mama",
+    title: "Si Veo a Tu Mamá",
+    album: "YHLQMDLG",
+    year: 2020,
+    theme: "yhlqmdlg",
+    emoji: "😭",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b3/cd/a2/b3cda27f-382a-ed21-b6b9-2d6d1d4c5bbe/mzaf_15368178672903748165.plus.aac.p.m4a"
+  },
+  {
+    id: "la-dificil",
+    title: "La Difícil",
+    album: "YHLQMDLG",
+    year: 2020,
+    theme: "yhlqmdlg",
+    emoji: "👑",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3d/bb/07/3dbb070e-7def-6973-fb9d-a2ba6e23ade2/mzaf_10872476211479128210.plus.aac.p.m4a"
+  },
+  {
+    id: "yo-perreo-sola",
+    title: "Yo Perreo Sola",
+    album: "YHLQMDLG",
+    year: 2020,
+    theme: "yhlqmdlg",
+    emoji: "💃",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/dd/45/0c/dd450c77-20ac-97a8-4b6f-189de32647b5/mzaf_3088503985720431976.plus.aac.p.m4a"
+  },
+  {
+    id: "ignorantes",
+    title: "Ignorantes (feat. Sech)",
+    album: "YHLQMDLG",
+    year: 2020,
+    theme: "yhlqmdlg",
+    emoji: "💔",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e5/cd/6f/e5cd6f7a-846c-791b-6ecc-519f85fa94da/mzaf_1308995959799076230.plus.aac.p.m4a"
+  },
+  {
+    id: "bichiyal",
+    title: "Bichiyal (feat. Yaviah)",
+    album: "YHLQMDLG",
+    year: 2020,
+    theme: "yhlqmdlg",
+    emoji: "🏍️",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/71/f0/fa/71f0faaa-bd26-006b-6060-6f6700bbe0fe/mzaf_1676135694668797571.plus.aac.p.m4a"
+  },
+  {
+    id: "vete",
+    title: "Vete",
+    album: "YHLQMDLG",
+    year: 2020,
+    theme: "yhlqmdlg",
+    emoji: "🚪",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/9e/ed/26/9eed26a0-2242-8bb7-6232-03248ff65f38/mzaf_11531603017291507693.plus.aac.p.m4a"
+  },
+  {
+    id: "25-8",
+    title: "25/8",
+    album: "YHLQMDLG",
+    year: 2020,
+    theme: "yhlqmdlg",
+    emoji: "⏰",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/9a/36/f2/9a36f259-8848-2071-4c41-4824e67a495b/mzaf_14902156511595530735.plus.aac.p.m4a"
+  },
+  {
+    id: "a-tu-merced",
+    title: "A Tu Merced",
+    album: "YHLQMDLG",
+    year: 2020,
+    theme: "yhlqmdlg",
+    emoji: "🛏️",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/17/ec/ef/17eceff9-59e2-3dbc-2395-eb83903b7d03/mzaf_3226979305489942701.plus.aac.p.m4a"
+  },
+  {
+    id: "solia",
+    title: "Soliá",
+    album: "YHLQMDLG",
+    year: 2020,
+    theme: "yhlqmdlg",
+    emoji: "💨",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e9/d8/4b/e9d84bc4-48ab-cd48-4114-f72359e62d68/mzaf_6762542665764117915.plus.aac.p.m4a"
+  },
+  {
+    id: "la-zona",
+    title: "La Zona",
+    album: "YHLQMDLG",
+    year: 2020,
+    theme: "yhlqmdlg",
+    emoji: "🚧",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ab/72/1a/ab721ae7-6281-e3a7-ea65-bab65a0d20ae/mzaf_4876322880574549450.plus.aac.p.m4a"
+  },
+  {
+    id: "monaco",
+    title: "MONACO",
+    album: "Nadie Sabe Lo Que Va A Pasar Mañana",
+    year: 2023,
+    theme: "nadiesabe",
+    emoji: "🏎️",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/aa/20/e1/aa20e16d-6a31-75d8-f929-b3d15402d014/mzaf_17931258878377910738.plus.aac.p.m4a"
+  },
+  {
+    id: "perro-negro",
+    title: "PERRO NEGRO (feat. Feid)",
+    album: "Nadie Sabe Lo Que Va A Pasar Mañana",
+    year: 2023,
+    theme: "nadiesabe",
+    emoji: "🐕",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/7d/66/2f/7d662f25-7023-0301-f9dc-0e8ce7155a56/mzaf_11838409189562420602.plus.aac.p.m4a"
+  },
+  {
+    id: "fina",
+    title: "FINA (feat. Young Miko)",
+    album: "Nadie Sabe Lo Que Va A Pasar Mañana",
+    year: 2023,
+    theme: "nadiesabe",
+    emoji: "🤫",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/92/2a/4b/922a4b90-3dde-c8e1-97f9-d610743e58f3/mzaf_2438940676305701570.plus.aac.p.m4a"
+  },
+  {
+    id: "hibiki",
+    title: "HIBIKI (feat. Mora)",
+    album: "Nadie Sabe Lo Que Va A Pasar Mañana",
+    year: 2023,
+    theme: "nadiesabe",
+    emoji: "🥃",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d4/cf/a4/d4cfa4fb-b94c-7dbc-4141-86710241f0f3/mzaf_14103554806807714088.plus.aac.p.m4a"
+  },
+  {
+    id: "un-preview",
+    title: "UN PREVIEW",
+    album: "Nadie Sabe Lo Que Va A Pasar Mañana",
+    year: 2023,
+    theme: "nadiesabe",
+    emoji: "🐎",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/75/38/42/753842ef-552a-be59-4e3f-8ade625dc4bd/mzaf_13312280848277164966.plus.aac.p.m4a"
+  },
+  {
+    id: "seda",
+    title: "SEDA (feat. Bryant Myers)",
+    album: "Nadie Sabe Lo Que Va A Pasar Mañana",
+    year: 2023,
+    theme: "nadiesabe",
+    emoji: "👔",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/57/8a/17/578a17d4-3ab9-b379-92ec-5fbfb1c9505c/mzaf_4863485028599427699.plus.aac.p.m4a"
+  },
+  {
+    id: "where-she-goes",
+    title: "WHERE SHE GOES",
+    album: "Nadie Sabe Lo Que Va A Pasar Mañana",
+    year: 2023,
+    theme: "nadiesabe",
+    emoji: "🌌",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ad/82/2d/ad822dea-6b44-13de-2593-7604181fde02/mzaf_13281917994889460607.plus.aac.p.m4a"
+  },
+  {
+    id: "mr-october",
+    title: "Mr. October",
+    album: "Nadie Sabe Lo Que Va A Pasar Mañana",
+    year: 2023,
+    theme: "nadiesabe",
+    emoji: "⚾",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ad/68/f3/ad68f34f-897a-0988-0c6f-b6a228e7c46f/mzaf_14312081941548417042.plus.aac.p.m4a"
+  },
+  {
+    id: "cybertruck",
+    title: "Cybertruck",
+    album: "Nadie Sabe Lo Que Va A Pasar Mañana",
+    year: 2023,
+    theme: "nadiesabe",
+    emoji: "📐",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/55/21/5a/55215a1f-5347-ac64-1a73-51dd79b27784/mzaf_14136676008117607438.plus.aac.p.m4a"
+  },
+  {
+    id: "vou7y",
+    title: "VOU7Y",
+    album: "Nadie Sabe Lo Que Va A Pasar Mañana",
+    year: 2023,
+    theme: "nadiesabe",
+    emoji: "✨",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4f/9a/77/4f9a776b-23ce-877f-03e5-966de543859f/mzaf_11944417217944518372.plus.aac.p.m4a"
+  },
+  {
+    id: "no-me-quiero-casar",
+    title: "No Me Quiero Casar",
+    album: "Nadie Sabe Lo Que Va A Pasar Mañana",
+    year: 2023,
+    theme: "nadiesabe",
+    emoji: "💍",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/88/09/c0/8809c0f5-7169-7219-49a6-d30edfeb448e/mzaf_4788092368644578104.plus.aac.p.m4a"
+  },
+  {
+    id: "baticano",
+    title: "BATICANO",
+    album: "Nadie Sabe Lo Que Va A Pasar Mañana",
+    year: 2023,
+    theme: "nadiesabe",
+    emoji: "🦇",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/9f/19/86/9f198699-682b-bf70-c79b-abacec44a41e/mzaf_6458569164932360839.plus.aac.p.m4a"
+  },
+  {
+    id: "gracias-por-nada",
+    title: "GRACIAS POR NADA",
+    album: "Nadie Sabe Lo Que Va A Pasar Mañana",
+    year: 2023,
+    theme: "nadiesabe",
+    emoji: "🗑️",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/53/2a/cf/532acfbf-bc5d-0cdb-fd0e-21c13e91bb37/mzaf_7342393327582022930.plus.aac.p.m4a"
+  },
+  {
+    id: "dakiti",
+    title: "Dákiti (feat. Jhayco)",
+    album: "El Último Tour Del Mundo",
+    year: 2020,
+    theme: "eutdm",
+    emoji: "🚛",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/91/ab/b9/91abb91c-4e28-b7ae-6b76-b2257b7ee7c4/mzaf_15037794813217074157.plus.aac.p.m4a"
+  },
+  {
+    id: "la-noche-de-anoche",
+    title: "La Noche de Anoche (with Rosalía)",
+    album: "El Último Tour Del Mundo",
+    year: 2020,
+    theme: "eutdm",
+    emoji: "🌹",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e1/68/7d/e1687dbd-9fa8-6330-f8bc-9f2d539ab039/mzaf_6426845985048084789.plus.aac.p.m4a"
+  },
+  {
+    id: "booker-t",
+    title: "Booker T",
+    album: "El Último Tour Del Mundo",
+    year: 2020,
+    theme: "eutdm",
+    emoji: "🏆",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/21/2b/8e/212b8eaf-b99c-e0e7-42e8-27f7fd701514/mzaf_4772784024094951049.plus.aac.p.m4a"
+  },
+  {
+    id: "te-mudaste",
+    title: "Te Mudaste",
+    album: "El Último Tour Del Mundo",
+    year: 2020,
+    theme: "eutdm",
+    emoji: "📦",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/47/78/81/4778818d-1313-7dc5-3183-f4c1b8745374/mzaf_18130379589461580070.plus.aac.p.m4a"
+  },
+  {
+    id: "yo-visto-asi",
+    title: "Yo Visto Así",
+    album: "El Último Tour Del Mundo",
+    year: 2020,
+    theme: "eutdm",
+    emoji: "👟",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/23/0e/60/230e6078-0550-7f1d-5b3a-83f9ba9c893c/mzaf_13043718732366245803.plus.aac.p.m4a"
+  },
+  {
+    id: "120",
+    title: "120",
+    album: "El Último Tour Del Mundo",
+    year: 2020,
+    theme: "eutdm",
+    emoji: "🔥",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2b/17/62/2b1762f2-bd7d-41c0-839c-20c964ff45de/mzaf_1155106365794524557.plus.aac.p.m4a"
+  },
+  {
+    id: "haciendo-que-me-amas",
+    title: "Haciendo Que Me Amas",
+    album: "El Último Tour Del Mundo",
+    year: 2020,
+    theme: "eutdm",
+    emoji: "🖤",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/db/16/0d/db160de2-ce8c-582c-7f42-3a7bd44afd6d/mzaf_509961440627713465.plus.aac.p.m4a"
+  },
+  {
+    id: "maldita-pobreza",
+    title: "Maldita Pobreza",
+    album: "El Último Tour Del Mundo",
+    year: 2020,
+    theme: "eutdm",
+    emoji: "💸",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/75/e0/39/75e039d8-f18b-92e2-5f87-fee0494eead8/mzaf_14320473857455168528.plus.aac.p.m4a"
+  },
+  {
+    id: "caro",
+    title: "Caro",
+    album: "X 100PRE",
+    year: 2018,
+    theme: "x100pre",
+    emoji: "👁️‍🗨️",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/48/f3/f9/48f3f913-8611-5dae-b9f7-b7e99e9618d0/mzaf_9554157280783761668.plus.aac.p.m4a"
+  },
+  {
+    id: "ni-bien-ni-mal",
+    title: "Ni Bien Ni Mal",
+    album: "X 100PRE",
+    year: 2018,
+    theme: "x100pre",
+    emoji: "🐩",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/97/a7/dc/97a7dc0b-3412-8bf9-6d3d-affa5cce0ac6/mzaf_14104158146329838429.plus.aac.p.m4a"
+  },
+  {
+    id: "estamos-bien",
+    title: "Estamos Bien",
+    album: "X 100PRE",
+    year: 2018,
+    theme: "x100pre",
+    emoji: "🤙",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/fc/2b/1f/fc2b1f38-b2af-4ba6-e144-26e8442f8586/mzaf_16057425778477285662.plus.aac.p.m4a"
+  },
+  {
+    id: "la-romana",
+    title: "La Romana (feat. El Alfa)",
+    album: "X 100PRE",
+    year: 2018,
+    theme: "x100pre",
+    emoji: "🔥",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/67/68/da/6768da23-2a87-1a61-3e0c-6343bbf7def2/mzaf_12566167496288218150.plus.aac.p.m4a"
+  },
+  {
+    id: "mia",
+    title: "MIA (feat. Drake)",
+    album: "X 100PRE",
+    year: 2018,
+    theme: "x100pre",
+    emoji: "🦉",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/72/ad/b6/72adb69d-18a8-a7cd-4534-bba34deb9486/mzaf_14761776520883767907.plus.aac.p.m4a"
+  },
+  {
+    id: "solo-de-mi",
+    title: "Solo de Mí",
+    album: "X 100PRE",
+    year: 2018,
+    theme: "x100pre",
+    emoji: "🚶",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/cb/79/62/cb7962e3-98a0-ca91-ffc7-3c374a331351/mzaf_18194306686486355534.plus.aac.p.m4a"
+  },
+  {
+    id: "si-estuviesemos-juntos",
+    title: "Si Estuviésemos Juntos",
+    album: "X 100PRE",
+    year: 2018,
+    theme: "x100pre",
+    emoji: "❄️",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/79/54/b9/7954b9c3-9015-47b4-4921-edf5b5da9871/mzaf_1677484927020451272.plus.aac.p.m4a"
+  },
+  {
+    id: "como-antes",
+    title: "Como Antes",
+    album: "X 100PRE",
+    year: 2018,
+    theme: "x100pre",
+    emoji: "🕰️",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b5/a5/2f/b5a52fc3-2a27-524a-b269-daf91056ee3a/mzaf_17890468728398963214.plus.aac.p.m4a"
+  },
+  {
+    id: "rlndt",
+    title: "RLNDT",
+    album: "X 100PRE",
+    year: 2018,
+    theme: "x100pre",
+    emoji: "🧩",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c9/27/1b/c9271b94-c0e0-62b1-2db7-334be9fa892c/mzaf_15269687580062839579.plus.aac.p.m4a"
+  },
+  {
+    id: "otra-noche-en-miami",
+    title: "Otra Noche en Miami",
+    album: "X 100PRE",
+    year: 2018,
+    theme: "x100pre",
+    emoji: "🌴",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a9/bb/1a/a9bb1a7e-9b23-8d9f-9f9e-226b1df72f2a/mzaf_12214025847237217238.plus.aac.p.m4a"
+  },
+  {
+    id: "la-cancion",
+    title: "La Canción (with J Balvin)",
+    album: "Oasis",
+    year: 2019,
+    theme: "oasis",
+    emoji: "🦎",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/cf/5f/ef/cf5fef49-8ab0-0d0b-f17a-d820cdca1d88/mzaf_3693019759359818051.plus.aac.p.m4a"
+  },
+  {
+    id: "mojaita",
+    title: "Mojaita (with J Balvin)",
+    album: "Oasis",
+    year: 2019,
+    theme: "oasis",
+    emoji: "🌊",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c2/42/86/c24286a3-9d6c-7056-e1f7-7707138b7538/mzaf_8709536272658992544.plus.aac.p.m4a"
+  },
+  {
+    id: "callaita",
+    title: "Callaita",
+    album: "Single",
+    year: 2019,
+    theme: "singles",
+    emoji: "🤫",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/93/3e/d7/933ed72c-f24f-ad7a-e91b-8a35ccc75372/mzaf_485263337566130707.plus.aac.p.m4a"
+  },
+  {
+    id: "yonaguni",
+    title: "Yonaguni",
+    album: "Single",
+    year: 2021,
+    theme: "singles",
+    emoji: "🇯🇵",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/49/b9/6b/49b96b1c-aeee-7e22-ce0a-be17bab4a864/mzaf_5470366028981689473.plus.aac.p.m4a"
+  },
+  {
+    id: "soy-peor",
+    title: "Soy Peor",
+    album: "Single (Trap Era)",
+    year: 2016,
+    theme: "singles",
+    emoji: "😈",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c2/d4/0d/c2d40d34-e407-ed99-eb58-0e2b4ecd799a/mzaf_7715703807770741123.plus.aac.p.m4a"
+  },
+  {
+    id: "chambea",
+    title: "Chambea",
+    album: "Single",
+    year: 2017,
+    theme: "singles",
+    emoji: "🔫",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fa/f1/f8/faf1f890-8c1d-a87b-9e3f-3f7a45235fbd/mzaf_11199641229246548629.plus.aac.p.m4a"
+  },
+  {
+    id: "amorfoda",
+    title: "Amorfoda",
+    album: "Single",
+    year: 2018,
+    theme: "singles",
+    emoji: "💔",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b3/68/bb/b368bb0f-5f10-f0e8-74b4-58e0a95d77fb/mzaf_14541338477590224542.plus.aac.p.m4a"
+  }
+];
