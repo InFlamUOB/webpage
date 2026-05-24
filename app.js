@@ -1921,6 +1921,7 @@ async function playPreview(songId, cardElement) {
   }
   previewAudio = window.globalAudioPlayer;
   previewAudio.src = url;
+  previewAudio.load(); // Fuerza a Safari a recargar el buffer del nuevo src
   previewAudio.volume = 0;
   previewAudio.crossOrigin = "anonymous";
   currentPreviewSongId = songId;
