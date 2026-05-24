@@ -643,8 +643,15 @@ const SONGS_DATABASE = [
   {
     id: "sp-eoo", title: "Eoo", album: "DeBÍ TiRAR MáS FOToS", year: 2025, theme: "dtmf", emoji: "🗣️",
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/bb/b7/ad/bbb7adc0-e19a-de2c-f5fa-7aa7597c018f/mzaf_3830528517982749933.plus.aac.p.m4a"
+  },
+  {
+    id: "sp-exclusiva", title: "Canción Sorpresa Exclusiva", album: "DeBÍ TiRAR MáS FOToS Tour", year: 2025, theme: "singles", emoji: "🤫",
+    previewUrl: null
+  },
+  {
+    id: "sp-abreme", title: "Ábreme Paso", album: "DeBÍ TiRAR MáS FOToS", year: 2025, theme: "dtmf", emoji: "🛣️",
+    previewUrl: null
   }
-
 ];
 
 // Diccionario de personalidades basado en el álbum
@@ -1078,23 +1085,48 @@ function advanceRound() {
 }
 
 function injectShareWinner(winner) {
-  const personalityText = ALBUM_PERSONALITIES[winner.theme] || ALBUM_PERSONALITIES["singles"];
   const personalityEl = document.getElementById("winner-personality");
-  if (personalityEl) {
-    personalityEl.innerHTML = `Eres de la era <strong>${winner.album}</strong>: ${personalityText}`;
-  }
-  
   const btnShare = document.getElementById("btn-share-tournament");
+  
+  let displayText = "";
+  let shareText = "";
+
+  if (gameMode === 'survivor') {
+    const pos = SPECIAL_TOUR_IDS.indexOf(winner.id) + 1;
+    if (pos > 0) {
+      displayText = `🎶 <strong>¡Estate atenta!</strong> Esta canción suele salir en el número <strong>${pos}</strong> en este tour.`;
+      shareText = `Mi canción soñada para el tour de Bad Bunny es ${winner.title} 🏆 ¡Suele salir en la posición ${pos}! ¿Cuál es la tuya? 🐰🔥`;
+    } else {
+      displayText = `🤫 <strong>¡Ojalá la cante!</strong> Esta canción es tan especial que tendría que ser la sorpresa exclusiva del tour.`;
+      shareText = `Mi canción soñada para el tour de Bad Bunny es ${winner.title} 🏆 ¡Tendría que ser la sorpresa exclusiva del concierto! ¿Cuál es la tuya? 🐰🔥`;
+    }
+  } else {
+    // Modo Torneo Clásico
+    const personalityText = ALBUM_PERSONALITIES[winner.theme] || ALBUM_PERSONALITIES["singles"];
+    displayText = `Eres de la era <strong>${winner.album}</strong>: ${personalityText}`;
+    shareText = `Mi canción campeona de Bad Bunny es ${winner.title} 🏆 Soy de la era ${winner.album}: ${personalityText}. ¡Descubre la tuya! 🐰🔥`;
+  }
+
+  if (personalityEl) personalityEl.innerHTML = displayText;
+
   if (btnShare) {
+    // Customize button text based on mode
+    btnShare.innerHTML = gameMode === 'survivor' 
+      ? `<span class="text-xl">📲</span> Compartir mi setlist 🐰` 
+      : `<span class="text-xl">📲</span> Compartir mi campeona 🐰`;
+
     btnShare.onclick = async () => {
       const shareData = {
         title: 'Bad Bunny Tournament',
-        text: `Mi canción campeona de Bad Bunny es ${winner.title} 🏆 Soy de la era ${winner.album}: ${personalityText}. ¡Descubre la tuya! 🐰🔥`,
+        text: `${shareText} ${window.location.href}`,
         url: window.location.href
       };
+      // Quitar la url de shareData para algunos navegadores (la añadimos al text) y usar solo texto si es necesario
+      const nativeShareData = { title: shareData.title, text: shareText, url: window.location.href };
+      
       try {
         if (navigator.share) {
-          await navigator.share(shareData);
+          await navigator.share(nativeShareData);
         } else {
           throw new Error("No share API");
         }
@@ -1102,7 +1134,7 @@ function injectShareWinner(winner) {
         console.log('Error sharing:', err);
         // Fallback si falla la API nativa
         try {
-          await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+          await navigator.clipboard.writeText(shareData.text);
           alert("¡Enlace y resultado copiados al portapapeles! Listo para compartir.");
         } catch(clipboardErr) {
           alert(`Tu resultado: ${shareData.text}`);
@@ -1691,12 +1723,16 @@ const SPECIAL_TOUR_IDS = [
   "la-romana",
   "sp-voy",
   "me-porto-bonito",
+  "no-me-conoce",
   "bichiyal",
   "yo-perreo-sola",
   "efecto",
   "safaera",
+  "diles",
   "monaco",
+  "sp-exclusiva",
   "sp-cafe",
+  "sp-abreme",
   "ojitos-lindos",
   "la-cancion",
   "sp-kloufrens",
