@@ -833,16 +833,18 @@ const ALBUM_PERSONALITIES = {
     "uvst": "nostálgica, playera, emocional 🌴💔",
     "yhlqmdlg": "rebelde, perreadora, icónica 🛹🔥",
     "x100pre": "profunda, innovadora, sentimental 👁️🖤",
-    "nsqtk": "oscura, directa, sin filtros 🐎🦇",
+    "nadiesabe": "oscura, directa, sin filtros 🐎🦇",
     "eutdm": "experimental, vanguardista, alternativa 🚛🌍",
+    "dtmf": "visionaria, conceptual, fotográfica 📸🔥",
     "singles": "versátil, impredecible, siempre en tendencia 📈✨"
   },
   en: {
     "uvst": "nostalgic, beachy, emotional 🌴💔",
     "yhlqmdlg": "rebellious, iconic, perreo-ready 🛹🔥",
     "x100pre": "deep, innovative, sentimental 👁️🖤",
-    "nsqtk": "dark, direct, unfiltered 🐎🦇",
+    "nadiesabe": "dark, direct, unfiltered 🐎🦇",
     "eutdm": "experimental, avant-garde, alternative 🚛🌍",
+    "dtmf": "visionary, conceptual, photographic 📸🔥",
     "singles": "versatile, unpredictable, always trending 📈✨"
   }
 };
@@ -1320,15 +1322,13 @@ function injectShareWinner(winner) {
     btnShare.onclick = async () => {
       const shareData = {
         title: 'Bad Bunny Tournament',
-        text: `${shareText} ${window.location.href}`,
-        url: window.location.href
+        text: `${shareText}\n\n${window.location.href}`
       };
-      // Quitar la url de shareData para algunos navegadores (la añadimos al text) y usar solo texto si es necesario
-      const nativeShareData = { title: shareData.title, text: shareText, url: window.location.href };
       
       try {
         if (navigator.share) {
-          await navigator.share(nativeShareData);
+          // Omitimos la propiedad "url" porque en iOS WhatsApp a veces ignora el "text" si hay una "url"
+          await navigator.share({ title: shareData.title, text: shareData.text });
         } else {
           throw new Error("No share API");
         }
@@ -1337,7 +1337,7 @@ function injectShareWinner(winner) {
         // Fallback si falla la API nativa
         try {
           await navigator.clipboard.writeText(shareData.text);
-          alert("¡Enlace y resultado copiados al portapapeles! Listo para compartir.");
+          alert(currentLang === 'en' ? "Link and result copied to clipboard! Ready to share." : "¡Enlace y resultado copiados al portapapeles! Listo para compartir.");
         } catch(clipboardErr) {
           alert(`Tu resultado: ${shareData.text}`);
         }
@@ -2379,13 +2379,12 @@ function endQuizMode() {
     btnShare.onclick = async () => {
       const shareData = {
         title: 'Reto Bad Bunny Trivia',
-        text: TRANSLATIONS[currentLang].share_quiz_text.replace('{correct}', quizState.correctSongs).replace('{time}', avgTime).replace('{score}', Math.max(0, quizState.score)),
-        url: window.location.href
+        text: `${TRANSLATIONS[currentLang].share_quiz_text.replace('{correct}', quizState.correctSongs).replace('{time}', avgTime).replace('{score}', Math.max(0, quizState.score))}\n\n${window.location.href}`
       };
       
       try {
         if (navigator.share) {
-          await navigator.share(shareData);
+          await navigator.share({ title: shareData.title, text: shareData.text });
         } else {
           throw new Error("No share API");
         }
