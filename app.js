@@ -1012,8 +1012,8 @@ function vote(chosenIndex) {
     handleSurvivorVote(winnerId);
     return;
   }
-  // Parar cualquier audio preview al votar
-  stopPreview();
+  // Parar cualquier audio preview INMEDIATAMENTE al votar para evitar solapamientos
+  stopPreview(true);
   const songA = tournament.roundSongs[tournament.currentMatchIndex * 2];
   const songB = tournament.roundSongs[tournament.currentMatchIndex * 2 + 1];
   
@@ -1577,8 +1577,12 @@ async function playPreview(songId, cardElement) {
     return;
   }
 
-  // Crear nuevo reproductor de audio
-  previewAudio = new Audio(url);
+  // Usar un único reproductor global para evitar solapamientos en móviles
+  if (!window.globalAudioPlayer) {
+    window.globalAudioPlayer = new Audio();
+  }
+  previewAudio = window.globalAudioPlayer;
+  previewAudio.src = url;
   previewAudio.volume = 0;
   previewAudio.crossOrigin = "anonymous";
   currentPreviewSongId = songId;
@@ -1625,9 +1629,9 @@ async function playPreview(songId, cardElement) {
 }
 
 /**
- * Detiene el preview actual con un fade-out suave.
+ * Detiene el preview actual con un fade-out suave o inmediatamente.
  */
-function stopPreview() {
+function stopPreview(immediate = false) {
   clearInterval(fadeInterval);
   clearTimeout(snippetTimer);
 
@@ -1655,6 +1659,15 @@ function stopPreview() {
   showAudioIndicator(document.getElementById("card-left"), false);
   showAudioIndicator(document.getElementById("card-right"), false);
 
+  if (immediate) {
+    audio.pause();
+    audio.currentTime = 0;
+    previewAudio = null;
+    currentPreviewSongId = null;
+    activePreviewCard = null;
+    return;
+  }
+
   // Fade-out rápido
   const steps = 8;
   const stepTime = 180 / steps;
@@ -1668,7 +1681,7 @@ function stopPreview() {
     if (currentStep >= steps) {
       clearInterval(fadeInterval);
       audio.pause();
-      audio.src = "";
+      audio.currentTime = 0;
     }
   }, stepTime);
 
@@ -1855,7 +1868,7 @@ function renderSurvivorMatch() {
 }
 
 function handleSurvivorVote(winnerId) {
-  stopPreview();
+  stopPreview(true);
   
   const isLeftWinner = winnerId === survivorState.reigningChamp.id;
   const winner = isLeftWinner ? survivorState.reigningChamp : survivorState.challenger;
