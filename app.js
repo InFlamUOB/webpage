@@ -2536,12 +2536,14 @@ function endQuizMode() {
         }
       } catch (err) {
         console.log('Error sharing:', err);
-        // Fallback si falla la API nativa (a veces falla por permisos)
+        if (err.name === 'AbortError') return; // User cancelled, do nothing
+        
+        // Fallback si falla la API nativa (a veces falla por permisos o estar en desktop)
         try {
-          await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+          await navigator.clipboard.writeText(shareData.text);
           alert(currentLang === 'en' ? "Link and result copied to clipboard! Paste it anywhere." : "¡Enlace y resultado copiados al portapapeles! Pégalo donde quieras.");
         } catch(clipboardErr) {
-          alert(`Tu resultado: ${shareData.text}`);
+          alert(`Tu resultado:\n\n${shareData.text}`);
         }
       }
     };
