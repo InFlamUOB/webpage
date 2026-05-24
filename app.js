@@ -2518,7 +2518,11 @@ function endQuizMode() {
   });
   leaderboard.sort((a, b) => b.score - a.score);
   leaderboard = leaderboard.slice(0, 5); // Top 5
-  localStorage.setItem("bb_quiz_leaderboard", JSON.stringify(leaderboard));
+  try {
+    localStorage.setItem("bb_quiz_leaderboard", JSON.stringify(leaderboard));
+  } catch (e) {
+    console.error("Error saving leaderboard", e);
+  }
   
   // Render Leaderboard
   const listEl = document.getElementById("quiz-leaderboard-list");
