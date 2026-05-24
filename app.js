@@ -1083,6 +1083,13 @@ function startTournament() {
     !["diles", "no-me-conoce", "sp-abreme"].includes(s.id)
   );
 
+  // Desbloquear reproductor global de audio para móviles (requiere interacción directa del usuario)
+  if (!window.globalAudioPlayer) {
+    window.globalAudioPlayer = new Audio();
+  }
+  window.globalAudioPlayer.play().catch(e => {});
+  window.globalAudioPlayer.pause();
+
   // Barajar canciones (Fisher-Yates shuffle)
   for (let i = pool.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -1967,6 +1974,13 @@ function shuffleArray(array) {
 
 function startSurvivorMode() {
   gameMode = 'survivor';
+  
+  // Desbloquear reproductor global de audio para móviles (requiere interacción directa del usuario)
+  if (!window.globalAudioPlayer) {
+    window.globalAudioPlayer = new Audio();
+  }
+  window.globalAudioPlayer.play().catch(e => {});
+  window.globalAudioPlayer.pause();
   
   // 1. Gather all special tour songs that exist in database
   let pool = [];
