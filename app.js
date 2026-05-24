@@ -181,7 +181,14 @@ const TRANSLATIONS = {
     quiz_leaderboard: "🏆 Mejores Puntuaciones",
     btn_challenge: "Retar a mis amigos 🔥",
     btn_refresh: "Actualizar Resultados",
-    footer_text: "A disfrutaaaar 🐰🔥",
+    footer_text: "A disfrutaaaar 🐰🔥💥",
+    mode_stats_title: "📊 Resultados Globales",
+    mode_stats_desc: "Descubre lo que vota el resto del mundo en tiempo real.",
+    stats_title: "El Fandom Ha Hablado",
+    stats_desc: "Métricas en tiempo real de todos los jugadores.",
+    stats_champion_label: "Canción más ganadora",
+    stats_duel_label: "El duelo más reñido",
+    stats_setlist_label: "Top 5 Tour Setlist",
     
     // Dynamic JS texts
     pool_count: "{count} canciones disponibles",
@@ -253,7 +260,14 @@ const TRANSLATIONS = {
     quiz_leaderboard: "🏆 Leaderboard",
     btn_challenge: "Challenge my friends 🔥",
     btn_refresh: "Refresh Results",
-    footer_text: "Enjoyyy 🐰🔥",
+    footer_text: "Enjoyyy 🐰🔥💥",
+    mode_stats_title: "📊 Global Results",
+    mode_stats_desc: "Discover what the rest of the world is voting for in real time.",
+    stats_title: "The Fandom Has Spoken",
+    stats_desc: "Real-time metrics from all players.",
+    stats_champion_label: "Most winning song",
+    stats_duel_label: "Closest duel",
+    stats_setlist_label: "Top 5 Tour Setlist",
     
     // Dynamic JS texts
     pool_count: "{count} songs available",
