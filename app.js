@@ -1863,6 +1863,14 @@ function startQuizMode() {
   document.getElementById("quiz-winner-screen").classList.add("hidden");
   document.getElementById("quiz-screen").classList.remove("hidden");
   
+  // Desbloquear reproductor global de audio para móviles (requiere interacción directa del usuario)
+  if (!window.globalAudioPlayer) {
+    window.globalAudioPlayer = new Audio();
+  }
+  // Reproducir y pausar rápidamente para desbloquear el contexto de audio en iOS/Android
+  window.globalAudioPlayer.play().catch(e => {});
+  window.globalAudioPlayer.pause();
+  
   // Seleccionar 10 canciones aleatorias únicas
   let pool = [...SONGS_DATABASE];
   shuffleArray(pool);
@@ -1925,13 +1933,15 @@ function renderQuizQuestion() {
     }
   }, 100);
   
-  // Reproducir audio sin revelar visualmente
+  // Reproducir audio usando el reproductor global para evitar bloqueos en móviles
   fetchPreviewUrl(currentSong.id).then(url => {
     if (!url) return; // Fallback si no hay URL
-    const audio = new Audio(url);
-    audio.volume = 0.5;
-    audio.play().catch(e => console.log("Autoplay blocked", e));
-    window.currentPreviewAudio = audio;
+    
+    if (!window.globalAudioPlayer) window.globalAudioPlayer = new Audio();
+    window.globalAudioPlayer.src = url;
+    window.globalAudioPlayer.volume = 0.5;
+    window.globalAudioPlayer.play().catch(e => console.log("Autoplay blocked", e));
+    window.currentPreviewAudio = window.globalAudioPlayer;
   });
 }
 
