@@ -948,10 +948,6 @@ const SONGS_DATABASE = [
   {
     id: "sp-eoo", title: "Eoo", album: "DeBÍ TiRAR MáS FOToS", year: 2025, theme: "dtmf", emoji: "🗣️",
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/bb/b7/ad/bbb7adc0-e19a-de2c-f5fa-7aa7597c018f/mzaf_3830528517982749933.plus.aac.p.m4a"
-  },
-  {
-    id: "sp-abreme", title: "Ábreme Paso", album: "DeBÍ TiRAR MáS FOToS", year: 2025, theme: "dtmf", emoji: "🛣️",
-    previewUrl: null
   }
 ];
 
@@ -1181,8 +1177,7 @@ function validateAlbumSelection() {
   
   // Filtrar base de datos (y excluir las 3 canciones reservadas para Survivor/Quiz)
   const pool = tournament.allSongs.filter(s => 
-    selectedAlbums.includes(s.theme) && 
-    !["diles", "no-me-conoce", "sp-abreme"].includes(s.id)
+    selectedAlbums.includes(s.theme)
   );
   
   const poolCountEl = document.getElementById("pool-count");
@@ -1214,8 +1209,7 @@ function renderConfigScreen() {
 function startTournament() {
   const selectedAlbums = Array.from(document.querySelectorAll(".album-checkbox:checked")).map(cb => cb.value);
   let pool = tournament.allSongs.filter(s => 
-    selectedAlbums.includes(s.theme) && 
-    !["diles", "no-me-conoce", "sp-abreme"].includes(s.id)
+    selectedAlbums.includes(s.theme)
   );
 
   // Desbloquear reproductor global de audio para móviles (requiere interacción directa del usuario)
@@ -1224,8 +1218,9 @@ function startTournament() {
   }
   // Añadimos un mp3 silencioso en base64 para que el play() no lance error y se desbloquee el contexto de audio
   window.globalAudioPlayer.src = "data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC0gUm95YWx0eSBGcmVlIFNvdW5kc///wQAAP8AAAAA//8GAAAP//AAAP/wAAAAAP/wAA";
-  window.globalAudioPlayer.play().catch(e => { console.log("Unlock failed", e) });
-  window.globalAudioPlayer.pause();
+  window.globalAudioPlayer.play().then(() => {
+    window.globalAudioPlayer.pause();
+  }).catch(e => { console.log("Unlock failed", e) });
 
   // Barajar canciones (Fisher-Yates shuffle)
   for (let i = pool.length - 1; i > 0; i--) {
@@ -2086,10 +2081,8 @@ const SPECIAL_TOUR_IDS = [
   "yo-perreo-sola",
   "efecto",
   "safaera",
-  "diles",
   "monaco",
   "sp-cafe",
-  "sp-abreme",
   "ojitos-lindos",
   "la-cancion",
   "sp-kloufrens",
@@ -2121,8 +2114,10 @@ function startSurvivorMode() {
   if (!window.globalAudioPlayer) {
     window.globalAudioPlayer = new Audio();
   }
-  window.globalAudioPlayer.play().catch(e => {});
-  window.globalAudioPlayer.pause();
+  window.globalAudioPlayer.src = "data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC0gUm95YWx0eSBGcmVlIFNvdW5kc///wQAAP8AAAAA//8GAAAP//AAAP/wAAAAAP/wAA";
+  window.globalAudioPlayer.play().then(() => {
+    window.globalAudioPlayer.pause();
+  }).catch(e => { console.log("Unlock failed", e) });
   
   // 1. Gather all special tour songs that exist in database
   let pool = [];
@@ -2353,8 +2348,9 @@ function startQuizMode() {
   }
   // Añadimos un mp3 silencioso en base64 para que el play() no lance error y se desbloquee el contexto de audio
   window.globalAudioPlayer.src = "data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC0gUm95YWx0eSBGcmVlIFNvdW5kc///wQAAP8AAAAA//8GAAAP//AAAP/wAAAAAP/wAA";
-  window.globalAudioPlayer.play().catch(e => { console.log("Unlock failed", e) });
-  window.globalAudioPlayer.pause();
+  window.globalAudioPlayer.play().then(() => {
+    window.globalAudioPlayer.pause();
+  }).catch(e => { console.log("Unlock failed", e) });
   
   // Seleccionar 10 canciones aleatorias únicas
   let pool = [...SONGS_DATABASE];
