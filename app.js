@@ -46,7 +46,7 @@ const TRANSLATIONS = {
     quiz_total_score: "Puntuación Total:",
     quiz_leaderboard: "🏆 Mejores Puntuaciones",
     btn_challenge: "Retar a mis amigos 🔥",
-    footer_text: "A disfrutaaaar 🐰🔥 Ningún conejo fue dañado en este proceso.",
+    footer_text: "A disfrutaaaar 🐰🔥",
     
     // Dynamic JS texts
     pool_count: "{count} canciones disponibles",
@@ -116,7 +116,7 @@ const TRANSLATIONS = {
     quiz_total_score: "Total Score:",
     quiz_leaderboard: "🏆 Leaderboard",
     btn_challenge: "Challenge my friends 🔥",
-    footer_text: "Enjoyyy 🐰🔥 No bunnies were harmed in the making of this game.",
+    footer_text: "Enjoyyy 🐰🔥",
     
     // Dynamic JS texts
     pool_count: "{count} songs available",
