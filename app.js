@@ -178,6 +178,7 @@ const TRANSLATIONS = {
     quiz_total_score: "Puntuación Total:",
     quiz_leaderboard: "🏆 Mejores Puntuaciones",
     btn_challenge: "Retar a mis amigos 🔥",
+    btn_refresh: "Actualizar Resultados",
     footer_text: "A disfrutaaaar 🐰🔥",
     
     // Dynamic JS texts
@@ -249,6 +250,7 @@ const TRANSLATIONS = {
     quiz_total_score: "Total Score:",
     quiz_leaderboard: "🏆 Leaderboard",
     btn_challenge: "Challenge my friends 🔥",
+    btn_refresh: "Refresh Results",
     footer_text: "Enjoyyy 🐰🔥",
     
     // Dynamic JS texts

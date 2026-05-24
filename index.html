@@ -71,7 +71,11 @@
       </button>
       
       <h2 class="text-3xl font-bold mb-2 font-display neon-text uppercase tracking-widest mt-8" data-i18n="stats_title">El Fandom Ha Hablado</h2>
-      <p class="text-gray-300 mb-8 max-w-md mx-auto" data-i18n="stats_desc">Métricas en tiempo real de todos los jugadores.</p>
+      <p class="text-gray-300 mb-6 max-w-md mx-auto" data-i18n="stats_desc">Métricas en tiempo real de todos los jugadores.</p>
+      
+      <button class="btn-primary mx-auto mb-8 flex items-center justify-center gap-2 px-6 py-2" onclick="fetchGlobalStats()" style="background: linear-gradient(135deg, #8A2387, #E94057, #F27121);">
+        <span>🔄</span> <span data-i18n="btn_refresh">Actualizar Resultados</span>
+      </button>
       
       <div id="stats-loading" class="py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
