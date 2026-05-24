@@ -1085,10 +1085,10 @@ function setupEventListeners() {
   }
   // Cambiar tamaño de torneo
   document.querySelectorAll(".btn-size").forEach(btn => {
-    btn.addEventListener("click", (e) => {
+    btn.addEventListener("click", () => {
       document.querySelectorAll(".btn-size").forEach(b => b.classList.remove("active"));
-      e.target.classList.add("active");
-      tournament.size = parseInt(e.target.dataset.size);
+      btn.classList.add("active");
+      tournament.size = parseInt(btn.dataset.size);
       validateAlbumSelection();
     });
   });
