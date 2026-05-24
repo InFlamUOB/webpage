@@ -1096,11 +1096,17 @@ function injectShareWinner(winner) {
         if (navigator.share) {
           await navigator.share(shareData);
         } else {
-          await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
-          alert("¡Copiado al portapapeles! Listo para compartir.");
+          throw new Error("No share API");
         }
       } catch (err) {
         console.log('Error sharing:', err);
+        // Fallback si falla la API nativa
+        try {
+          await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+          alert("¡Enlace y resultado copiados al portapapeles! Listo para compartir.");
+        } catch(clipboardErr) {
+          alert(`Tu resultado: ${shareData.text}`);
+        }
       }
     };
   }
@@ -2121,11 +2127,17 @@ function endQuizMode() {
         if (navigator.share) {
           await navigator.share(shareData);
         } else {
-          await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
-          alert("¡Copiado al portapapeles! Listo para retar a tus amigos.");
+          throw new Error("No share API");
         }
       } catch (err) {
         console.log('Error sharing:', err);
+        // Fallback si falla la API nativa (a veces falla por permisos)
+        try {
+          await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+          alert("¡Enlace y resultado copiados al portapapeles! Pégalo donde quieras.");
+        } catch(clipboardErr) {
+          alert(`Tu resultado: ${shareData.text}`);
+        }
       }
     };
   }
