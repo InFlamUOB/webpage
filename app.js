@@ -1,4 +1,52 @@
 // =========================================
+// SUPABASE (ANALYTICS & DATA COLLECTION)
+// =========================================
+const SUPABASE_URL = "https://anwpshueemzzujmuyotk.supabase.co/rest/v1";
+const SUPABASE_ANON_KEY = "sb_publishable_BAdYLkxmiNeZ7mk_5IKZNg_NG_buq6d";
+
+async function saveMatchupVote(songAId, songBId, winnerId, mode) {
+  try {
+    fetch(`${SUPABASE_URL}/matchups`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+      },
+      body: JSON.stringify({
+        mode: mode,
+        song_a_id: songAId,
+        song_b_id: songBId,
+        winner_id: winnerId
+      })
+    });
+  } catch (error) {
+    console.log("Analytics non-blocking error", error);
+  }
+}
+
+async function saveGameResult(winnerId, topSongs, mode) {
+  try {
+    fetch(`${SUPABASE_URL}/tournament_results`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+      },
+      body: JSON.stringify({
+        mode: mode,
+        winner_id: winnerId,
+        top_songs: topSongs,
+        language: currentLang
+      })
+    });
+  } catch (error) {
+    console.log("Analytics non-blocking error", error);
+  }
+}
+
+// =========================================
 // I18N (INTERNATIONALIZATION)
 // =========================================
 const TRANSLATIONS = {
@@ -1217,6 +1265,9 @@ function vote(chosenIndex) {
   const chosen = chosenIndex === 0 ? songA : songB;
   const loser = chosenIndex === 0 ? songB : songA;
 
+  // Supabase Analytics: Guardar votación anónima (fire-and-forget)
+  saveMatchupVote(songA.id, songB.id, chosen.id, gameMode);
+
   // Registrar en historial para el bracket
   tournament.history.push({
     round: tournament.roundNumber,
@@ -1367,6 +1418,10 @@ function showWinnerScreen(champion) {
   document.getElementById("winner-year").textContent = champion.year;
 
   injectShareWinner(champion);
+  
+  // Supabase Analytics: Guardar torneo completado
+  const topSongs = [...tournament.ranking].reverse().slice(0, 8).map(r => r.song.id);
+  saveGameResult(champion.id, topSongs, gameMode);
 
   // Renderizar Top 8 final
   renderRankingList();
@@ -2077,6 +2132,9 @@ function handleSurvivorVote(winnerId) {
   const winner = isLeftWinner ? survivorState.reigningChamp : survivorState.challenger;
   const loser = isLeftWinner ? survivorState.challenger : survivorState.reigningChamp;
   
+  // Supabase Analytics: Guardar votación anónima
+  saveMatchupVote(survivorState.reigningChamp.id, survivorState.challenger.id, winner.id, gameMode);
+  
   // Animaciones
   const winningCard = document.getElementById(isLeftWinner ? "card-left" : "card-right");
   const losingCard = document.getElementById(isLeftWinner ? "card-right" : "card-left");
@@ -2172,6 +2230,10 @@ function endSurvivorMode(winner) {
   });
   
   triggerConfetti();
+  
+  // Supabase Analytics: Guardar survivor completado
+  const topSongs = survivors.map(s => s.id);
+  saveGameResult(winner.id, topSongs, gameMode);
 }
 
 // =====================================================================
