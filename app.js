@@ -2501,7 +2501,15 @@ function endQuizMode() {
   document.getElementById("quiz-result-score").textContent = Math.max(0, quizState.score);
   
   // Guardar en LocalStorage
-  let leaderboard = JSON.parse(localStorage.getItem("bb_quiz_leaderboard") || "[]");
+  let leaderboard = [];
+  try {
+    leaderboard = JSON.parse(localStorage.getItem("bb_quiz_leaderboard") || "[]");
+    if (!Array.isArray(leaderboard)) leaderboard = [];
+  } catch (e) {
+    console.error("Error parsing leaderboard", e);
+    leaderboard = [];
+  }
+  
   leaderboard.push({
     score: Math.max(0, quizState.score),
     correct: quizState.correctSongs,
