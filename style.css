@@ -397,17 +397,24 @@ body {
 
 .battle-ground-layout {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
+  grid-template-columns: 1fr 1fr; /* SIEMPRE SIDE-BY-SIDE */
+  gap: 0.75rem; /* Gap más pequeño en móvil */
   width: 100%;
-  align-items: center;
+  align-items: stretch; /* Para que tengan la misma altura */
   margin-top: 1.5rem;
 }
 
 @media (min-width: 768px) {
   .battle-ground-layout {
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: 1fr auto 1fr; /* Vuelve el VS en medio en escritorio */
     gap: 1rem;
+  }
+}
+
+/* Ocultar el separador VS en móvil (demasiado espacio) */
+@media (max-width: 767px) {
+  .vs-divider {
+    display: none;
   }
 }
 
@@ -415,8 +422,8 @@ body {
 .song-card-wrapper {
   background: var(--color-panel);
   border: 2px solid var(--color-border);
-  border-radius: 20px;
-  padding: 2rem 1.5rem;
+  border-radius: 16px; /* Ligeramente más cuadrado en móvil */
+  padding: 1.25rem 0.75rem; /* Menos padding en móvil */
   text-align: center;
   cursor: pointer;
   position: relative;
@@ -424,9 +431,17 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 380px;
+  min-height: 280px; /* Menos altura mínima en móvil */
   justify-content: space-between;
   overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .song-card-wrapper {
+    padding: 2rem 1.5rem;
+    border-radius: 20px;
+    min-height: 380px;
+  }
 }
 
 .song-card-wrapper::after {
@@ -488,17 +503,25 @@ body {
 
 /* Portada de Canción */
 .song-cover-container {
-  width: 120px;
-  height: 120px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   border: 2px solid rgba(255, 255, 255, 0.1);
   box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .song-cover-container {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 1.5rem;
+  }
 }
 
 .song-card-wrapper:hover .song-cover-container {
@@ -508,34 +531,60 @@ body {
 }
 
 .song-cover-emoji {
-  font-size: 3.5rem;
+  font-size: 2rem;
   filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
 }
 
+@media (min-width: 768px) {
+  .song-cover-emoji {
+    font-size: 3.5rem;
+  }
+}
+
 .song-info {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   width: 100%;
+}
+
+@media (min-width: 768px) {
+  .song-info {
+    margin-bottom: 1.5rem;
+  }
 }
 
 .song-title {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: 1.05rem; /* Más pequeño para que quepa en side-by-side */
   font-weight: 800;
-  line-height: 1.2;
+  line-height: 1.1;
   color: #fff;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.25rem;
   text-transform: uppercase;
   word-wrap: break-word;
 }
 
+@media (min-width: 768px) {
+  .song-title {
+    font-size: 1.35rem;
+    line-height: 1.2;
+    margin-bottom: 0.35rem;
+  }
+}
+
 .song-album {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.8);
   font-weight: 500;
 }
 
+@media (min-width: 768px) {
+  .song-album {
+    font-size: 0.85rem;
+  }
+}
+
 .song-year {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   color: var(--color-text-muted);
   display: inline-block;
   margin-top: 0.25rem;

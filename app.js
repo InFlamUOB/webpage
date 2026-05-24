@@ -810,6 +810,34 @@ function setupEventListeners() {
       }
     }
   });
+
+  // Gestos de Swipe en móvil
+  let touchStartX = 0;
+  let touchEndX = 0;
+  
+  document.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, {passive: true});
+  
+  document.addEventListener("touchend", (e) => {
+    const arena = document.getElementById("arena-screen");
+    if (!arena || arena.classList.contains("hidden")) return; 
+    
+    // Asegurarse de que no estamos en el modo bracket donde el usuario intenta hacer scroll
+    const bracketView = document.getElementById("bracket-view-content");
+    if (bracketView && !bracketView.classList.contains("hidden")) return;
+
+    touchEndX = e.changedTouches[0].screenX;
+    
+    // Si la distancia es mayor a 50px
+    if (touchEndX < touchStartX - 50) {
+      // Swipe Izquierda <- (Elige la canción de la Izquierda)
+      vote(0);
+    } else if (touchEndX > touchStartX + 50) {
+      // Swipe Derecha -> (Elige la canción de la Derecha)
+      vote(1);
+    }
+  }, {passive: true});
 }
 
 // Validar selección de álbumes y actualizar estimación de canciones
