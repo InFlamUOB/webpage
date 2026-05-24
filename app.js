@@ -2545,13 +2545,15 @@ function endQuizMode() {
   triggerConfetti();
 
   const btnShare = document.getElementById("btn-share-quiz");
-  if (btnShare) {
-    btnShare.onclick = shareQuizResults;
-  }
+  // Se asigna en HTML vía onclick="shareQuizResults(event)"
 }
 
-async function shareQuizResults() {
-  alert("Botón pulsado! Calculando..."); // TEST
+async function shareQuizResults(event) {
+  if (event && event.target) {
+    const btn = event.currentTarget || document.getElementById("btn-share-quiz");
+    if (btn) btn.innerHTML = "Copiando...";
+  }
+  
   const avgTime = (quizState.totalTime / 10).toFixed(1);
   const shareData = {
     title: 'Reto Bad Bunny Trivia',
