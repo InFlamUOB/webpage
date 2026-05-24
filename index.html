@@ -56,6 +56,59 @@
           <span class="text-xl mb-1" data-i18n="mode_quiz_title">⏱️ Trivia Velocidad (Blind)</span>
           <span class="text-xs text-gray-200 font-normal opacity-80" style="text-transform: none;" data-i18n="mode_quiz_desc">Adivina la canción escuchando a ciegas lo más rápido posible.</span>
         </button>
+        
+        <button id="btn-mode-stats" class="btn-primary flex flex-col items-center justify-center p-4 mt-4" style="background: linear-gradient(135deg, #8E2DE2, #4A00E0);">
+          <span class="text-xl mb-1" data-i18n="mode_stats_title">📊 Resultados Globales</span>
+          <span class="text-xs text-gray-200 font-normal opacity-80" style="text-transform: none;" data-i18n="mode_stats_desc">Descubre lo que vota el resto del mundo en tiempo real.</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- PANTALLA DE RESULTADOS GLOBALES -->
+    <section id="global-stats-screen" class="glass-panel text-center hidden fade-in relative mb-8">
+      <button class="btn-back-to-menu absolute top-4 left-4" onclick="location.reload()">
+        <span data-i18n="btn_back_home"><span>🏠</span> Volver</span>
+      </button>
+      
+      <h2 class="text-3xl font-bold mb-2 font-display neon-text uppercase tracking-widest mt-8" data-i18n="stats_title">El Fandom Ha Hablado</h2>
+      <p class="text-gray-300 mb-8 max-w-md mx-auto" data-i18n="stats_desc">Métricas en tiempo real de todos los jugadores.</p>
+      
+      <div id="stats-loading" class="py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+        <p class="text-gray-400">Analizando miles de votos...</p>
+      </div>
+      
+      <div id="stats-content" class="hidden flex flex-col gap-6 text-left">
+        <!-- Campeona Global -->
+        <div class="bg-black bg-opacity-40 p-5 rounded-xl border border-gray-700 shadow-lg relative overflow-hidden">
+          <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">🏆</div>
+          <h3 class="text-yellow-400 font-bold uppercase text-xs tracking-widest mb-1" data-i18n="stats_champion_label">Canción más ganadora</h3>
+          <p id="stat-champion-title" class="text-2xl font-display font-bold text-white mb-1">Cargando...</p>
+          <p id="stat-champion-count" class="text-sm text-gray-400">0 victorias globales</p>
+        </div>
+        
+        <!-- Duelo más reñido -->
+        <div class="bg-black bg-opacity-40 p-5 rounded-xl border border-gray-700 shadow-lg relative overflow-hidden">
+          <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">⚔️</div>
+          <h3 class="text-red-400 font-bold uppercase text-xs tracking-widest mb-2" data-i18n="stats_duel_label">El duelo más reñido</h3>
+          <div class="flex justify-between items-center bg-white bg-opacity-5 rounded p-3 mb-2">
+            <span id="stat-duel-song-a" class="font-bold truncate w-2/5">Cargando...</span>
+            <span id="stat-duel-percent" class="text-xs bg-red-900 text-white px-2 py-1 rounded-full font-bold">50% - 50%</span>
+            <span id="stat-duel-song-b" class="font-bold text-right truncate w-2/5">Cargando...</span>
+          </div>
+          <p class="text-xs text-gray-400 italic">Nadie se pone de acuerdo en este 1v1.</p>
+        </div>
+        
+        <!-- Top 5 Setlist -->
+        <div class="bg-black bg-opacity-40 p-5 rounded-xl border border-gray-700 shadow-lg relative">
+          <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">🎟️</div>
+          <h3 class="text-purple-400 font-bold uppercase text-xs tracking-widest mb-4" data-i18n="stats_setlist_label">Top 5 Tour Setlist</h3>
+          <div id="stat-setlist-container" class="flex flex-col gap-2">
+            <!-- Inyectado por JS -->
+          </div>
+        </div>
+        
+        <p id="stat-total-matches" class="text-center text-gray-500 text-xs mt-4">Total de duelos registrados: 0</p>
       </div>
     </section>
 

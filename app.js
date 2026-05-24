@@ -46,6 +46,90 @@ async function saveGameResult(winnerId, topSongs, mode) {
   }
 }
 
+async function fetchGlobalStats() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rpc/get_global_stats`, {
+      method: "POST", // RPC via POST
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+      }
+    });
+    if (!res.ok) throw new Error("API error");
+    const data = await res.json();
+    renderGlobalStats(data);
+  } catch (error) {
+    console.log("Error fetching stats", error);
+    document.getElementById("stats-loading").innerHTML = `<p class="text-red-400">Error cargando datos. ¿Ejecutaste el código SQL en Supabase?</p>`;
+  }
+}
+
+function renderGlobalStats(data) {
+  document.getElementById("stats-loading").classList.add("hidden");
+  document.getElementById("stats-content").classList.remove("hidden");
+  
+  // Total Matches
+  document.getElementById("stat-total-matches").textContent = `Total de duelos registrados: ${data.total_matchups || 0}`;
+  
+  // Champion
+  if (data.global_champion) {
+    const champSong = findSongById(data.global_champion.winner_id);
+    if (champSong) {
+      document.getElementById("stat-champion-title").textContent = `${champSong.emoji} ${champSong.title}`;
+      document.getElementById("stat-champion-count").textContent = `${data.global_champion.wins} victorias globales`;
+    }
+  }
+  
+  // Closest Duel
+  if (data.closest_duel) {
+    const songA = findSongById(data.closest_duel.song_a_id);
+    const songB = findSongById(data.closest_duel.song_b_id);
+    if (songA && songB) {
+      document.getElementById("stat-duel-song-a").textContent = `${songA.emoji} ${songA.title}`;
+      document.getElementById("stat-duel-song-b").textContent = `${songB.title} ${songB.emoji}`;
+      // Calculate percentage
+      const total = data.closest_duel.votes_a + data.closest_duel.votes_b;
+      const pctA = Math.round((data.closest_duel.votes_a / total) * 100);
+      document.getElementById("stat-duel-percent").textContent = `${pctA}% - ${100 - pctA}%`;
+    }
+  }
+  
+  // Top 5 Setlist
+  if (data.top_setlist && data.top_setlist.length > 0) {
+    const container = document.getElementById("stat-setlist-container");
+    container.innerHTML = "";
+    data.top_setlist.forEach((item, idx) => {
+      const song = findSongById(item.song_id);
+      if (song) {
+        container.innerHTML += `
+          <div class="flex justify-between items-center bg-white bg-opacity-5 p-2 rounded mb-2">
+            <span><span class="font-bold opacity-50 mr-2">${idx + 1}</span> ${song.emoji} ${song.title}</span>
+            <span class="text-xs text-purple-400 font-bold">${item.picks} picks</span>
+          </div>
+        `;
+      }
+    });
+  }
+}
+
+function showGlobalStats() {
+  document.getElementById("mode-selection-screen").classList.add("hidden");
+  document.getElementById("config-screen").classList.add("hidden");
+  const statsScreen = document.getElementById("global-stats-screen");
+  statsScreen.classList.remove("hidden");
+  
+  // Show loading state
+  document.getElementById("stats-loading").classList.remove("hidden");
+  document.getElementById("stats-content").classList.add("hidden");
+  document.getElementById("stats-loading").innerHTML = `
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+    <p class="text-gray-400">Analizando miles de votos...</p>
+  `;
+  
+  fetchGlobalStats();
+}
+
 // =========================================
 // I18N (INTERNATIONALIZATION)
 // =========================================
@@ -997,6 +1081,11 @@ function setupEventListeners() {
   const btnModeQuiz = document.getElementById("btn-mode-quiz");
   if (btnModeQuiz) {
     btnModeQuiz.addEventListener("click", startQuizMode);
+  }
+  
+  const btnModeStats = document.getElementById("btn-mode-stats");
+  if (btnModeStats) {
+    btnModeStats.addEventListener("click", showGlobalStats);
   }
   // Cambiar tamaño de torneo
   document.querySelectorAll(".btn-size").forEach(btn => {
