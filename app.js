@@ -2551,6 +2551,7 @@ function endQuizMode() {
 }
 
 async function shareQuizResults() {
+  alert("Botón pulsado! Calculando..."); // TEST
   const avgTime = (quizState.totalTime / 10).toFixed(1);
   const shareData = {
     title: 'Reto Bad Bunny Trivia',
