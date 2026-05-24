@@ -1133,7 +1133,9 @@ function startTournament() {
   if (!window.globalAudioPlayer) {
     window.globalAudioPlayer = new Audio();
   }
-  window.globalAudioPlayer.play().catch(e => {});
+  // Añadimos un mp3 silencioso en base64 para que el play() no lance error y se desbloquee el contexto de audio
+  window.globalAudioPlayer.src = "data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC0gUm95YWx0eSBGcmVlIFNvdW5kc///wQAAP8AAAAA//8GAAAP//AAAP/wAAAAAP/wAA";
+  window.globalAudioPlayer.play().catch(e => { console.log("Unlock failed", e) });
   window.globalAudioPlayer.pause();
 
   // Barajar canciones (Fisher-Yates shuffle)
@@ -2259,8 +2261,9 @@ function startQuizMode() {
   if (!window.globalAudioPlayer) {
     window.globalAudioPlayer = new Audio();
   }
-  // Reproducir y pausar rápidamente para desbloquear el contexto de audio en iOS/Android
-  window.globalAudioPlayer.play().catch(e => {});
+  // Añadimos un mp3 silencioso en base64 para que el play() no lance error y se desbloquee el contexto de audio
+  window.globalAudioPlayer.src = "data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC0gUm95YWx0eSBGcmVlIFNvdW5kc///wQAAP8AAAAA//8GAAAP//AAAP/wAAAAAP/wAA";
+  window.globalAudioPlayer.play().catch(e => { console.log("Unlock failed", e) });
   window.globalAudioPlayer.pause();
   
   // Seleccionar 10 canciones aleatorias únicas
