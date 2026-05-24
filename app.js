@@ -70,7 +70,9 @@ function renderGlobalStats(data) {
   document.getElementById("stats-content").classList.remove("hidden");
   
   // Total Matches
-  document.getElementById("stat-total-matches").textContent = `Total de duelos registrados: ${data.total_matchups || 0}`;
+  document.getElementById("stat-total-matches").textContent = currentLang === 'en'
+    ? `Total tournaments completed: ${data.total_matchups || 0}`
+    : `Torneos completados en todo el mundo: ${data.total_matchups || 0}`;
   
   // Champion
   if (data.global_champion) {
