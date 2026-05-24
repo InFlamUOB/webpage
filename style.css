@@ -1267,3 +1267,38 @@ body {
   background: linear-gradient(to right, #dc2626, #ef4444) !important; /* red-600 to red-500 */
   border-color: #f87171 !important; /* red-400 */
 }
+
+/* =========================================
+   Botón Atrás / Volver
+========================================= */
+.btn-back-to-menu {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  padding: 0.5rem 1rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #d1d5db;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  z-index: 50;
+}
+
+.btn-back-to-menu:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+.btn-back-to-menu:active {
+  transform: translateY(0);
+}
