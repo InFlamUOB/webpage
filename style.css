@@ -411,12 +411,7 @@ body {
   }
 }
 
-/* Ocultar el separador VS en móvil (demasiado espacio) */
-@media (max-width: 767px) {
-  .vs-divider {
-    display: none;
-  }
-}
+
 
 /* Tarjetas de Canción en Batalla */
 .song-card-wrapper {
@@ -658,15 +653,15 @@ body {
 
 /* Divisor VS */
 .vs-divider {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0.5rem 0;
-  position: relative;
+  display: none; /* Oculto en móvil por defecto */
 }
 
 @media (min-width: 768px) {
   .vs-divider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
     height: 100%;
     margin: 0;
   }
