@@ -107,7 +107,7 @@ function renderGlobalStats(data) {
         container.innerHTML += `
           <div class="flex justify-between items-center bg-white bg-opacity-5 p-2 rounded mb-2">
             <span><span class="font-bold opacity-50 mr-2">${idx + 1}</span> ${song.emoji} ${song.title}</span>
-            <span class="text-xs text-purple-400 font-bold">${item.picks} picks</span>
+            <span class="text-xs text-purple-400 font-bold">${item.count} ${currentLang === 'en' ? 'times' : 'veces'}</span>
           </div>
         `;
       }
