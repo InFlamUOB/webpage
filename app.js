@@ -1,3 +1,176 @@
+// =========================================
+// I18N (INTERNATIONALIZATION)
+// =========================================
+const TRANSLATIONS = {
+  es: {
+    app_title: "LA COPA CONEJO",
+    app_subtitle: "¿Cuál es la mejor canción del Conejo Malo?",
+    mode_title: "Elige tu Modo",
+    mode_desc: "Selecciona la experiencia que quieres jugar. Puedes armar tu torneo por eras o jugar el setlist oficial del Tour 2025.",
+    mode_classic_title: "🏆 Torneo Clásico",
+    mode_classic_desc: "Arma tu propio cuadro eliminatorio seleccionando eras.",
+    mode_survivor_title: "🔥 Especial Tour 2025",
+    mode_survivor_desc: "Modo Supervivencia: Juegan 2, gana 1 y sigue en la pista!",
+    mode_quiz_title: "⏱️ Trivia Velocidad (Blind)",
+    mode_quiz_desc: "Adivina la canción escuchando a ciegas lo más rápido posible.",
+    btn_back_home: "<span>🏠</span> Volver",
+    btn_exit: "<span>🏠</span> Salir",
+    btn_abandon: "<span>🏠</span> Abandonar",
+    config_title: "Elige el Tamaño del Torneo",
+    config_desc: "Enfréntalas 1v1 en eliminatorias directas hasta descubrir tu favorita.",
+    config_8: "8 Canciones",
+    config_16: "16 Canciones",
+    config_32: "32 Canciones",
+    config_64: "64 Canciones",
+    config_albums: "Selecciona las Eras / Álbumes a Incluir",
+    btn_start: "INICIAR TORNEO",
+    tab_arena: "🏟️ La Arena (1v1)",
+    tab_bracket: "📊 Cuadro (Bracket)",
+    badge_option_a: "OPCIÓN A",
+    badge_option_b: "OPCIÓN B",
+    btn_choose: "ELEGIR",
+    arena_hint: "Puedes usar las flechas ⬅️ ➡️ o teclas A/D para votar. Pulsa 🎧 para escuchar un fragmento.",
+    bracket_hint: "Desliza horizontalmente para ver el cuadro completo del torneo.",
+    winner_title: "¡Tenemos Ganadora!",
+    winner_desc: "Tu canción favorita absoluta de Bad Bunny es:",
+    badge_champion: "👑 CAMPEONA",
+    btn_share_winner: "Compartir mi campeona 🐰",
+    btn_share_setlist: "Compartir mi setlist 🐰",
+    ranking_title: "Tu Top de Canciones",
+    btn_view_bracket: "Ver Cuadro Completo 📊",
+    btn_play_again: "JUGAR DE NUEVO",
+    quiz_hint: "¿Qué canción está sonando?",
+    quiz_completed: "¡Trivia Completada!",
+    quiz_correct: "Aciertos:",
+    quiz_avg_time: "Tiempo Promedio:",
+    quiz_total_score: "Puntuación Total:",
+    quiz_leaderboard: "🏆 Mejores Puntuaciones",
+    btn_challenge: "Retar a mis amigos 🔥",
+    footer_text: "A disfrutaaaar 🐰🔥 Ningún conejo fue dañado en este proceso.",
+    
+    // Dynamic JS texts
+    pool_count: "{count} canciones disponibles",
+    pool_error: "⚠️ Necesitas al menos {size} canciones seleccionadas (tienes {count}). Activa más álbumes.",
+    match_progress: "Enfrentamiento {current} de {total}",
+    survivor_progress: "Modo Survivor <span class='text-xs ml-2 text-gray-400'>Restantes: {count}</span>",
+    round_32: "Treintaidosavos de Final",
+    round_16: "Octavos de Final",
+    round_8: "Cuartos de Final",
+    round_4: "Semifinales",
+    round_2: "🔥 Gran Final 🔥",
+    round_default: "Torneo Bad Bunny",
+    survivor_champ: "👑 Campeón (Rachas: {streak})",
+    survivor_challenger: "⚔️ Retador",
+    survivor_leaderboard_champ: "👑 Campeón Actual: {title}",
+    survivor_leaderboard_wins: "{streak} Victorias",
+    survivor_cemetery: "Cementerio (Eliminados)",
+    quiz_question: "Pregunta {current}/{total}",
+    share_classic_text: "Mi canción campeona de Bad Bunny es {title} 🏆 Soy de la era {album}: {personality}. ¡Descubre la tuya! 🐰🔥",
+    share_survivor_hint: "🎶 <strong>¡Estate atenta!</strong> Esta canción suele salir en el número <strong>{pos}</strong> en este tour.",
+    share_survivor_text: "Mi canción soñada para el tour de Bad Bunny es {title} 🏆 ¡Suele salir en la posición {pos}! ¿Cuál es la tuya? 🐰🔥",
+    share_survivor_exclusive_hint: "🤫 <strong>¡Ojalá la cante!</strong> Esta canción es tan especial que tendría que ser la sorpresa exclusiva del tour.",
+    share_survivor_exclusive_text: "Mi canción soñada para el tour de Bad Bunny es {title} 🏆 ¡Tendría que ser la sorpresa exclusiva del concierto! ¿Cuál es la tuya? 🐰🔥",
+    share_quiz_text: "Reto Bad Bunny 🐰: He sacado {correct}/10 aciertos con un promedio de {time}s por canción (Puntos: {score}) 🔥 ¿Tú cuánto sacas?"
+  },
+  en: {
+    app_title: "THE BUNNY CUP",
+    app_subtitle: "What is the ultimate Bad Bunny song?",
+    mode_title: "Choose Your Mode",
+    mode_desc: "Select the experience you want to play. Build your bracket by eras or play the official 2025 Tour Setlist.",
+    mode_classic_title: "🏆 Classic Tournament",
+    mode_classic_desc: "Build your own elimination bracket by selecting eras.",
+    mode_survivor_title: "🔥 2025 Tour Special",
+    mode_survivor_desc: "Survival Mode: 2 enter, 1 wins and stays on the floor!",
+    mode_quiz_title: "⏱️ Speed Trivia (Blind Test)",
+    mode_quiz_desc: "Guess the song by listening blindly as fast as possible.",
+    btn_back_home: "<span>🏠</span> Back",
+    btn_exit: "<span>🏠</span> Exit",
+    btn_abandon: "<span>🏠</span> Quit",
+    config_title: "Choose Tournament Size",
+    config_desc: "Face them off 1v1 in direct eliminations until you find your absolute favorite.",
+    config_8: "8 Songs",
+    config_16: "16 Songs",
+    config_32: "32 Songs",
+    config_64: "64 Songs",
+    config_albums: "Select Eras / Albums to Include",
+    btn_start: "START TOURNAMENT",
+    tab_arena: "🏟️ The Arena (1v1)",
+    tab_bracket: "📊 Bracket",
+    badge_option_a: "OPTION A",
+    badge_option_b: "OPTION B",
+    btn_choose: "CHOOSE",
+    arena_hint: "You can use ⬅️ ➡️ arrows or A/D keys to vote. Press 🎧 to listen to a snippet.",
+    bracket_hint: "Swipe horizontally to see the full tournament bracket.",
+    winner_title: "We Have a Winner!",
+    winner_desc: "Your absolute favorite Bad Bunny song is:",
+    badge_champion: "👑 CHAMPION",
+    btn_share_winner: "Share my champion 🐰",
+    btn_share_setlist: "Share my setlist 🐰",
+    ranking_title: "Your Top Songs",
+    btn_view_bracket: "View Full Bracket 📊",
+    btn_play_again: "PLAY AGAIN",
+    quiz_hint: "What song is playing?",
+    quiz_completed: "Trivia Completed!",
+    quiz_correct: "Correct:",
+    quiz_avg_time: "Avg Time:",
+    quiz_total_score: "Total Score:",
+    quiz_leaderboard: "🏆 Leaderboard",
+    btn_challenge: "Challenge my friends 🔥",
+    footer_text: "Enjoyyy 🐰🔥 No bunnies were harmed in the making of this game.",
+    
+    // Dynamic JS texts
+    pool_count: "{count} songs available",
+    pool_error: "⚠️ You need at least {size} songs selected (you have {count}). Enable more albums.",
+    match_progress: "Matchup {current} of {total}",
+    survivor_progress: "Survivor Mode <span class='text-xs ml-2 text-gray-400'>{count} remaining</span>",
+    round_32: "Round of 64", // Since it's 32 matchups
+    round_16: "Round of 16",
+    round_8: "Quarterfinals",
+    round_4: "Semifinals",
+    round_2: "🔥 Grand Finale 🔥",
+    round_default: "Bad Bunny Tournament",
+    survivor_champ: "👑 Champion (Streak: {streak})",
+    survivor_challenger: "⚔️ Challenger",
+    survivor_leaderboard_champ: "👑 Current Champ: {title}",
+    survivor_leaderboard_wins: "{streak} Wins",
+    survivor_cemetery: "Graveyard (Eliminated)",
+    quiz_question: "Question {current}/{total}",
+    share_classic_text: "My ultimate Bad Bunny champion is {title} 🏆 I'm from the {album} era: {personality}. Find out yours! 🐰🔥",
+    share_survivor_hint: "🎶 <strong>Heads up!</strong> This song usually plays at number <strong>{pos}</strong> on this tour.",
+    share_survivor_text: "My dream song for the Bad Bunny tour is {title} 🏆 It usually plays at position {pos}! What's yours? 🐰🔥",
+    share_survivor_exclusive_hint: "🤫 <strong>I wish!</strong> This song is so special it would have to be the exclusive surprise of the concert.",
+    share_survivor_exclusive_text: "My dream song for the Bad Bunny tour is {title} 🏆 It would have to be the exclusive surprise of the concert! What's yours? 🐰🔥",
+    share_quiz_text: "Bad Bunny Challenge 🐰: I got {correct}/10 correct with an average of {time}s per song (Score: {score}) 🔥 Can you beat me?"
+  }
+};
+
+let currentLang = localStorage.getItem("bb_lang") || "es";
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem("bb_lang", lang);
+  
+  // Update toggle buttons
+  document.getElementById("lang-btn-es").className = lang === "es" ? "lang-btn active px-3 py-1 text-sm font-bold rounded-full transition-colors text-white bg-white bg-opacity-20" : "lang-btn px-3 py-1 text-sm font-bold rounded-full transition-colors text-gray-400 hover:text-white";
+  document.getElementById("lang-btn-en").className = lang === "en" ? "lang-btn active px-3 py-1 text-sm font-bold rounded-full transition-colors text-white bg-white bg-opacity-20" : "lang-btn px-3 py-1 text-sm font-bold rounded-full transition-colors text-gray-400 hover:text-white";
+  
+  // Update all data-i18n elements
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (TRANSLATIONS[currentLang][key]) {
+      el.innerHTML = TRANSLATIONS[currentLang][key];
+    }
+  });
+
+  // Re-render any dynamic UI if needed (like the pool count, match progress, etc)
+  if (typeof validateAlbumSelection === "function") validateAlbumSelection();
+}
+
+// Call on init
+document.addEventListener("DOMContentLoaded", () => {
+  setLanguage(currentLang);
+});
+
 // Base de datos de canciones de Bad Bunny con metadatos y estilos visuales por era/álbum (Álbumes y Singles Originales)
 const SONGS_DATABASE = [
   {
@@ -656,12 +829,22 @@ const SONGS_DATABASE = [
 
 // Diccionario de personalidades basado en el álbum
 const ALBUM_PERSONALITIES = {
-  "uvst": "nostálgica, playera, emocional 🌴💔",
-  "yhlqmdlg": "rebelde, perreadora, icónica 🛹🔥",
-  "x100pre": "profunda, innovadora, sentimental 👁️🖤",
-  "nsqtk": "oscura, directa, sin filtros 🐎🦇",
-  "eutdm": "experimental, vanguardista, alternativa 🚛🌍",
-  "singles": "versátil, impredecible, siempre en tendencia 📈✨"
+  es: {
+    "uvst": "nostálgica, playera, emocional 🌴💔",
+    "yhlqmdlg": "rebelde, perreadora, icónica 🛹🔥",
+    "x100pre": "profunda, innovadora, sentimental 👁️🖤",
+    "nsqtk": "oscura, directa, sin filtros 🐎🦇",
+    "eutdm": "experimental, vanguardista, alternativa 🚛🌍",
+    "singles": "versátil, impredecible, siempre en tendencia 📈✨"
+  },
+  en: {
+    "uvst": "nostalgic, beachy, emotional 🌴💔",
+    "yhlqmdlg": "rebellious, iconic, perreo-ready 🛹🔥",
+    "x100pre": "deep, innovative, sentimental 👁️🖤",
+    "nsqtk": "dark, direct, unfiltered 🐎🦇",
+    "eutdm": "experimental, avant-garde, alternative 🚛🌍",
+    "singles": "versatile, unpredictable, always trending 📈✨"
+  }
 };
 
 // Estado global del torneo
@@ -868,13 +1051,15 @@ function validateAlbumSelection() {
   );
   
   const poolCountEl = document.getElementById("pool-count");
-  poolCountEl.textContent = `${pool.length} canciones disponibles`;
+  poolCountEl.innerHTML = TRANSLATIONS[currentLang].pool_count.replace('{count}', pool.length);
 
   const btnStart = document.getElementById("btn-start");
   const errorMsg = document.getElementById("config-error");
 
   if (pool.length < tournament.size) {
-    errorMsg.textContent = `⚠️ Necesitas al menos ${tournament.size} canciones seleccionadas (tienes ${pool.length}). Activa más álbumes.`;
+    errorMsg.innerHTML = TRANSLATIONS[currentLang].pool_error
+      .replace('{size}', tournament.size)
+      .replace('{count}', pool.length);
     errorMsg.classList.remove("hidden");
     btnStart.disabled = true;
   } else {
@@ -931,7 +1116,9 @@ function updateRoundHeader() {
   const currentMatch = tournament.currentMatchIndex + 1;
 
   document.getElementById("round-title").textContent = getRoundName(tournament.roundSongs.length);
-  document.getElementById("match-progress").textContent = `Enfrentamiento ${currentMatch} de ${totalMatches}`;
+  document.getElementById("match-progress").innerHTML = TRANSLATIONS[currentLang].match_progress
+    .replace('{current}', currentMatch)
+    .replace('{total}', totalMatches);
   
   // Barra de progreso
   const percent = ((currentMatch - 1) / totalMatches) * 100;
@@ -940,12 +1127,13 @@ function updateRoundHeader() {
 
 // Obtener nombre legible de la ronda
 function getRoundName(songsCount) {
-  if (songsCount === 32) return "Treintaidosavos de Final";
-  if (songsCount === 16) return "Octavos de Final";
-  if (songsCount === 8) return "Cuartos de Final";
-  if (songsCount === 4) return "Semifinales";
-  if (songsCount === 2) return "🔥 Gran Final 🔥";
-  return "Torneo Bad Bunny";
+  if (songsCount === 64) return TRANSLATIONS[currentLang].round_32; // same logic
+  if (songsCount === 32) return TRANSLATIONS[currentLang].round_32;
+  if (songsCount === 16) return TRANSLATIONS[currentLang].round_16;
+  if (songsCount === 8) return TRANSLATIONS[currentLang].round_8;
+  if (songsCount === 4) return TRANSLATIONS[currentLang].round_4;
+  if (songsCount === 2) return TRANSLATIONS[currentLang].round_2;
+  return TRANSLATIONS[currentLang].round_default;
 }
 
 // Renderizar el enfrentamiento 1v1
@@ -1100,17 +1288,18 @@ function injectShareWinner(winner) {
   if (gameMode === 'survivor') {
     const pos = SPECIAL_TOUR_IDS.indexOf(winner.id) + 1;
     if (pos > 0) {
-      displayText = `🎶 <strong>¡Estate atenta!</strong> Esta canción suele salir en el número <strong>${pos}</strong> en este tour.`;
-      shareText = `Mi canción soñada para el tour de Bad Bunny es ${winner.title} 🏆 ¡Suele salir en la posición ${pos}! ¿Cuál es la tuya? 🐰🔥`;
+      displayText = TRANSLATIONS[currentLang].share_survivor_hint.replace('{pos}', pos);
+      shareText = TRANSLATIONS[currentLang].share_survivor_text.replace('{title}', winner.title).replace('{pos}', pos);
     } else {
-      displayText = `🤫 <strong>¡Ojalá la cante!</strong> Esta canción es tan especial que tendría que ser la sorpresa exclusiva del tour.`;
-      shareText = `Mi canción soñada para el tour de Bad Bunny es ${winner.title} 🏆 ¡Tendría que ser la sorpresa exclusiva del concierto! ¿Cuál es la tuya? 🐰🔥`;
+      displayText = TRANSLATIONS[currentLang].share_survivor_exclusive_hint;
+      shareText = TRANSLATIONS[currentLang].share_survivor_exclusive_text.replace('{title}', winner.title);
     }
   } else {
     // Modo Torneo Clásico
-    const personalityText = ALBUM_PERSONALITIES[winner.theme] || ALBUM_PERSONALITIES["singles"];
-    displayText = `Eres de la era <strong>${winner.album}</strong>: ${personalityText}`;
-    shareText = `Mi canción campeona de Bad Bunny es ${winner.title} 🏆 Soy de la era ${winner.album}: ${personalityText}. ¡Descubre la tuya! 🐰🔥`;
+    const personalityText = ALBUM_PERSONALITIES[currentLang][winner.theme] || ALBUM_PERSONALITIES[currentLang]["singles"];
+    // Hardcoding display text format for simplicity but translating personality
+    displayText = currentLang === 'en' ? `You are from the <strong>${winner.album}</strong> era: ${personalityText}` : `Eres de la era <strong>${winner.album}</strong>: ${personalityText}`;
+    shareText = TRANSLATIONS[currentLang].share_classic_text.replace('{title}', winner.title).replace('{album}', winner.album).replace('{personality}', personalityText);
   }
 
   if (personalityEl) personalityEl.innerHTML = displayText;
@@ -1118,8 +1307,8 @@ function injectShareWinner(winner) {
   if (btnShare) {
     // Customize button text based on mode
     btnShare.innerHTML = gameMode === 'survivor' 
-      ? `<span class="text-xl">📲</span> Compartir mi setlist 🐰` 
-      : `<span class="text-xl">📲</span> Compartir mi campeona 🐰`;
+      ? `<span class="text-xl">📲</span> <span data-i18n="btn_share_setlist">${TRANSLATIONS[currentLang].btn_share_setlist}</span>` 
+      : `<span class="text-xl">📲</span> <span data-i18n="btn_share_winner">${TRANSLATIONS[currentLang].btn_share_winner}</span>`;
 
     btnShare.onclick = async () => {
       const shareData = {
@@ -1818,7 +2007,7 @@ function startSurvivorMode() {
   // Ocultar barra de progreso y texto de enfrentamiento (ya que no es un bracket fijo)
   document.querySelector(".progress-bar-container").style.display = "none";
   document.getElementById("match-progress").style.display = "none";
-  document.getElementById("round-title").innerHTML = `Modo Survivor <span class="text-xs ml-2 text-gray-400">Quedan ${survivorState.pool.length + 2} canciones</span>`;
+  document.getElementById("round-title").innerHTML = TRANSLATIONS[currentLang].survivor_progress.replace('{count}', survivorState.pool.length + 2);
   
   renderSurvivorMatch();
   renderSurvivorLeaderboard();
@@ -1855,8 +2044,8 @@ function renderSurvivorMatch() {
   document.getElementById("right-year").textContent = songB.year;
   
   // Special Badges
-  cardLeft.querySelector(".card-badge").textContent = `👑 Campeón (Rachas: ${survivorState.streaks[songA.id]})`;
-  cardRight.querySelector(".card-badge").textContent = "⚔️ Retador";
+  cardLeft.querySelector(".card-badge").textContent = TRANSLATIONS[currentLang].survivor_champ.replace('{streak}', survivorState.streaks[songA.id]);
+  cardRight.querySelector(".card-badge").textContent = TRANSLATIONS[currentLang].survivor_challenger;
   
   document.getElementById("card-left").dataset.previewSongId = songA.id;
   document.getElementById("card-right").dataset.previewSongId = songB.id;
@@ -1864,7 +2053,7 @@ function renderSurvivorMatch() {
   fetchPreviewUrl(songA.id);
   fetchPreviewUrl(songB.id);
   
-  document.getElementById("round-title").innerHTML = `Modo Survivor <span class="text-xs ml-2 text-gray-400">Restantes: ${survivorState.pool.length + 2}</span>`;
+  document.getElementById("round-title").innerHTML = TRANSLATIONS[currentLang].survivor_progress.replace('{count}', survivorState.pool.length + 2);
 }
 
 function handleSurvivorVote(winnerId) {
@@ -1906,19 +2095,19 @@ function renderSurvivorLeaderboard() {
     const champ = survivorState.reigningChamp;
     container.innerHTML += `
       <div class="p-3 bg-white bg-opacity-10 rounded border border-yellow-500 mb-4 flex justify-between">
-        <span class="font-bold text-yellow-500">👑 Campeón Actual: ${champ.title}</span>
-        <span class="text-yellow-500 font-bold">${survivorState.streaks[champ.id]} Victorias</span>
+        <span class="font-bold text-yellow-500">${TRANSLATIONS[currentLang].survivor_leaderboard_champ.replace('{title}', champ.title)}</span>
+        <span class="text-yellow-500 font-bold">${TRANSLATIONS[currentLang].survivor_leaderboard_wins.replace('{streak}', survivorState.streaks[champ.id])}</span>
       </div>
     `;
   }
   
   if (survivorState.eliminated.length > 0) {
-    container.innerHTML += `<h3 class="text-gray-400 text-sm mb-2">Cementerio (Eliminados)</h3>`;
+    container.innerHTML += `<h3 class="text-gray-400 text-sm mb-2">${TRANSLATIONS[currentLang].survivor_cemetery}</h3>`;
     survivorState.eliminated.forEach((song, i) => {
       container.innerHTML += `
         <div class="p-2 bg-black bg-opacity-30 border border-red-900 rounded flex justify-between text-gray-500 text-sm">
           <span>💀 ${song.title}</span>
-          <span>Sobrevivió ${survivorState.streaks[song.id]} tandas</span>
+          <span>${TRANSLATIONS[currentLang].survivor_leaderboard_wins.replace('{streak}', survivorState.streaks[song.id])}</span>
         </div>
       `;
     });
@@ -1942,7 +2131,7 @@ function endSurvivorMode(winner) {
   topList.innerHTML = "";
   
   // Ocultar título genérico "Tu Top de Canciones" por algo más específico
-  topList.parentElement.querySelector("h3").textContent = "🏆 Récords de Supervivencia";
+  topList.parentElement.querySelector("h3").textContent = currentLang === 'en' ? "🏆 Survival Records" : "🏆 Récords de Supervivencia";
   
   // Ordenar todas las canciones por rachas ganadas
   const allSongs = [winner, ...survivorState.eliminated];
@@ -1962,7 +2151,7 @@ function endSurvivorMode(winner) {
         <span>${song.emoji} ${song.title}</span>
       </div>
       <div class="flex items-center gap-2">
-        <span class="text-xs text-yellow-500 font-bold">${survivorState.streaks[song.id]} Victorias</span>
+        <span class="text-xs text-yellow-500 font-bold">${TRANSLATIONS[currentLang].survivor_leaderboard_wins.replace('{streak}', survivorState.streaks[song.id])}</span>
       </div>
     `;
     topList.appendChild(li);
@@ -2021,7 +2210,7 @@ function renderQuizQuestion() {
   stopPreview();
   
   const currentSong = quizState.questions[quizState.currentIndex];
-  document.getElementById("quiz-progress-text").textContent = `Pregunta ${quizState.currentIndex + 1} / 10`;
+  document.getElementById("quiz-progress-text").textContent = TRANSLATIONS[currentLang].quiz_question.replace('{current}', quizState.currentIndex + 1).replace('{total}', 10);
   
   // Generar 3 opciones falsas (para hacer un total de 4 con la correcta)
   let options = [currentSong];
@@ -2105,7 +2294,7 @@ function handleQuizAnswer(selectedId, correctId, btnElement) {
     const speedBonus = Math.max(0, 30 - timeTaken);
     quizState.score += Math.round(1000 + (speedBonus * 50));
     if (btnElement) btnElement.classList.add("correct-answer");
-    feedbackEl.innerHTML = `✅ ¡CORRECTO!`;
+    feedbackEl.innerHTML = currentLang === 'en' ? `✅ CORRECT!` : `✅ ¡CORRECTO!`;
     feedbackEl.style.color = "#38ef7d";
   } else {
     // Fallo o tiempo agotado
@@ -2114,7 +2303,9 @@ function handleQuizAnswer(selectedId, correctId, btnElement) {
     // Resaltar el correcto
     const correctBtn = Array.from(buttons).find(b => b.dataset.songId === correctSong.id);
     if (correctBtn) correctBtn.classList.add("correct-answer");
-    feedbackEl.innerHTML = `❌ FALLO <span class="text-sm block mt-1 text-gray-300">Era: ${correctSong.title}</span>`;
+    const wrongText = currentLang === 'en' ? '❌ WRONG' : '❌ FALLO';
+    const eraText = currentLang === 'en' ? 'Era' : 'Era';
+    feedbackEl.innerHTML = `${wrongText} <span class="text-sm block mt-1 text-gray-300">${eraText}: ${correctSong.title}</span>`;
     feedbackEl.style.color = "#ff4b2b";
   }
   
@@ -2174,7 +2365,7 @@ function endQuizMode() {
     btnShare.onclick = async () => {
       const shareData = {
         title: 'Reto Bad Bunny Trivia',
-        text: `He sacado ${quizState.correctSongs}/10 en ${avgTime}s de media adivinando canciones de Bad Bunny. ¿Me ganas? 🐰🔥`,
+        text: TRANSLATIONS[currentLang].share_quiz_text.replace('{correct}', quizState.correctSongs).replace('{time}', avgTime).replace('{score}', Math.max(0, quizState.score)),
         url: window.location.href
       };
       
@@ -2189,7 +2380,7 @@ function endQuizMode() {
         // Fallback si falla la API nativa (a veces falla por permisos)
         try {
           await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
-          alert("¡Enlace y resultado copiados al portapapeles! Pégalo donde quieras.");
+          alert(currentLang === 'en' ? "Link and result copied to clipboard! Paste it anywhere." : "¡Enlace y resultado copiados al portapapeles! Pégalo donde quieras.");
         } catch(clipboardErr) {
           alert(`Tu resultado: ${shareData.text}`);
         }

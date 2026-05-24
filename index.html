@@ -21,11 +21,16 @@
   
   <!-- Contenedor para Confeti en la victoria -->
   <div id="confetti-container" class="pointer-events-none"></div>
+  <!-- Botón de Idioma -->
+  <div class="lang-toggle-container absolute top-4 right-4 z-50 flex bg-black bg-opacity-40 border border-gray-600 rounded-full p-1 backdrop-blur-md">
+    <button id="lang-btn-es" class="lang-btn active px-3 py-1 text-sm font-bold rounded-full transition-colors text-white bg-white bg-opacity-20" onclick="setLanguage('es')">ES</button>
+    <button id="lang-btn-en" class="lang-btn px-3 py-1 text-sm font-bold rounded-full transition-colors text-gray-400 hover:text-white" onclick="setLanguage('en')">EN</button>
+  </div>
 
   <!-- Header Principal -->
   <header class="main-header">
-    <h1 class="logo-text">LA COPA CONEJO</h1>
-    <p class="subtitle">¿Cuál es la mejor canción del Conejo Malo?</p>
+    <h1 class="logo-text" data-i18n="app_title">LA COPA CONEJO</h1>
+    <p class="subtitle" data-i18n="app_subtitle">¿Cuál es la mejor canción del Conejo Malo?</p>
   </header>
 
   <!-- Contenedor Principal de la App -->
@@ -33,23 +38,23 @@
     
     <!-- PANTALLA 0: Selección de Modo -->
     <section id="mode-selection-screen" class="glass-panel text-center fade-in mb-8">
-      <h2 class="text-3xl font-bold mb-4 font-display neon-text uppercase tracking-widest" style="text-shadow: 0 0 10px rgba(255,255,255,0.5);">Elige tu Modo</h2>
-      <p class="text-gray-300 mb-8 max-w-md mx-auto">Selecciona la experiencia que quieres jugar. Puedes armar tu torneo por eras o jugar el setlist oficial del Tour 2025.</p>
+      <h2 class="text-3xl font-bold mb-4 font-display neon-text uppercase tracking-widest" style="text-shadow: 0 0 10px rgba(255,255,255,0.5);" data-i18n="mode_title">Elige tu Modo</h2>
+      <p class="text-gray-300 mb-8 max-w-md mx-auto" data-i18n="mode_desc">Selecciona la experiencia que quieres jugar. Puedes armar tu torneo por eras o jugar el setlist oficial del Tour 2025.</p>
 
       <div class="flex flex-col gap-6 max-w-sm mx-auto">
         <button id="btn-mode-classic" class="btn-primary flex flex-col items-center justify-center p-4">
-          <span class="text-xl mb-1">🏆 Torneo Clásico</span>
-          <span class="text-xs text-gray-200 font-normal opacity-80" style="text-transform: none;">Arma tu propio cuadro eliminatorio seleccionando eras.</span>
+          <span class="text-xl mb-1" data-i18n="mode_classic_title">🏆 Torneo Clásico</span>
+          <span class="text-xs text-gray-200 font-normal opacity-80" style="text-transform: none;" data-i18n="mode_classic_desc">Arma tu propio cuadro eliminatorio seleccionando eras.</span>
         </button>
         
         <button id="btn-mode-survivor" class="btn-primary flex flex-col items-center justify-center p-4" style="background: linear-gradient(135deg, #ff4b2b, #ff416c);">
-          <span class="text-xl mb-1">🔥 Especial Tour 2025</span>
-          <span class="text-xs text-gray-200 font-normal opacity-80" style="text-transform: none;">Modo Supervivencia: Juegan 2, gana 1 y sigue en la pista!</span>
+          <span class="text-xl mb-1" data-i18n="mode_survivor_title">🔥 Especial Tour 2025</span>
+          <span class="text-xs text-gray-200 font-normal opacity-80" style="text-transform: none;" data-i18n="mode_survivor_desc">Modo Supervivencia: Juegan 2, gana 1 y sigue en la pista!</span>
         </button>
         
         <button id="btn-mode-quiz" class="btn-primary flex flex-col items-center justify-center p-4" style="background: linear-gradient(135deg, #11998e, #38ef7d);">
-          <span class="text-xl mb-1">⏱️ Trivia Velocidad (Blind)</span>
-          <span class="text-xs text-gray-200 font-normal opacity-80" style="text-transform: none;">Adivina la canción escuchando a ciegas lo más rápido posible.</span>
+          <span class="text-xl mb-1" data-i18n="mode_quiz_title">⏱️ Trivia Velocidad (Blind)</span>
+          <span class="text-xs text-gray-200 font-normal opacity-80" style="text-transform: none;" data-i18n="mode_quiz_desc">Adivina la canción escuchando a ciegas lo más rápido posible.</span>
         </button>
       </div>
     </section>
@@ -57,21 +62,21 @@
     <!-- PANTALLA 1: CONFIGURACIÓN -->
     <section id="config-screen" class="glass-panel text-center hidden fade-in relative">
       <button class="btn-back-to-menu absolute top-4 left-4" onclick="location.reload()">
-        <span>🏠</span> Volver
+        <span data-i18n="btn_back_home"><span>🏠</span> Volver</span>
       </button>
-      <h2 class="section-title mt-4">Elige el Tamaño del Torneo</h2>
-      <p class="text-gray-400 mb-6 text-sm">Enfréntalas 1v1 en eliminatorias directas hasta descubrir tu favorita.</p>
+      <h2 class="section-title mt-4" data-i18n="config_title">Elige el Tamaño del Torneo</h2>
+      <p class="text-gray-400 mb-6 text-sm" data-i18n="config_desc">Enfréntalas 1v1 en eliminatorias directas hasta descubrir tu favorita.</p>
       
       <!-- Selector de tamaño -->
       <div class="size-selector flex justify-center gap-4 mb-8">
-        <button type="button" class="btn-size" data-size="8">8 Canciones</button>
-        <button type="button" class="btn-size active" data-size="16">16 Canciones</button>
-        <button type="button" class="btn-size" data-size="32">32 Canciones</button>
-        <button type="button" class="btn-size" data-size="64">64 Canciones</button>
+        <button type="button" class="btn-size" data-size="8"><span data-i18n="config_8">8 Canciones</span></button>
+        <button type="button" class="btn-size active" data-size="16"><span data-i18n="config_16">16 Canciones</span></button>
+        <button type="button" class="btn-size" data-size="32"><span data-i18n="config_32">32 Canciones</span></button>
+        <button type="button" class="btn-size" data-size="64"><span data-i18n="config_64">64 Canciones</span></button>
       </div>
 
       <!-- Selector de Eras / Álbumes -->
-      <h3 class="subsection-title">Selecciona las Eras / Álbumes a Incluir</h3>
+      <h3 class="subsection-title" data-i18n="config_albums">Selecciona las Eras / Álbumes a Incluir</h3>
       <div class="album-selector-grid mb-8">
         <label class="album-checkbox-card theme-dtmf">
           <input type="checkbox" class="album-checkbox" value="dtmf" checked>
@@ -143,19 +148,19 @@
 
       <!-- Botón Comenzar -->
       <button id="btn-start" class="btn-primary w-full max-w-sm mb-12">
-        <span>INICIAR TORNEO</span>
+        <span data-i18n="btn_start">INICIAR TORNEO</span>
       </button>
     </section>
 
     <!-- PANTALLA 2: ARENA DE BATALLA -->
     <section id="arena-screen" class="hidden relative">
       <button class="btn-back-to-menu absolute top-0 left-0 sm:-left-4" onclick="location.reload()">
-        <span>🏠</span> Salir
+        <span data-i18n="btn_exit"><span>🏠</span> Salir</span>
       </button>
       <!-- Pestañas del Torneo -->
       <div id="nav-bracket" class="flex justify-center gap-2 mb-6 hidden">
-        <button id="tab-arena-btn" class="tab-btn active" onclick="switchTab('arena')">🏟️ La Arena (1v1)</button>
-        <button id="tab-bracket-btn" class="tab-btn" onclick="switchTab('bracket')">📊 Cuadro (Bracket)</button>
+        <button id="tab-arena-btn" class="tab-btn active" onclick="switchTab('arena')" data-i18n="tab_arena">🏟️ La Arena (1v1)</button>
+        <button id="tab-bracket-btn" class="tab-btn" onclick="switchTab('bracket')" data-i18n="tab_bracket">📊 Cuadro (Bracket)</button>
       </div>
 
       <!-- Contenido 1: Arena 1v1 -->
@@ -175,7 +180,7 @@
         <div class="battle-ground-layout">
           <!-- Canción Izquierda -->
           <div id="card-left" class="song-card-wrapper">
-            <div class="card-badge">OPCIÓN A</div>
+            <div class="card-badge" data-i18n="badge_option_a">OPCIÓN A</div>
             <div class="song-cover-container">
               <span id="left-emoji" class="song-cover-emoji">🏖️</span>
             </div>
@@ -185,7 +190,7 @@
               <p id="left-album" class="song-album">Un Verano Sin Ti</p>
               <span id="left-year" class="song-year">2022</span>
             </div>
-            <button class="btn-vote">ELEGIR</button>
+            <button class="btn-vote" data-i18n="btn_choose">ELEGIR</button>
           </div>
 
           <!-- Divisor VS -->
@@ -195,7 +200,7 @@
 
           <!-- Canción Derecha -->
           <div id="card-right" class="song-card-wrapper">
-            <div class="card-badge">OPCIÓN B</div>
+            <div class="card-badge" data-i18n="badge_option_b">OPCIÓN B</div>
             <div class="song-cover-container">
               <span id="right-emoji" class="song-cover-emoji">🛹</span>
             </div>
@@ -205,17 +210,17 @@
               <p id="right-album" class="song-album">YHLQMDLG</p>
               <span id="right-year" class="song-year">2020</span>
             </div>
-            <button class="btn-vote">ELEGIR</button>
+            <button class="btn-vote" data-i18n="btn_choose">ELEGIR</button>
           </div>
         </div>
         
-        <p class="text-center text-xs text-gray-400 mt-6">Puedes usar las flechas ⬅️ ➡️ o teclas A/D para votar. Pulsa 🎧 para escuchar un fragmento.</p>
+        <p class="text-center text-xs text-gray-400 mt-6" data-i18n="arena_hint">Puedes usar las flechas ⬅️ ➡️ o teclas A/D para votar. Pulsa 🎧 para escuchar un fragmento.</p>
       </div>
 
       <!-- Contenido 2: Bracket/Cuadro Completo -->
       <div id="bracket-view-content" class="hidden fade-in">
         <div class="bracket-instructions text-center mb-4">
-          <p class="text-xs text-gray-400">Desliza horizontalmente para ver el cuadro completo del torneo.</p>
+          <p class="text-xs text-gray-400" data-i18n="bracket_hint">Desliza horizontalmente para ver el cuadro completo del torneo.</p>
         </div>
         <div class="bracket-scroll-wrapper">
           <div id="bracket-container" class="bracket-tree-layout">
@@ -228,12 +233,12 @@
 
     <!-- PANTALLA 3: CAMPEÓN Y RANKING -->
     <section id="winner-screen" class="glass-panel text-center hidden fade-in">
-      <h2 class="winner-congrats-title">¡Tenemos Ganadora!</h2>
-      <p class="text-gray-400 mb-6 text-sm">Tu canción favorita absoluta de Bad Bunny es:</p>
+      <h2 class="winner-congrats-title" data-i18n="winner_title">¡Tenemos Ganadora!</h2>
+      <p class="text-gray-400 mb-6 text-sm" data-i18n="winner_desc">Tu canción favorita absoluta de Bad Bunny es:</p>
 
       <!-- Tarjeta del Ganador -->
       <div id="winner-banner" class="winner-showcase-card mx-auto mb-8">
-        <div class="crown-badge">👑 CAMPEONA</div>
+        <div class="crown-badge" data-i18n="badge_champion">👑 CAMPEONA</div>
         <div class="winner-cover-container">
           <span id="winner-emoji" class="winner-cover-emoji">🥇</span>
         </div>
@@ -247,12 +252,12 @@
       <p id="winner-personality" class="text-sm md:text-base text-gray-300 italic mb-6 px-4"></p>
       
       <button id="btn-share-tournament" class="btn-share mx-auto mb-8 flex items-center justify-center gap-2">
-        <span class="text-xl">📲</span> Compartir mi campeona 🐰
+        <span class="text-xl">📲</span> <span data-i18n="btn_share_winner">Compartir mi campeona 🐰</span>
       </button>
 
       <!-- Sección de Ranking (Top 8) -->
       <div class="ranking-section max-w-lg mx-auto mb-8">
-        <h3 class="subsection-title mb-4">Tu Top de Canciones</h3>
+        <h3 class="subsection-title mb-4" data-i18n="ranking_title">Tu Top de Canciones</h3>
         <div id="ranking-list" class="flex flex-col gap-2">
           <!-- Rellenado dinámicamente en JS -->
         </div>
@@ -260,7 +265,7 @@
 
       <!-- Botón para ver cuadro completo -->
       <button onclick="document.getElementById('winner-bracket-wrapper').classList.toggle('hidden')" class="btn-secondary w-full max-w-sm mb-4 p-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors border border-gray-600 font-bold text-white tracking-widest text-sm uppercase">
-        Ver Cuadro Completo 📊
+        <span data-i18n="btn_view_bracket">Ver Cuadro Completo 📊</span>
       </button>
 
       <!-- Contenedor del cuadro final (oculto por defecto) -->
@@ -272,14 +277,14 @@
 
       <!-- Botón Reiniciar -->
       <button class="btn-primary btn-restart w-full max-w-sm">
-        <span>JUGAR DE NUEVO</span>
+        <span data-i18n="btn_play_again">JUGAR DE NUEVO</span>
       </button>
     </section>
 
     <!-- PANTALLA 4: TRIVIA / BLIND TEST -->
     <section id="quiz-screen" class="glass-panel text-center hidden fade-in w-full max-w-3xl mx-auto relative">
       <button class="btn-back-to-menu absolute -top-4 left-0 sm:-left-4" onclick="location.reload()">
-        <span>🏠</span> Abandonar
+        <span data-i18n="btn_abandon"><span>🏠</span> Abandonar</span>
       </button>
       <div class="flex justify-between items-center mb-6 mt-4">
         <h2 id="quiz-progress-text" class="text-xl font-bold uppercase tracking-widest text-white opacity-80">Pregunta 1/10</h2>
@@ -293,7 +298,7 @@
         </div>
       </div>
       
-      <p class="text-gray-300 mb-6 font-medium">¿Qué canción está sonando?</p>
+      <p class="text-gray-300 mb-6 font-medium" data-i18n="quiz_hint">¿Qué canción está sonando?</p>
       
       <!-- Opciones -->
       <div id="quiz-options-container" class="flex flex-col gap-3">
@@ -303,44 +308,44 @@
 
     <!-- PANTALLA 5: RESULTADOS TRIVIA -->
     <section id="quiz-winner-screen" class="glass-panel text-center hidden fade-in w-full max-w-3xl mx-auto">
-      <h2 class="text-4xl font-bold mb-4 font-display neon-text uppercase tracking-widest" style="color: #38ef7d; text-shadow: 0 0 15px rgba(56, 239, 125, 0.6);">¡Trivia Completada!</h2>
+      <h2 class="text-4xl font-bold mb-4 font-display neon-text uppercase tracking-widest" style="color: #38ef7d; text-shadow: 0 0 15px rgba(56, 239, 125, 0.6);" data-i18n="quiz_completed">¡Trivia Completada!</h2>
       
       <div class="flex flex-col gap-4 my-8 p-6 rounded-2xl bg-black bg-opacity-40 border border-gray-700">
         <div class="flex justify-between items-center text-xl">
-          <span class="text-gray-300">Aciertos:</span>
+          <span class="text-gray-300" data-i18n="quiz_correct">Aciertos:</span>
           <span id="quiz-result-correct" class="font-bold text-white">8 / 10</span>
         </div>
         <div class="flex justify-between items-center text-xl">
-          <span class="text-gray-300">Tiempo Promedio:</span>
+          <span class="text-gray-300" data-i18n="quiz_avg_time">Tiempo Promedio:</span>
           <span id="quiz-result-time" class="font-bold text-white">4.5s</span>
         </div>
         <div class="w-full h-px bg-gray-600 my-2"></div>
         <div class="flex justify-between items-center text-3xl">
-          <span class="text-gray-300">Puntuación Total:</span>
+          <span class="text-gray-300" data-i18n="quiz_total_score">Puntuación Total:</span>
           <span id="quiz-result-score" class="font-bold neon-text" style="color: #ffd700;">12500</span>
         </div>
       </div>
       
       <div class="ranking-section max-w-lg mx-auto mb-8">
-        <h3 class="subsection-title mb-4">🏆 Mejores Puntuaciones</h3>
+        <h3 class="subsection-title mb-4" data-i18n="quiz_leaderboard">🏆 Mejores Puntuaciones</h3>
         <div id="quiz-leaderboard-list" class="flex flex-col gap-2 text-left">
           <!-- Rellenado dinámicamente -->
         </div>
       </div>
       
       <button id="btn-share-quiz" class="btn-share mx-auto mb-6 flex items-center justify-center gap-2">
-        <span class="text-xl">📲</span> Retar a mis amigos 🔥
+        <span class="text-xl">📲</span> <span data-i18n="btn_challenge">Retar a mis amigos 🔥</span>
       </button>
 
       <button class="btn-primary btn-restart w-full max-w-sm" style="background: linear-gradient(135deg, #11998e, #38ef7d);">
-        <span>VOLVER A JUGAR</span>
+        <span data-i18n="btn_play_again">VOLVER A JUGAR</span>
       </button>
     </section>
 
   </main>
 
   <footer class="main-footer">
-    <p>A disfrutaaaar 🐰🔥 Ningún conejo fue dañado en este proceso.</p>
+    <p data-i18n="footer_text">A disfrutaaaar 🐰🔥 Ningún conejo fue dañado en este proceso.</p>
   </footer>
 
   <!-- Scripts -->
