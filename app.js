@@ -11,7 +11,7 @@ const TRANSLATIONS = {
     mode_classic_desc: "Todas las eras. Todas las canciones. Solo una sobrevive.",
     mode_survivor_title: "🎟️ Modo Tour",
     mode_survivor_desc: "Juega con el setlist y descubre qué canción estás esperando más.",
-    mode_quiz_title: "⚡ 7 Segundos",
+    mode_quiz_title: "⚡ 15 Segundos",
     mode_quiz_desc: "Escucha el fragmento, adivina rápido y reta a tus amigos.",
     btn_back_home: "<span>🏠</span> Volver",
     btn_exit: "<span>🏠</span> Salir",
@@ -81,7 +81,7 @@ const TRANSLATIONS = {
     mode_classic_desc: "All eras. All songs. Only one survives.",
     mode_survivor_title: "🎟️ Tour Mode",
     mode_survivor_desc: "Play with the setlist and discover which song you are waiting for the most.",
-    mode_quiz_title: "⚡ 7 Seconds",
+    mode_quiz_title: "⚡ 15 Seconds",
     mode_quiz_desc: "Listen to the snippet, guess fast and challenge your friends.",
     btn_back_home: "<span>🏠</span> Back",
     btn_exit: "<span>🏠</span> Exit",
@@ -2234,7 +2234,7 @@ function renderQuizQuestion() {
   // Iniciar timer
   quizState.startTime = Date.now();
   const timerEl = document.getElementById("quiz-timer");
-  timerEl.textContent = "30.0s";
+  timerEl.textContent = "15.0s";
   timerEl.style.color = "#38ef7d";
   
   // Limpiar mensaje de feedback previo
@@ -2243,11 +2243,11 @@ function renderQuizQuestion() {
   
   quizState.timerInterval = setInterval(() => {
     const elapsed = (Date.now() - quizState.startTime) / 1000;
-    const remaining = Math.max(0, 30 - elapsed);
+    const remaining = Math.max(0, 15 - elapsed);
     timerEl.textContent = remaining.toFixed(1) + "s";
     
-    if (remaining <= 5) timerEl.style.color = "#ff4b2b";
-    else if (remaining <= 15) timerEl.style.color = "#ffd700";
+    if (remaining <= 3) timerEl.style.color = "#ff4b2b";
+    else if (remaining <= 7) timerEl.style.color = "#ffd700";
     
     if (remaining <= 0) {
       clearInterval(quizState.timerInterval);
@@ -2291,7 +2291,7 @@ function handleQuizAnswer(selectedId, correctId, btnElement) {
   if (selectedId === correctId) {
     // Acierto
     quizState.correctSongs++;
-    const speedBonus = Math.max(0, 30 - timeTaken);
+    const speedBonus = Math.max(0, 15 - timeTaken);
     quizState.score += Math.round(1000 + (speedBonus * 50));
     if (btnElement) btnElement.classList.add("correct-answer");
     feedbackEl.innerHTML = currentLang === 'en' ? `✅ CORRECT!` : `✅ ¡CORRECTO!`;
