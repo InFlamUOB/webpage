@@ -861,8 +861,11 @@ function setupEventListeners() {
 function validateAlbumSelection() {
   const selectedAlbums = Array.from(document.querySelectorAll(".album-checkbox:checked")).map(cb => cb.value);
   
-  // Filtrar base de datos
-  const pool = tournament.allSongs.filter(s => selectedAlbums.includes(s.theme));
+  // Filtrar base de datos (y excluir las 3 canciones reservadas para Survivor/Quiz)
+  const pool = tournament.allSongs.filter(s => 
+    selectedAlbums.includes(s.theme) && 
+    !["diles", "no-me-conoce", "sp-abreme"].includes(s.id)
+  );
   
   const poolCountEl = document.getElementById("pool-count");
   poolCountEl.textContent = `${pool.length} canciones disponibles`;
@@ -890,7 +893,10 @@ function renderConfigScreen() {
 // Iniciar torneo
 function startTournament() {
   const selectedAlbums = Array.from(document.querySelectorAll(".album-checkbox:checked")).map(cb => cb.value);
-  let pool = tournament.allSongs.filter(s => selectedAlbums.includes(s.theme));
+  let pool = tournament.allSongs.filter(s => 
+    selectedAlbums.includes(s.theme) && 
+    !["diles", "no-me-conoce", "sp-abreme"].includes(s.id)
+  );
 
   // Barajar canciones (Fisher-Yates shuffle)
   for (let i = pool.length - 1; i > 0; i--) {
