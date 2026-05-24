@@ -185,7 +185,8 @@ const TRANSLATIONS = {
     pool_error: "⚠️ Necesitas al menos {size} canciones seleccionadas (tienes {count}). Activa más álbumes.",
     match_progress: "Enfrentamiento {current} de {total}",
     survivor_progress: "Modo Survivor <span class='text-xs ml-2 text-gray-400'>Restantes: {count}</span>",
-    round_32: "Treintaidosavos de Final",
+    round_64: "Treintaidosavos de Final",
+    round_32: "Dieciseisavos de Final",
     round_16: "Octavos de Final",
     round_8: "Cuartos de Final",
     round_4: "Semifinales",
@@ -253,13 +254,15 @@ const TRANSLATIONS = {
     // Dynamic JS texts
     pool_count: "{count} songs available",
     pool_error: "⚠️ You need at least {size} songs selected (you have {count}). Enable more albums.",
+    pool_warning_64: "⚠️ The 64-song tournament is a marathon! Get ready for an intense session.",
     match_progress: "Matchup {current} of {total}",
     survivor_progress: "Survivor Mode <span class='text-xs ml-2 text-gray-400'>{count} remaining</span>",
-    round_32: "Round of 64", // Since it's 32 matchups
+    round_64: "Round of 64",
+    round_32: "Round of 32",
     round_16: "Round of 16",
     round_8: "Quarterfinals",
-    round_4: "Semifinals",
-    round_2: "🔥 Grand Finale 🔥",
+    round_4: "Semifinales",
+    round_2: "🔥 Grand Final 🔥",
     round_default: "Bad Bunny Tournament",
     survivor_champ: "👑 Defending (Streak: {streak})",
     survivor_challenger: "⚔️ New rival",
@@ -1083,12 +1086,19 @@ function setupEventListeners() {
   if (btnModeStats) {
     btnModeStats.addEventListener("click", showGlobalStats);
   }
-  // Cambiar tamaño de torneo
   document.querySelectorAll(".btn-size").forEach(btn => {
     btn.addEventListener("click", () => {
       document.querySelectorAll(".btn-size").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       tournament.size = parseInt(btn.dataset.size);
+      
+      const warningEl = document.getElementById("size-warning");
+      if (warningEl) {
+        warningEl.textContent = tournament.size === 64 
+          ? (currentLang === 'en' ? "(WARNING: This is a review of almost all songs!)" : "(OJO, ¡esto es un repaso de todas las canciones!)")
+          : "";
+      }
+      
       validateAlbumSelection();
     });
   });
@@ -1266,7 +1276,7 @@ function updateRoundHeader() {
 
 // Obtener nombre legible de la ronda
 function getRoundName(songsCount) {
-  if (songsCount === 64) return TRANSLATIONS[currentLang].round_32; // same logic
+  if (songsCount === 64) return TRANSLATIONS[currentLang].round_64;
   if (songsCount === 32) return TRANSLATIONS[currentLang].round_32;
   if (songsCount === 16) return TRANSLATIONS[currentLang].round_16;
   if (songsCount === 8) return TRANSLATIONS[currentLang].round_8;
