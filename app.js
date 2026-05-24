@@ -1061,6 +1061,16 @@ function showWinnerScreen(champion) {
 
   // Renderizar Top 8 final
   renderRankingList();
+  
+  // Copiar el bracket finalizado para poder visualizarlo
+  const mainBracket = document.getElementById("bracket-container").innerHTML;
+  const winnerBracketContainer = document.getElementById("winner-bracket-container");
+  if (winnerBracketContainer) {
+    winnerBracketContainer.innerHTML = mainBracket;
+    // Esconder el wrapper por defecto cada vez que se carga un nuevo ganador
+    const wrapper = document.getElementById("winner-bracket-wrapper");
+    if (wrapper) wrapper.classList.add("hidden");
+  }
 }
 
 // Renderizar el ranking final (Top 8 / 4 / 2 dependiendo del tamaño del torneo)
@@ -1885,8 +1895,8 @@ function renderQuizQuestion() {
   
   options.forEach(opt => {
     const btn = document.createElement("button");
-    btn.className = "w-full p-4 text-left rounded-xl bg-gray-800 hover:bg-gray-700 transition-colors border border-gray-700";
-    btn.innerHTML = `<span class="text-lg font-bold">${opt.title}</span>`;
+    btn.className = "quiz-option-btn";
+    btn.innerHTML = `<span class="quiz-option-text">${opt.title}</span>`;
     btn.onclick = () => handleQuizAnswer(opt.id, currentSong.id, btn);
     container.appendChild(btn);
   });
@@ -1951,16 +1961,16 @@ function handleQuizAnswer(selectedId, correctId, btnElement) {
     quizState.correctSongs++;
     const speedBonus = Math.max(0, 30 - timeTaken);
     quizState.score += Math.round(1000 + (speedBonus * 50));
-    if (btnElement) btnElement.classList.add("bg-green-600", "border-green-400");
+    if (btnElement) btnElement.classList.add("correct-answer");
     feedbackEl.innerHTML = `✅ ¡CORRECTO!`;
     feedbackEl.style.color = "#38ef7d";
   } else {
     // Fallo o tiempo agotado
     quizState.score -= 500;
-    if (btnElement) btnElement.classList.add("bg-red-600", "border-red-400");
+    if (btnElement) btnElement.classList.add("wrong-answer");
     // Resaltar el correcto
-    const correctIndex = Array.from(buttons).findIndex(b => b.textContent === correctSong.title);
-    if (correctIndex >= 0) buttons[correctIndex].classList.add("bg-green-700", "border-green-400", "border-2");
+    const correctIndex = Array.from(buttons).findIndex(b => b.querySelector(".quiz-option-text").textContent === correctSong.title);
+    if (correctIndex >= 0) buttons[correctIndex].classList.add("correct-answer");
     feedbackEl.innerHTML = `❌ FALLO <span class="text-sm block mt-1 text-gray-300">Era: ${correctSong.title}</span>`;
     feedbackEl.style.color = "#ff4b2b";
   }

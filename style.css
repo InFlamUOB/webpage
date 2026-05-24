@@ -1147,3 +1147,49 @@ body {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* =========================================
+   Quiz Option Button Styles
+========================================= */
+.quiz-option-btn {
+  width: 100%;
+  padding: 1.25rem;
+  margin-bottom: 0.75rem;
+  text-align: center;
+  border-radius: 1rem;
+  background: linear-gradient(to right, #111827, #1f2937); /* dark gray gradient */
+  border: 1px solid #4b5563; 
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.quiz-option-btn:hover:not(:disabled) {
+  background: linear-gradient(to right, #7c3aed, #2563eb); /* purple to blue gradient */
+  border-color: #c084fc; 
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+}
+
+.quiz-option-btn:disabled {
+  opacity: 0.8;
+  cursor: default;
+}
+
+.quiz-option-text {
+  font-size: 1.25rem; 
+  font-weight: 800; 
+  letter-spacing: 0.05em; 
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.quiz-option-btn.correct-answer {
+  background: linear-gradient(to right, #059669, #10b981) !important; /* green-600 to green-500 */
+  border-color: #34d399 !important; /* green-400 */
+}
+
+.quiz-option-btn.wrong-answer {
+  background: linear-gradient(to right, #dc2626, #ef4444) !important; /* red-600 to red-500 */
+  border-color: #f87171 !important; /* red-400 */
+}
