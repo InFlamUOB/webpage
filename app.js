@@ -866,10 +866,6 @@ const SONGS_DATABASE = [
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/bb/b7/ad/bbb7adc0-e19a-de2c-f5fa-7aa7597c018f/mzaf_3830528517982749933.plus.aac.p.m4a"
   },
   {
-    id: "sp-exclusiva", title: "Canción Sorpresa Exclusiva", album: "DeBÍ TiRAR MáS FOToS Tour", year: 2025, theme: "singles", emoji: "🤫",
-    previewUrl: null
-  },
-  {
     id: "sp-abreme", title: "Ábreme Paso", album: "DeBÍ TiRAR MáS FOToS", year: 2025, theme: "dtmf", emoji: "🛣️",
     previewUrl: null
   }
@@ -2000,7 +1996,6 @@ const SPECIAL_TOUR_IDS = [
   "safaera",
   "diles",
   "monaco",
-  "sp-exclusiva",
   "sp-cafe",
   "sp-abreme",
   "ojitos-lindos",
