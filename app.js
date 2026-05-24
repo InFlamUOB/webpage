@@ -2546,29 +2546,36 @@ function endQuizMode() {
 
   const btnShare = document.getElementById("btn-share-quiz");
   if (btnShare) {
-    btnShare.onclick = async () => {
-      const shareData = {
-        title: 'Reto Bad Bunny Trivia',
-        text: `${TRANSLATIONS[currentLang].share_quiz_text.replace('{correct}', quizState.correctSongs).replace('{time}', avgTime).replace('{score}', Math.max(0, quizState.score))}\n\n${window.location.href}`
-      };
-      
-      try {
-        if (navigator.share) {
-          // Omitimos la propiedad "url" porque en iOS WhatsApp a veces ignora el "text" si hay una "url"
-          await navigator.share({ title: shareData.title, text: shareData.text });
-        } else {
-          throw new Error("No share API");
-        }
-      } catch (err) {
-        console.log('Error sharing:', err);
-        // Fallback si falla la API nativa
-        try {
-          await navigator.clipboard.writeText(shareData.text);
-          alert(currentLang === 'en' ? "Link and result copied to clipboard! Ready to share." : "¡Enlace y resultado copiados al portapapeles! Listo para compartir.");
-        } catch(clipboardErr) {
-          alert(`Tu resultado:\n\n${shareData.text}`);
-        }
-      }
-    };
+    btnShare.onclick = shareQuizResults;
+  }
+}
+
+async function shareQuizResults() {
+  const avgTime = (quizState.totalTime / 10).toFixed(1);
+  const shareData = {
+    title: 'Reto Bad Bunny Trivia',
+    text: `${TRANSLATIONS[currentLang].share_quiz_text.replace('{correct}', quizState.correctSongs).replace('{time}', avgTime).replace('{score}', Math.max(0, quizState.score))}\n\n${window.location.href}`
+  };
+  
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: shareData.title, text: shareData.text });
+    } else {
+      throw new Error("No share API");
+    }
+  } catch (err) {
+    console.log('Error sharing:', err);
+    try {
+      // Fallback a portapapeles
+      const textArea = document.createElement("textarea");
+      textArea.value = shareData.text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      alert(currentLang === 'en' ? "Link and result copied to clipboard! Ready to share." : "¡Enlace y resultado copiados al portapapeles! Listo para compartir.");
+    } catch(clipboardErr) {
+      alert(`Tu resultado:\n\n${shareData.text}`);
+    }
   }
 }
