@@ -2548,18 +2548,17 @@ function endQuizMode() {
       
       try {
         if (navigator.share) {
+          // Omitimos la propiedad "url" porque en iOS WhatsApp a veces ignora el "text" si hay una "url"
           await navigator.share({ title: shareData.title, text: shareData.text });
         } else {
           throw new Error("No share API");
         }
       } catch (err) {
         console.log('Error sharing:', err);
-        if (err.name === 'AbortError') return; // User cancelled, do nothing
-        
-        // Fallback si falla la API nativa (a veces falla por permisos o estar en desktop)
+        // Fallback si falla la API nativa
         try {
           await navigator.clipboard.writeText(shareData.text);
-          alert(currentLang === 'en' ? "Link and result copied to clipboard! Paste it anywhere." : "¡Enlace y resultado copiados al portapapeles! Pégalo donde quieras.");
+          alert(currentLang === 'en' ? "Link and result copied to clipboard! Ready to share." : "¡Enlace y resultado copiados al portapapeles! Listo para compartir.");
         } catch(clipboardErr) {
           alert(`Tu resultado:\n\n${shareData.text}`);
         }
