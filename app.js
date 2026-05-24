@@ -647,6 +647,16 @@ const SONGS_DATABASE = [
 
 ];
 
+// Diccionario de personalidades basado en el álbum
+const ALBUM_PERSONALITIES = {
+  "uvst": "nostálgica, playera, emocional 🌴💔",
+  "yhlqmdlg": "rebelde, perreadora, icónica 🛹🔥",
+  "x100pre": "profunda, innovadora, sentimental 👁️🖤",
+  "nsqtk": "oscura, directa, sin filtros 🐎🦇",
+  "eutdm": "experimental, vanguardista, alternativa 🚛🌍",
+  "singles": "versátil, impredecible, siempre en tendencia 📈✨"
+};
+
 // Estado global del torneo
 let tournament = {
   allSongs: [...SONGS_DATABASE], // Copia para añadir personalizadas
@@ -1067,6 +1077,35 @@ function advanceRound() {
   }
 }
 
+function injectShareWinner(winner) {
+  const personalityText = ALBUM_PERSONALITIES[winner.theme] || ALBUM_PERSONALITIES["singles"];
+  const personalityEl = document.getElementById("winner-personality");
+  if (personalityEl) {
+    personalityEl.innerHTML = `Eres de la era <strong>${winner.album}</strong>: ${personalityText}`;
+  }
+  
+  const btnShare = document.getElementById("btn-share-tournament");
+  if (btnShare) {
+    btnShare.onclick = async () => {
+      const shareData = {
+        title: 'Bad Bunny Tournament',
+        text: `Mi canción campeona de Bad Bunny es ${winner.title} 🏆 Soy de la era ${winner.album}: ${personalityText}. ¡Descubre la tuya! 🐰🔥`,
+        url: window.location.href
+      };
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+        } else {
+          await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+          alert("¡Copiado al portapapeles! Listo para compartir.");
+        }
+      } catch (err) {
+        console.log('Error sharing:', err);
+      }
+    };
+  }
+}
+
 // Mostrar pantalla de ganador final
 function showWinnerScreen(champion) {
   document.getElementById("arena-screen").classList.add("hidden");
@@ -1086,6 +1125,8 @@ function showWinnerScreen(champion) {
   document.getElementById("winner-title").textContent = champion.title;
   document.getElementById("winner-album").textContent = champion.album;
   document.getElementById("winner-year").textContent = champion.year;
+
+  injectShareWinner(champion);
 
   // Renderizar Top 8 final
   renderRankingList();
@@ -1834,6 +1875,8 @@ function endSurvivorMode(winner) {
   const theme = THEME_STYLES[winner.theme] || THEME_STYLES.singles;
   document.getElementById("winner-banner").style.background = `linear-gradient(135deg, ${theme.color1}, ${theme.color2})`;
   
+  injectShareWinner(winner);
+
   const topList = document.getElementById("ranking-list");
   topList.innerHTML = "";
   
@@ -1919,11 +1962,11 @@ function renderQuizQuestion() {
   const currentSong = quizState.questions[quizState.currentIndex];
   document.getElementById("quiz-progress-text").textContent = `Pregunta ${quizState.currentIndex + 1} / 10`;
   
-  // Generar 4 opciones falsas
+  // Generar 3 opciones falsas (para hacer un total de 4 con la correcta)
   let options = [currentSong];
   let pool = SONGS_DATABASE.filter(s => s.id !== currentSong.id);
   shuffleArray(pool);
-  options = options.concat(pool.slice(0, 4));
+  options = options.concat(pool.slice(0, 3));
   shuffleArray(options); // Mezclar la correcta entre las falsas
   
   const container = document.getElementById("quiz-options-container");
@@ -1932,6 +1975,7 @@ function renderQuizQuestion() {
   options.forEach(opt => {
     const btn = document.createElement("button");
     btn.className = "quiz-option-btn";
+    btn.dataset.songId = opt.id;
     btn.innerHTML = `<span class="quiz-option-text">${opt.title}</span>`;
     btn.onclick = () => handleQuizAnswer(opt.id, currentSong.id, btn);
     container.appendChild(btn);
@@ -2007,8 +2051,8 @@ function handleQuizAnswer(selectedId, correctId, btnElement) {
     quizState.score -= 500;
     if (btnElement) btnElement.classList.add("wrong-answer");
     // Resaltar el correcto
-    const correctIndex = Array.from(buttons).findIndex(b => b.querySelector(".quiz-option-text").textContent === correctSong.title);
-    if (correctIndex >= 0) buttons[correctIndex].classList.add("correct-answer");
+    const correctBtn = Array.from(buttons).find(b => b.dataset.songId === correctSong.id);
+    if (correctBtn) correctBtn.classList.add("correct-answer");
     feedbackEl.innerHTML = `❌ FALLO <span class="text-sm block mt-1 text-gray-300">Era: ${correctSong.title}</span>`;
     feedbackEl.style.color = "#ff4b2b";
   }
@@ -2063,4 +2107,26 @@ function endQuizMode() {
   });
   
   triggerConfetti();
+
+  const btnShare = document.getElementById("btn-share-quiz");
+  if (btnShare) {
+    btnShare.onclick = async () => {
+      const shareData = {
+        title: 'Reto Bad Bunny Trivia',
+        text: `He sacado ${quizState.correctSongs}/10 en ${avgTime}s de media adivinando canciones de Bad Bunny. ¿Me ganas? 🐰🔥`,
+        url: window.location.href
+      };
+      
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+        } else {
+          await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+          alert("¡Copiado al portapapeles! Listo para retar a tus amigos.");
+        }
+      } catch (err) {
+        console.log('Error sharing:', err);
+      }
+    };
+  }
 }
