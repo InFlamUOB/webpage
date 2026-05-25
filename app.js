@@ -286,6 +286,15 @@ document.addEventListener("DOMContentLoaded", () => {
 // Base de datos de canciones de Bad Bunny con metadatos y estilos visuales por era/álbum (Álbumes y Singles Originales)
 const SONGS_DATABASE = [
   {
+    id: "desde-el-corazon",
+    title: "Desde el Corazón",
+    album: "Singles",
+    year: 2018,
+    theme: "singles",
+    emoji: "❤️",
+    previewUrl: null
+  },
+  {
     id: "titi-me-pregunto",
     title: "Tití Me Preguntó",
     album: "Un Verano Sin Ti",
@@ -2382,8 +2391,8 @@ function startQuizMode() {
     window.globalAudioPlayer.pause();
   }).catch(e => { console.log("Unlock failed", e) });
   
-  // Seleccionar 10 canciones aleatorias únicas
-  let pool = [...SONGS_DATABASE];
+  // Seleccionar 10 canciones aleatorias únicas que tengan audio
+  let pool = SONGS_DATABASE.filter(s => s.previewUrl);
   shuffleArray(pool);
   quizState.questions = pool.slice(0, 10);
   
