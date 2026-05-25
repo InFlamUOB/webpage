@@ -219,7 +219,7 @@ const TRANSLATIONS = {
     pool_count: "{count} canciones disponibles",
     pool_error: "⚠️ Necesitas al menos {size} canciones seleccionadas (tienes {count}). Activa más álbumes.",
     match_progress: "Enfrentamiento {current} de {total}",
-    survivor_progress: "Modo Survivor <span class='text-xs ml-2 text-gray-400'>Restantes: {count}</span>",
+    survivor_progress: "El Setlist del Tour <span class='text-xs ml-2 text-gray-400'>Restantes: {count}</span>",
     round_64: "Treintaidosavos de Final",
     round_32: "Dieciseisavos de Final",
     round_16: "Octavos de Final",
@@ -1864,8 +1864,8 @@ function resetTournament() {
   document.getElementById("bracket-container").classList.remove("hidden");
   const survivorLeaderboard = document.getElementById("survivor-leaderboard");
   if (survivorLeaderboard) survivorLeaderboard.classList.add("hidden");
-  document.querySelector(".progress-bar-container").style.display = "block";
-  document.getElementById("match-progress").style.display = "block";
+  document.querySelector(".progress-bar-container").classList.remove("hidden");
+  document.getElementById("match-progress").classList.remove("hidden");
   
   // Forzar la pestaña de Arena
   if (typeof window.switchTab === "function") window.switchTab("arena");
@@ -2255,8 +2255,10 @@ function startSurvivorMode() {
   document.getElementById("survivor-leaderboard").classList.remove("hidden");
   
   // Ocultar barra de progreso y texto de enfrentamiento (ya que no es un bracket fijo)
-  document.querySelector(".progress-bar-container").style.display = "none";
-  document.getElementById("match-progress").style.display = "none";
+  document.querySelector(".progress-bar-container").classList.add("hidden");
+  const matchProgress = document.getElementById("match-progress");
+  matchProgress.classList.add("hidden");
+  matchProgress.innerHTML = "";
   document.getElementById("round-title").innerHTML = TRANSLATIONS[currentLang].survivor_progress.replace('{count}', survivorState.pool.length + 2);
   
   renderSurvivorMatch();
