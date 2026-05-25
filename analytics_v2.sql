@@ -113,11 +113,14 @@ BEGIN
     -- QUIZ INSIGHTS: Hardest Songs (Most Failed)
     'quiz_hardest', (
       SELECT COALESCE(json_agg(t), '[]'::json) FROM (
-        SELECT song_id, count(*) as fails
+        SELECT 
+          song_id, 
+          SUM(CASE WHEN correct = false THEN 1 ELSE 0 END) as fails,
+          COUNT(*) as total_attempts
         FROM public.trivia_answers
-        WHERE correct = false
         GROUP BY song_id
-        ORDER BY fails DESC
+        HAVING SUM(CASE WHEN correct = false THEN 1 ELSE 0 END) > 0
+        ORDER BY fails DESC, total_attempts DESC
         LIMIT 3
       ) t
     ),

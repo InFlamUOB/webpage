@@ -114,7 +114,9 @@ function renderGlobalStats(data) {
     data.quiz_hardest.forEach((item) => {
       const song = findSongById(item.song_id);
       if (song) {
-        hardestContainer.innerHTML += `<li><span class="font-bold text-white">${song.title}</span> <span class="text-xs text-red-400 ml-1">(${item.fails} fallos)</span></li>`;
+        // Fallback for total_attempts if using old data structure
+        const total = item.total_attempts || item.fails;
+        hardestContainer.innerHTML += `<li><span class="font-bold text-white">${song.title}</span> <span class="text-xs text-red-400 ml-1">(${item.fails}/${total} fallos)</span></li>`;
       }
     });
   } else {
