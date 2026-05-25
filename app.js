@@ -26,49 +26,113 @@ function renderGlobalStats(data) {
   document.getElementById("stats-loading").classList.add("hidden");
   document.getElementById("stats-content").classList.remove("hidden");
   
-  // Total Matches
-  document.getElementById("stat-total-matches").textContent = currentLang === 'en'
-    ? `Total tournaments completed: ${data.total_matchups || 0}`
-    : `Torneos completados en todo el mundo: ${data.total_matchups || 0}`;
-  
-  // Champion
-  if (data.global_champion) {
-    const champSong = findSongById(data.global_champion.winner_id);
-    if (champSong) {
-      document.getElementById("stat-champion-title").textContent = `${champSong.emoji} ${champSong.title}`;
-      document.getElementById("stat-champion-count").textContent = `${data.global_champion.wins} victorias globales`;
-    }
+  // Community Stats
+  if (data.community_stats) {
+    document.getElementById("stat-comm-tournaments").textContent = (data.community_stats.total_tournaments || 0).toLocaleString();
+    document.getElementById("stat-comm-duels").textContent = (data.community_stats.total_duels || 0).toLocaleString();
+    document.getElementById("stat-comm-quizzes").textContent = (data.community_stats.total_quizzes || 0).toLocaleString();
   }
   
-  // Closest Duel
-  if (data.closest_duel) {
+  // Hero Stat: El Número 1
+  if (data.global_champion && data.global_champion.song_id) {
+    const champSong = findSongById(data.global_champion.song_id);
+    if (champSong) {
+      document.getElementById("stat-hero-icon").textContent = champSong.emoji;
+      document.getElementById("stat-hero-title").textContent = champSong.title;
+      document.getElementById("stat-hero-winrate").textContent = currentLang === 'en' 
+        ? `Wins ${Math.round(data.global_champion.win_rate)}% of its duels` 
+        : `Gana el ${Math.round(data.global_champion.win_rate)}% de sus duelos`;
+      document.getElementById("stat-hero-tournaments").textContent = currentLang === 'en'
+        ? `Won ${data.global_champion.tournament_wins} tournaments`
+        : `${data.global_champion.tournament_wins} torneos ganados`;
+    }
+  } else {
+    document.getElementById("stat-hero-title").textContent = currentLang === 'en' ? "Waiting for votes..." : "Aún sin datos...";
+    document.getElementById("stat-hero-winrate").textContent = "-";
+    document.getElementById("stat-hero-tournaments").textContent = "-";
+  }
+  
+  // Controversial Duel
+  if (data.closest_duel && data.closest_duel.song_a_id) {
     const songA = findSongById(data.closest_duel.song_a_id);
     const songB = findSongById(data.closest_duel.song_b_id);
     if (songA && songB) {
       document.getElementById("stat-duel-song-a").textContent = `${songA.emoji} ${songA.title}`;
       document.getElementById("stat-duel-song-b").textContent = `${songB.title} ${songB.emoji}`;
-      // Calculate percentage
+      
       const total = data.closest_duel.votes_a + data.closest_duel.votes_b;
-      const pctA = Math.round((data.closest_duel.votes_a / total) * 100);
-      document.getElementById("stat-duel-percent").textContent = `${pctA}% - ${100 - pctA}%`;
+      const pctA = total > 0 ? (data.closest_duel.votes_a / total * 100).toFixed(1) : 50;
+      const pctB = total > 0 ? (data.closest_duel.votes_b / total * 100).toFixed(1) : 50;
+      
+      document.getElementById("stat-duel-percent").textContent = `${pctA}% - ${pctB}%`;
+      document.getElementById("stat-duel-votes").textContent = currentLang === 'en' 
+        ? `${total.toLocaleString()} total votes` 
+        : `${total.toLocaleString()} votos totales`;
     }
+  } else {
+    document.getElementById("stat-duel-song-a").textContent = "N/A";
+    document.getElementById("stat-duel-song-b").textContent = "N/A";
+    document.getElementById("stat-duel-percent").textContent = "-";
+  }
+  
+  // Tour Mode Insights
+  if (data.tour_champion && data.tour_champion.song_id) {
+    const tourSong = findSongById(data.tour_champion.song_id);
+    if (tourSong) {
+      document.getElementById("stat-tour-anticipated").textContent = `${tourSong.emoji} ${tourSong.title}`;
+      document.getElementById("stat-tour-anticipated-wins").textContent = currentLang === 'en' 
+        ? `${data.tour_champion.wins} tournament wins` 
+        : `${data.tour_champion.wins} torneos ganados`;
+    }
+  } else {
+    document.getElementById("stat-tour-anticipated").textContent = "N/A";
   }
   
   // Top 5 Setlist
+  const setlistContainer = document.getElementById("stat-setlist-container");
+  setlistContainer.innerHTML = "";
   if (data.top_setlist && data.top_setlist.length > 0) {
-    const container = document.getElementById("stat-setlist-container");
-    container.innerHTML = "";
     data.top_setlist.forEach((item, idx) => {
       const song = findSongById(item.song_id);
       if (song) {
-        container.innerHTML += `
-          <div class="flex justify-between items-center bg-white bg-opacity-5 p-2 rounded mb-2">
-            <span><span class="font-bold opacity-50 mr-2">${idx + 1}</span> ${song.emoji} ${song.title}</span>
-            <span class="text-xs text-purple-400 font-bold">${item.count} ${currentLang === 'en' ? 'times' : 'veces'}</span>
+        setlistContainer.innerHTML += `
+          <div class="flex justify-between items-center bg-white bg-opacity-5 p-2 rounded mb-1 hover:bg-opacity-10 transition">
+            <span class="truncate"><span class="font-bold opacity-50 mr-2">#${idx + 1}</span> ${song.title}</span>
+            <span class="text-xs text-orange-400 font-bold whitespace-nowrap ml-2">${item.count} ${currentLang === 'en' ? 'times' : 'veces'}</span>
           </div>
         `;
       }
     });
+  } else {
+    setlistContainer.innerHTML = `<p class="text-sm italic text-gray-500">${currentLang === 'en' ? 'Still waiting for the fandom to decide 👀' : 'Esperando a que el fandom decida 👀'}</p>`;
+  }
+  
+  // Quiz Insights: Hardest
+  const hardestContainer = document.getElementById("stat-quiz-hardest");
+  hardestContainer.innerHTML = "";
+  if (data.quiz_hardest && data.quiz_hardest.length > 0) {
+    data.quiz_hardest.forEach((item) => {
+      const song = findSongById(item.song_id);
+      if (song) {
+        hardestContainer.innerHTML += `<li><span class="font-bold text-white">${song.title}</span> <span class="text-xs text-red-400 ml-1">(${item.fails} fallos)</span></li>`;
+      }
+    });
+  } else {
+    hardestContainer.innerHTML = `<li class="italic text-gray-500">N/A</li>`;
+  }
+  
+  // Quiz Insights: Fastest
+  const fastestContainer = document.getElementById("stat-quiz-fastest");
+  fastestContainer.innerHTML = "";
+  if (data.quiz_fastest && data.quiz_fastest.length > 0) {
+    data.quiz_fastest.forEach((item) => {
+      const song = findSongById(item.song_id);
+      if (song) {
+        fastestContainer.innerHTML += `<li><span class="font-bold text-white">${song.title}</span> <span class="text-xs text-green-400 ml-1">(${(item.avg_time/1000).toFixed(1)}s avg)</span></li>`;
+      }
+    });
+  } else {
+    fastestContainer.innerHTML = `<li class="italic text-gray-500">N/A</li>`;
   }
 }
 

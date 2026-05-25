@@ -82,37 +82,103 @@
         <p class="text-gray-400">Analizando miles de votos...</p>
       </div>
       
-      <div id="stats-content" class="hidden flex flex-col gap-6 text-left">
-        <!-- Campeona Global -->
-        <div class="bg-black bg-opacity-40 p-5 rounded-xl border border-gray-700 shadow-lg relative overflow-hidden">
-          <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">🏆</div>
-          <h3 class="text-yellow-400 font-bold uppercase text-xs tracking-widest mb-1" data-i18n="stats_champion_label">Canción más ganadora</h3>
-          <p id="stat-champion-title" class="text-2xl font-display font-bold text-white mb-1">Cargando...</p>
-          <p id="stat-champion-count" class="text-sm text-gray-400">0 victorias globales</p>
-        </div>
+      <div id="stats-content" class="hidden flex flex-col gap-8 text-left max-w-2xl mx-auto pb-12">
         
-        <!-- Duelo más reñido -->
-        <div class="bg-black bg-opacity-40 p-5 rounded-xl border border-gray-700 shadow-lg relative overflow-hidden">
-          <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">⚔️</div>
-          <h3 class="text-red-400 font-bold uppercase text-xs tracking-widest mb-2" data-i18n="stats_duel_label">El duelo más reñido</h3>
-          <div class="flex justify-between items-center bg-white bg-opacity-5 rounded p-3 mb-2">
-            <span id="stat-duel-song-a" class="font-bold truncate w-2/5">Cargando...</span>
-            <span id="stat-duel-percent" class="text-xs bg-red-900 text-white px-2 py-1 rounded-full font-bold">50% - 50%</span>
-            <span id="stat-duel-song-b" class="font-bold text-right truncate w-2/5">Cargando...</span>
+        <!-- 1. HERO STAT: EL NÚMERO 1 -->
+        <div class="bg-gradient-to-br from-purple-900 to-indigo-900 p-6 rounded-2xl border border-purple-500 shadow-2xl relative overflow-hidden text-center transform hover:scale-105 transition-transform duration-300">
+          <div class="absolute -top-4 -right-4 opacity-10 text-8xl">👑</div>
+          <h3 class="text-yellow-400 font-bold uppercase text-sm tracking-[0.2em] mb-4 drop-shadow-md">👑 EL NÚMERO 1 👑</h3>
+          <div id="stat-hero-icon" class="text-6xl mb-2 animate-bounce">🥇</div>
+          <p id="stat-hero-title" class="text-3xl font-display font-black text-white mb-2 drop-shadow-lg" style="text-shadow: 0 0 10px rgba(255,255,255,0.5);">Cargando...</p>
+          <div class="flex justify-center gap-4 text-sm font-medium">
+            <span id="stat-hero-winrate" class="bg-black bg-opacity-40 px-3 py-1 rounded-full text-green-400 border border-green-500">Gana 0% de sus duelos</span>
+            <span id="stat-hero-tournaments" class="bg-black bg-opacity-40 px-3 py-1 rounded-full text-purple-300 border border-purple-500">0 torneos ganados</span>
           </div>
-          <p class="text-xs text-gray-400 italic">Nadie se pone de acuerdo en este 1v1.</p>
+          <p id="stat-hero-trend" class="text-xs text-gray-400 mt-4 uppercase tracking-widest">— Estable</p>
         </div>
-        
-        <!-- Top 5 Setlist -->
-        <div class="bg-black bg-opacity-40 p-5 rounded-xl border border-gray-700 shadow-lg relative">
-          <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">🎟️</div>
-          <h3 class="text-purple-400 font-bold uppercase text-xs tracking-widest mb-4" data-i18n="stats_setlist_label">Top 5 Tour Setlist</h3>
-          <div id="stat-setlist-container" class="flex flex-col gap-2">
-            <!-- Inyectado por JS -->
+
+        <!-- 2. MOST CONTROVERSIAL DUEL -->
+        <div class="bg-black bg-opacity-60 p-6 rounded-2xl border border-red-900 shadow-xl relative overflow-hidden">
+          <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-5 text-9xl pointer-events-none">⚔️</div>
+          <h3 class="text-red-500 font-bold uppercase text-sm tracking-[0.2em] mb-4 text-center">⚔️ EL FANDOM ESTÁ DIVIDIDO</h3>
+          
+          <div class="flex justify-between items-center bg-gradient-to-r from-red-900 via-black to-blue-900 rounded-xl p-4 mb-3 border border-gray-800 relative">
+            <span id="stat-duel-song-a" class="font-bold text-lg truncate w-2/5 text-left text-red-200">Cargando...</span>
+            
+            <div class="flex flex-col items-center justify-center absolute left-1/2 transform -translate-x-1/2 w-1/5">
+              <span class="text-xs text-gray-500 font-black mb-1">VS</span>
+              <span id="stat-duel-percent" class="text-sm bg-black px-3 py-1 rounded-full font-bold shadow-[0_0_10px_rgba(255,255,255,0.2)]">50% - 50%</span>
+            </div>
+            
+            <span id="stat-duel-song-b" class="font-bold text-lg text-right truncate w-2/5 text-blue-200">Cargando...</span>
+          </div>
+          <p id="stat-duel-votes" class="text-center text-xs text-gray-400 font-medium tracking-wide">0 votos totales</p>
+        </div>
+
+        <!-- 3. TOUR MODE INSIGHTS -->
+        <div class="bg-gradient-to-b from-gray-900 to-black p-6 rounded-2xl border border-gray-700 shadow-xl">
+          <h3 class="text-orange-400 font-bold uppercase text-sm tracking-[0.2em] mb-6 text-center">🎟️ EL TOUR HA HABLADO</h3>
+          
+          <div class="flex flex-col md:flex-row gap-6">
+            <!-- Most Anticipated -->
+            <div class="flex-1 bg-black bg-opacity-50 p-4 rounded-xl border border-orange-900/50 text-center flex flex-col justify-center relative overflow-hidden group">
+              <div class="absolute -bottom-4 -right-4 opacity-10 text-6xl group-hover:scale-125 transition-transform">🔥</div>
+              <p class="text-xs text-orange-300 uppercase tracking-widest font-bold mb-2">La más esperada</p>
+              <p id="stat-tour-anticipated" class="text-xl font-display font-bold text-white mb-1">Cargando...</p>
+              <p id="stat-tour-anticipated-wins" class="text-xs text-gray-500">0 victorias en Survivor</p>
+            </div>
+            
+            <!-- Top 5 Setlist -->
+            <div class="flex-1">
+              <p class="text-xs text-gray-400 uppercase tracking-widest font-bold mb-3 text-center md:text-left">Top 5 Setlist Ideal</p>
+              <div id="stat-setlist-container" class="flex flex-col gap-2">
+                <!-- Inyectado por JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. QUIZ INSIGHTS -->
+        <div class="bg-gradient-to-b from-teal-900/40 to-black p-6 rounded-2xl border border-teal-800/50 shadow-xl">
+          <h3 class="text-teal-400 font-bold uppercase text-sm tracking-[0.2em] mb-6 text-center">🎧 ¿QUIÉN ES REAL FAN?</h3>
+          
+          <div class="flex flex-col md:flex-row gap-6">
+            <!-- Hardest Songs -->
+            <div class="flex-1">
+              <p class="text-xs text-red-300 uppercase tracking-widest font-bold mb-3 flex items-center gap-2"><span class="text-base">🥵</span> Las más falladas</p>
+              <ol id="stat-quiz-hardest" class="list-decimal list-inside flex flex-col gap-2 text-sm text-gray-300 bg-black/30 p-4 rounded-xl">
+                <!-- Inyectado por JS -->
+                <li class="italic text-gray-500">Esperando datos...</li>
+              </ol>
+            </div>
+            
+            <!-- Fastest Recognized -->
+            <div class="flex-1">
+              <p class="text-xs text-green-300 uppercase tracking-widest font-bold mb-3 flex items-center gap-2"><span class="text-base">⚡</span> Las más rápidas</p>
+              <ol id="stat-quiz-fastest" class="list-decimal list-inside flex flex-col gap-2 text-sm text-gray-300 bg-black/30 p-4 rounded-xl">
+                <!-- Inyectado por JS -->
+                <li class="italic text-gray-500">Esperando datos...</li>
+              </ol>
+            </div>
           </div>
         </div>
         
-        <p id="stat-total-matches" class="text-center text-gray-500 text-xs mt-4">Torneos completados en todo el mundo: 0</p>
+        <!-- 5. COMMUNITY STATS (FOOTER) -->
+        <div class="flex justify-around items-center pt-8 border-t border-gray-800 text-center">
+          <div>
+            <p id="stat-comm-tournaments" class="text-xl font-bold text-white font-display">0</p>
+            <p class="text-[10px] text-gray-500 uppercase tracking-widest">Torneos Jugados</p>
+          </div>
+          <div>
+            <p id="stat-comm-duels" class="text-xl font-bold text-white font-display">0</p>
+            <p class="text-[10px] text-gray-500 uppercase tracking-widest">Duelos Votados</p>
+          </div>
+          <div>
+            <p id="stat-comm-quizzes" class="text-xl font-bold text-white font-display">0</p>
+            <p class="text-[10px] text-gray-500 uppercase tracking-widest">Quizzes Resueltos</p>
+          </div>
+        </div>
+
       </div>
     </section>
 
