@@ -383,9 +383,6 @@
         <button id="btn-share-tournament" class="btn-share w-full flex items-center justify-center gap-2">
           <span class="text-xl">📲</span> <span data-i18n="btn_share_winner">Compartir mi campeona 🐰</span>
         </button>
-        <button id="btn-share-image" class="btn-primary w-full shadow-lg flex items-center justify-center gap-2" onclick="shareAsImage('winner-screen', 'CopaConejo-Setlist')">
-          <span>📸</span> <span>Descargar Imagen</span>
-        </button>
       </div>
       
       <!-- Sección de Ranking (Top 8) -->
@@ -396,22 +393,7 @@
         </div>
       </div>
 
-      <!-- Botones para ver y descargar cuadro completo -->
-      <div class="flex gap-2 w-full max-w-sm mx-auto mb-4">
-        <button onclick="document.getElementById('winner-bracket-wrapper').classList.toggle('hidden')" class="btn-secondary flex-1 p-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors border border-gray-600 font-bold text-white tracking-widest text-sm uppercase">
-          <span data-i18n="btn_view_bracket">Ver Cuadro 📊</span>
-        </button>
-        <button onclick="shareAsImage('winner-bracket-container', 'CopaConejo-Torneo')" class="btn-primary p-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors border border-gray-600 font-bold text-white tracking-widest text-sm uppercase">
-          📸 Descargar
-        </button>
-      </div>
 
-      <!-- Contenedor del cuadro final (oculto por defecto) -->
-      <div id="winner-bracket-wrapper" class="hidden bracket-scroll-wrapper mb-8 mt-4 rounded-xl bg-black bg-opacity-50 border border-gray-700 p-4">
-        <div id="winner-bracket-container" class="bracket-tree-layout" style="pointer-events: none;">
-          <!-- Se copia el bracket aquí vía JS -->
-        </div>
-      </div>
 
       <!-- Botón Reiniciar -->
       <button class="btn-primary btn-restart w-full max-w-sm">
