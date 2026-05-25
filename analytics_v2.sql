@@ -85,19 +85,19 @@ BEGIN
       LIMIT 1
     ),
     
-    -- TOUR MODE: Top 5 Setlist
+    -- TOUR MODE: Top 5 Setlist (ranked by how many times each song WON a full Tour)
     'top_setlist', (
       SELECT COALESCE(json_agg(t), '[]'::json) FROM (
-        SELECT song_id, count(*) as count
-        FROM public.tournament_results, jsonb_array_elements_text(top_songs) as song_id
+        SELECT winner_song_id AS song_id, count(*) AS count
+        FROM public.tournament_results
         WHERE mode = 'survivor'
-        GROUP BY song_id
+        GROUP BY winner_song_id
         ORDER BY count DESC
         LIMIT 5
       ) t
     ),
     
-    -- TOUR MODE: Most Anticipated (Tournament Wins in Survivor)
+    -- TOUR MODE: Most Anticipated (song with most Tour wins — same source as top_setlist #1)
     'tour_champion', (
       SELECT json_build_object('song_id', winner_song_id, 'wins', count)
       FROM (
