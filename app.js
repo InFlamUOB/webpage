@@ -1466,7 +1466,7 @@ function injectShareWinner(winner) {
     btnShare.onclick = async () => {
       const shareData = {
         title: 'Bad Bunny Tournament',
-        text: `${shareText}\n\n${window.location.href}`
+        text: `${shareText}\n\nhttps://copaconejo.vercel.app`
       };
       
       try {
@@ -2587,7 +2587,7 @@ async function shareQuizResults(event) {
   const avgTime = (quizState.totalTime / 10).toFixed(1);
   const shareData = {
     title: 'Reto Bad Bunny Trivia',
-    text: `${TRANSLATIONS[currentLang].share_quiz_text.replace('{correct}', quizState.correctSongs).replace('{time}', avgTime).replace('{score}', Math.max(0, quizState.score))}\n\n${window.location.href}`
+    text: `${TRANSLATIONS[currentLang].share_quiz_text.replace('{correct}', quizState.correctSongs).replace('{time}', avgTime).replace('{score}', Math.max(0, quizState.score))}\n\nhttps://copaconejo.vercel.app`
   };
   
   try {
