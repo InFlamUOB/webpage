@@ -90,6 +90,11 @@ function renderGlobalStats(data) {
       document.getElementById("stat-tour-anticipated-wins").textContent = currentLang === 'en' 
         ? `${data.tour_champion.wins} tour wins` 
         : `${data.tour_champion.wins} victorias en el Tour`;
+    } else {
+      document.getElementById("stat-tour-anticipated").textContent = data.tour_champion.song_id;
+      document.getElementById("stat-tour-anticipated-wins").textContent = currentLang === 'en' 
+        ? `${data.tour_champion.wins} tour wins` 
+        : `${data.tour_champion.wins} victorias en el Tour`;
     }
   } else {
     document.getElementById("stat-tour-anticipated").textContent = "N/A";
@@ -99,13 +104,28 @@ function renderGlobalStats(data) {
   const setlistContainer = document.getElementById("stat-setlist-container");
   setlistContainer.innerHTML = "";
   if (data.top_setlist && data.top_setlist.length > 0) {
-    data.top_setlist.forEach((item, idx) => {
+    data.top_setlist.forEach((item, index) => {
       const song = findSongById(item.song_id);
       if (song) {
         setlistContainer.innerHTML += `
-          <div class="flex justify-between items-center bg-white bg-opacity-5 p-2 rounded mb-1 hover:bg-opacity-10 transition">
-            <span class="truncate"><span class="font-bold opacity-50 mr-2">#${idx + 1}</span> ${song.title}</span>
-            <span class="text-xs text-orange-400 font-bold whitespace-nowrap ml-2">${item.count} ${currentLang === 'en' ? 'times' : 'veces'}</span>
+          <div class="flex items-center gap-3 bg-black bg-opacity-40 p-2 rounded-lg border border-gray-800">
+            <span class="text-orange-500 font-black italic text-lg w-4">${index + 1}</span>
+            <span class="text-xl">${song.emoji}</span>
+            <div class="flex-1">
+              <p class="font-bold text-white text-sm leading-tight truncate">${song.title}</p>
+            </div>
+            <span class="text-xs text-gray-500">${item.count} votos</span>
+          </div>
+        `;
+      } else {
+        setlistContainer.innerHTML += `
+          <div class="flex items-center gap-3 bg-black bg-opacity-40 p-2 rounded-lg border border-gray-800">
+            <span class="text-orange-500 font-black italic text-lg w-4">${index + 1}</span>
+            <span class="text-xl">🎵</span>
+            <div class="flex-1">
+              <p class="font-bold text-white text-sm leading-tight truncate">${item.song_id}</p>
+            </div>
+            <span class="text-xs text-gray-500">${item.count} votos</span>
           </div>
         `;
       }
