@@ -1306,3 +1306,79 @@ body {
 .btn-back-to-menu:active {
   transform: translateY(0);
 }
+
+/* Utilitarios Flexbox para la pantalla de estadísticas */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-1 { flex: 1; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.justify-around { justify-content: space-around; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-6 { gap: 1.5rem; }
+.gap-8 { gap: 2rem; }
+
+/* Espaciado */
+.p-2 { padding: 0.5rem; }
+.p-4 { padding: 1rem; }
+.p-6 { padding: 1.5rem; }
+.pt-8 { padding-top: 2rem; }
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 0.75rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+
+/* Tipografía */
+.text-xs { font-size: 0.75rem; }
+.text-sm { font-size: 0.875rem; }
+.text-xl { font-size: 1.25rem; }
+.text-6xl { font-size: 3.75rem; }
+.font-bold { font-weight: bold; }
+.italic { font-style: italic; }
+.uppercase { text-transform: uppercase; }
+.tracking-widest { letter-spacing: 0.1em; }
+.text-center { text-align: center; }
+.list-decimal { list-style-type: decimal; }
+.list-inside { list-style-position: inside; }
+
+/* Colores y Fondos stats */
+.bg-black { background-color: #000; }
+.bg-black\\/30 { background-color: rgba(0,0,0,0.3); }
+.bg-opacity-50 { background-color: rgba(0,0,0,0.5); }
+.text-white { color: #fff; }
+.text-gray-300 { color: #d1d5db; }
+.text-gray-400 { color: #9ca3af; }
+.text-gray-500 { color: #6b7280; }
+.text-red-300 { color: #fca5a5; }
+.text-red-400 { color: #f87171; }
+.text-green-300 { color: #86efac; }
+.text-green-400 { color: #4ade80; }
+.text-orange-300 { color: #fdba74; }
+.text-orange-400 { color: #fb923c; }
+.text-teal-400 { color: #2dd4bf; }
+
+/* Bordes y redondeado */
+.rounded { border-radius: 0.25rem; }
+.rounded-xl { border-radius: 0.75rem; }
+.rounded-2xl { border-radius: 1rem; }
+.border { border: 1px solid; }
+.border-t { border-top: 1px solid; }
+.border-gray-700 { border-color: #374151; }
+.border-gray-800 { border-color: #1f2937; }
+
+/* Responsive Grid para las stats */
+@media (min-width: 640px) {
+  .sm\\:flex-row { flex-direction: row; }
+  .sm\\:gap-8 { gap: 2rem; }
+}
+@media (min-width: 768px) {
+  .md\\:flex-row { flex-direction: row; }
+}
+
+/* Extras stats */
+.bg-gradient-to-b { background: linear-gradient(to bottom, var(--tw-gradient-stops)); }
+.from-gray-900 { --tw-gradient-from: #111827; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(17, 24, 39, 0)); }
+.to-black { --tw-gradient-to: #000; }
+.from-teal-900\\/40 { --tw-gradient-from: rgba(19, 78, 74, 0.4); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(19, 78, 74, 0)); }
