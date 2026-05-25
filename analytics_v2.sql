@@ -70,19 +70,31 @@ BEGIN
       LEFT JOIN public.global_song_rankings gsr ON tr.winner_song_id = gsr.song_id
     ),
     
-    -- CONTROVERSIAL DUEL: Closest duel (min 5 votes to be interesting, or just the closest if not enough)
-    'closest_duel', (
-      SELECT json_build_object(
-        'song_a_id', song_a,
-        'song_b_id', song_b,
-        'votes_a', song_a_wins,
-        'votes_b', song_b_wins,
-        'total', total_votes
-      )
-      FROM public.controversial_duels
-      WHERE total_votes >= 3 -- Lower threshold to ensure something shows up early
-      ORDER BY vote_difference ASC, total_votes DESC
-      LIMIT 1
+    -- COPA TOP 5: Most successful songs in Copa (by tournament wins + duel win rate)
+    'copa_top5', (
+      SELECT COALESCE(json_agg(t), '[]'::json) FROM (
+        SELECT 
+          gsr.song_id,
+          gsr.wins,
+          gsr.total_duels,
+          ROUND(gsr.win_rate::numeric, 1) AS win_rate,
+          COALESCE(tr.tournament_wins, 0) AS tournament_wins
+        FROM public.global_song_rankings gsr
+        LEFT JOIN (
+          SELECT winner_song_id, count(*) as tournament_wins
+          FROM public.tournament_results
+          WHERE mode = 'classic'
+          GROUP BY winner_song_id
+        ) tr ON gsr.song_id = tr.winner_song_id
+        WHERE gsr.total_duels > 0
+        ORDER BY gsr.wins DESC, gsr.win_rate DESC
+        LIMIT 5
+      ) t
+    ),
+    
+    -- TOTAL CLASSIC TOURNAMENTS (for "X de Y copas" display)
+    'total_classic', (
+      SELECT count(*) FROM public.tournament_results WHERE mode = 'classic'
     ),
     
     -- TOUR MODE: Top 5 Setlist (ranked by how many times each song WON a full Tour)

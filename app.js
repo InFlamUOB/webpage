@@ -35,6 +35,7 @@ function renderGlobalStats(data) {
   }
   
   // Hero Stat: El Número 1
+  const totalClassic = data.total_classic || 0;
   if (data.global_champion && data.global_champion.song_id) {
     const champSong = findSongById(data.global_champion.song_id);
     if (champSong) {
@@ -44,8 +45,8 @@ function renderGlobalStats(data) {
         ? `Wins ${Math.round(data.global_champion.win_rate)}% of its duels` 
         : `Gana el ${Math.round(data.global_champion.win_rate)}% de sus duelos`;
       document.getElementById("stat-hero-tournaments").textContent = currentLang === 'en'
-        ? `Won ${data.global_champion.tournament_wins} tournaments`
-        : `${data.global_champion.tournament_wins} torneos ganados`;
+        ? `Champion in ${data.global_champion.tournament_wins} of ${totalClassic} Copa${totalClassic !== 1 ? 's' : ''}`
+        : `Campeón en ${data.global_champion.tournament_wins} de ${totalClassic} Copa${totalClassic !== 1 ? 's' : ''} jugadas`;
     }
   } else {
     document.getElementById("stat-hero-title").textContent = currentLang === 'en' ? "Waiting for votes..." : "Aún sin datos...";
@@ -53,34 +54,32 @@ function renderGlobalStats(data) {
     document.getElementById("stat-hero-tournaments").textContent = "-";
   }
   
-  // Controversial Duel
-  if (data.closest_duel && data.closest_duel.song_a_id) {
-    const songA = findSongById(data.closest_duel.song_a_id);
-    const songB = findSongById(data.closest_duel.song_b_id);
-    if (songA && songB) {
-      document.getElementById("stat-duel-song-a").textContent = `${songA.emoji} ${songA.title}`;
-      document.getElementById("stat-duel-song-b").textContent = `${songB.title} ${songB.emoji}`;
-      
-      const total = data.closest_duel.votes_a + data.closest_duel.votes_b;
-      const pctA = total > 0 ? (data.closest_duel.votes_a / total * 100).toFixed(1) : 50;
-      const pctB = total > 0 ? (data.closest_duel.votes_b / total * 100).toFixed(1) : 50;
-      
-      document.getElementById("stat-duel-percent").textContent = `${pctA}% - ${pctB}%`;
-      document.getElementById("stat-duel-votes").textContent = currentLang === 'en' 
-        ? `${total.toLocaleString()} votes in this duel` 
-        : `${total.toLocaleString()} votos en este duelo`;
-      
-      const commDuels = data.community_stats ? data.community_stats.total_duels : 0;
-      document.getElementById("stat-duel-total").textContent = currentLang === 'en'
-        ? `Out of ${commDuels.toLocaleString()} total duels voted`
-        : `De un total de ${commDuels.toLocaleString()} duelos votados en la comunidad`;
-    }
+  // Copa Top 5
+  const copaTop5Container = document.getElementById("stat-copa-top5");
+  copaTop5Container.innerHTML = "";
+  if (data.copa_top5 && data.copa_top5.length > 0) {
+    const medals = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣"];
+    data.copa_top5.forEach((item, index) => {
+      const song = findSongById(item.song_id);
+      const title = song ? song.title : item.song_id;
+      const emoji = song ? song.emoji : "🎵";
+      const cupWins = item.tournament_wins > 0 ? `🏆 ${item.tournament_wins}` : "";
+      copaTop5Container.innerHTML += `
+        <div style="display:flex; align-items:center; gap:10px; background:rgba(0,0,0,0.4); padding:8px 12px; border-radius:10px; border:1px solid rgba(142,45,226,0.3);">
+          <span style="font-size:1.2rem; width:24px; text-align:center;">${medals[index]}</span>
+          <span style="font-size:1.1rem;">${emoji}</span>
+          <div style="flex:1;">
+            <p style="font-weight:700; color:white; font-size:0.875rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${title}</p>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:2px;">
+            ${cupWins ? `<span style="font-size:0.7rem; color:#c084fc; font-weight:700;">${cupWins} ${currentLang === 'en' ? 'copa' : 'copa'}</span>` : ""}
+            <span style="font-size:0.7rem; color:#6b7280;">${item.wins}W / ${item.total_duels}D</span>
+          </div>
+        </div>
+      `;
+    });
   } else {
-    document.getElementById("stat-duel-song-a").textContent = "N/A";
-    document.getElementById("stat-duel-song-b").textContent = "N/A";
-    document.getElementById("stat-duel-percent").textContent = "-";
-    document.getElementById("stat-duel-votes").textContent = "-";
-    document.getElementById("stat-duel-total").textContent = "-";
+    copaTop5Container.innerHTML = `<p style="color:#6b7280; text-align:center; font-size:0.875rem;">Sin datos aún</p>`;
   }
   
   // Tour Mode Insights
