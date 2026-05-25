@@ -2444,6 +2444,7 @@ let quizState = {
 function startQuizMode() {
   gameMode = 'quiz';
   
+  analyticsTournamentStartMs = Date.now();
   if (typeof generateUUID === 'function') {
     analyticsTournamentId = generateUUID();
   }
