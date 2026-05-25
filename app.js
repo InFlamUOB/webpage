@@ -185,6 +185,12 @@ function showGlobalStats() {
 }
 
 // =========================================
+// =========================================
+// GLOBAL STATE
+// =========================================
+let gameMode = 'classic'; // 'classic', 'survivor', or 'quiz'
+
+// =========================================
 // I18N (INTERNATIONALIZATION)
 // =========================================
 const TRANSLATIONS = {
@@ -2180,7 +2186,7 @@ function showAudioIndicator(cardElement, show) {
 // SURVIVOR / ESPECIAL TOUR MODE LOGIC
 // ==========================================
 
-let gameMode = 'classic'; // 'classic' or 'survivor'
+// gameMode is set by setupEventListeners ('classic') and startSurvivorMode/startQuizMode
 
 const SPECIAL_TOUR_IDS = [
   "sp-mudanza",
