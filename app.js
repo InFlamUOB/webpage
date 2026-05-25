@@ -2452,8 +2452,8 @@ function endSurvivorMode(winner) {
     const eras = Array.from(document.querySelectorAll(".album-checkbox:checked")).map(cb => cb.value);
     // En survivor el totalDuels es cuantas veces ha cambiado el challenger o ganado (aprox total songs - 1)
     const totalDuels = survivorState.pool.length + survivorState.eliminated.length; 
-    trackTournamentResult(gameMode, null, eras, winner.id, null, topSongs, totalDuels, duration, false);
-    trackEvent('tournament_completed', gameMode);
+    trackTournamentResult('survivor', null, eras, winner.id, null, topSongs, totalDuels, duration, false);
+    trackEvent('tournament_completed', 'survivor');
   }
 }
 
