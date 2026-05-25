@@ -273,13 +273,15 @@
 
     <!-- PANTALLA 2: ARENA DE BATALLA -->
     <section id="arena-screen" class="hidden relative">
-      <button class="btn-back-to-menu absolute top-0 left-0 sm:-left-4" onclick="location.reload()">
-        <span data-i18n="btn_exit"><span>🏠</span> Salir</span>
-      </button>
-      <!-- Pestañas del Torneo -->
-      <div id="nav-bracket" class="flex justify-center gap-2 mb-6 hidden">
-        <button id="tab-arena-btn" class="tab-btn active" onclick="switchTab('arena')" data-i18n="tab_arena">🏟️ La Arena (1v1)</button>
-        <button id="tab-bracket-btn" class="tab-btn" onclick="switchTab('bracket')" data-i18n="tab_bracket">📊 Cuadro (Bracket)</button>
+      <!-- Nav bar: SALIR + Tabs in one row, mobile-safe -->
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:1.5rem; flex-wrap:wrap;">
+        <button class="btn-back-to-menu" onclick="location.reload()" style="flex-shrink:0;">
+          <span data-i18n="btn_exit"><span>🏠</span> Salir</span>
+        </button>
+        <div id="nav-bracket" class="hidden" style="gap:8px; flex:1; justify-content:flex-end;">
+          <button id="tab-arena-btn" class="tab-btn active" onclick="switchTab('arena')" data-i18n="tab_arena">🏟️ La Arena (1v1)</button>
+          <button id="tab-bracket-btn" class="tab-btn" onclick="switchTab('bracket')" data-i18n="tab_bracket">📊 Leaderboard</button>
+        </div>
       </div>
 
       <!-- Contenido 1: Arena 1v1 -->

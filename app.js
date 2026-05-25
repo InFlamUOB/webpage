@@ -1350,7 +1350,7 @@ function startTournament() {
   // Ocultar inicio, mostrar batalla
   document.getElementById("config-screen").classList.add("hidden");
   document.getElementById("arena-screen").classList.remove("hidden");
-  document.getElementById("nav-bracket").classList.remove("hidden");
+  const nb = document.getElementById("nav-bracket"); nb.classList.remove("hidden"); nb.style.display = 'flex';
 
   // Iniciar la ronda
   updateRoundHeader();
@@ -1874,7 +1874,7 @@ function launchConfetti() {
 function resetTournament() {
   document.getElementById("winner-screen").classList.add("hidden");
   document.getElementById("arena-screen").classList.add("hidden");
-  document.getElementById("nav-bracket").classList.add("hidden");
+  const nb2 = document.getElementById("nav-bracket"); nb2.classList.add("hidden"); nb2.style.display = 'none';
   
   const quizScreen = document.getElementById("quiz-screen");
   if (quizScreen) quizScreen.classList.add("hidden");
@@ -2274,7 +2274,7 @@ function startSurvivorMode() {
   document.getElementById("mode-selection-screen").classList.add("hidden");
   document.getElementById("config-screen").classList.add("hidden");
   document.getElementById("arena-screen").classList.remove("hidden");
-  document.getElementById("nav-bracket").classList.remove("hidden");
+  const nb3 = document.getElementById("nav-bracket"); nb3.classList.remove("hidden"); nb3.style.display = 'flex';
   
   document.getElementById("tab-bracket-btn").innerHTML = "📊 Leaderboard";
   document.getElementById("bracket-container").classList.add("hidden");
