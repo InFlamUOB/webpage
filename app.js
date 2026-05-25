@@ -88,8 +88,8 @@ function renderGlobalStats(data) {
     if (tourSong) {
       document.getElementById("stat-tour-anticipated").textContent = `${tourSong.emoji} ${tourSong.title}`;
       document.getElementById("stat-tour-anticipated-wins").textContent = currentLang === 'en' 
-        ? `${data.tour_champion.wins} tournament wins` 
-        : `${data.tour_champion.wins} torneos ganados`;
+        ? `${data.tour_champion.wins} tour wins` 
+        : `${data.tour_champion.wins} victorias en el Tour`;
     }
   } else {
     document.getElementById("stat-tour-anticipated").textContent = "N/A";
@@ -306,7 +306,7 @@ const TRANSLATIONS = {
     pool_error: "⚠️ You need at least {size} songs selected (you have {count}). Enable more albums.",
     pool_warning_64: "⚠️ The 64-song tournament is a marathon! Get ready for an intense session.",
     match_progress: "Matchup {current} of {total}",
-    survivor_progress: "Survivor Mode <span class='text-xs ml-2 text-gray-400'>{count} remaining</span>",
+    survivor_progress: "Tour Setlist <span class='text-xs ml-2 text-gray-400'>{count} remaining</span>",
     round_64: "Round of 64",
     round_32: "Round of 32",
     round_16: "Round of 16",
