@@ -5,7 +5,7 @@
 
 async function fetchGlobalStats() {
   try {
-    const res = await fetch(`${SUPABASE_URL}/rpc/get_global_stats`, {
+    const res = await fetch(`${SUPABASE_REST_URL}/rpc/get_global_stats`, {
       method: "POST", // RPC via POST
       headers: {
         "Content-Type": "application/json",
