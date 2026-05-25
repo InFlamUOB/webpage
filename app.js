@@ -2204,6 +2204,11 @@ function shuffleArray(array) {
 function startSurvivorMode() {
   gameMode = 'survivor';
   
+  analyticsTournamentStartMs = Date.now();
+  if (typeof generateUUID === 'function') {
+    analyticsTournamentId = generateUUID();
+  }
+  
   // Desbloquear reproductor global de audio para móviles (requiere interacción directa del usuario)
   if (!window.globalAudioPlayer) {
     window.globalAudioPlayer = new Audio();
