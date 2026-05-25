@@ -2,6 +2,7 @@
 // SUPABASE (ANALYTICS & DATA COLLECTION)
 // Now managed by analytics.js
 // =========================================
+let gameMode = 'classic'; // 'classic', 'survivor', or 'quiz'
 
 async function fetchGlobalStats() {
   try {
@@ -185,11 +186,6 @@ function showGlobalStats() {
 }
 
 // =========================================
-// =========================================
-// GLOBAL STATE
-// =========================================
-let gameMode = 'classic'; // 'classic', 'survivor', or 'quiz'
-
 // =========================================
 // I18N (INTERNATIONALIZATION)
 // =========================================
@@ -2185,8 +2181,6 @@ function showAudioIndicator(cardElement, show) {
 // ==========================================
 // SURVIVOR / ESPECIAL TOUR MODE LOGIC
 // ==========================================
-
-// gameMode is set by setupEventListeners ('classic') and startSurvivorMode/startQuizMode
 
 const SPECIAL_TOUR_IDS = [
   "sp-mudanza",
