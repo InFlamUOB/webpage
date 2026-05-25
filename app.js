@@ -2443,7 +2443,7 @@ function endSurvivorMode(winner) {
     topList.appendChild(li);
   });
   
-  triggerConfetti();
+  launchConfetti();
   
   // Supabase Analytics
   const topSongs = survivors.map(s => s.id);
@@ -2686,7 +2686,7 @@ function endQuizMode() {
     listEl.appendChild(div);
   });
   
-  triggerConfetti();
+  launchConfetti();
 
   const btnShare = document.getElementById("btn-share-quiz");
   // Se asigna en HTML vía onclick="shareQuizResults(event)"
