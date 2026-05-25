@@ -1,50 +1,7 @@
 // =========================================
 // SUPABASE (ANALYTICS & DATA COLLECTION)
+// Now managed by analytics.js
 // =========================================
-const SUPABASE_URL = "https://anwpshueemzzujmuyotk.supabase.co/rest/v1";
-const SUPABASE_ANON_KEY = "sb_publishable_BAdYLkxmiNeZ7mk_5IKZNg_NG_buq6d";
-
-async function saveMatchupVote(songAId, songBId, winnerId, mode) {
-  try {
-    fetch(`${SUPABASE_URL}/matchups`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": SUPABASE_ANON_KEY,
-        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
-      },
-      body: JSON.stringify({
-        mode: mode,
-        song_a_id: songAId,
-        song_b_id: songBId,
-        winner_id: winnerId
-      })
-    });
-  } catch (error) {
-    console.log("Analytics non-blocking error", error);
-  }
-}
-
-async function saveGameResult(winnerId, topSongs, mode) {
-  try {
-    fetch(`${SUPABASE_URL}/tournament_results`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": SUPABASE_ANON_KEY,
-        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
-      },
-      body: JSON.stringify({
-        mode: mode,
-        winner_id: winnerId,
-        top_songs: topSongs,
-        language: currentLang
-      })
-    });
-  } catch (error) {
-    console.log("Analytics non-blocking error", error);
-  }
-}
 
 async function fetchGlobalStats() {
   try {
@@ -120,6 +77,8 @@ function showGlobalStats() {
   document.getElementById("config-screen").classList.add("hidden");
   const statsScreen = document.getElementById("global-stats-screen");
   statsScreen.classList.remove("hidden");
+  
+  if (typeof trackEvent === 'function') trackEvent('global_results_viewed');
   
   // Show loading state
   document.getElementById("stats-loading").classList.remove("hidden");
@@ -1010,6 +969,11 @@ let tournament = {
   customSongsCount: 0
 };
 
+// Estado Analítica
+let analyticsTournamentId = null;
+let analyticsTournamentStartMs = 0;
+let analyticsMatchStartMs = 0;
+
 // Configuración de temas visuales por Era
 const THEME_STYLES = {
   dtmf: {
@@ -1085,6 +1049,7 @@ function setupEventListeners() {
   if (btnModeClassic) {
     btnModeClassic.addEventListener("click", () => {
       gameMode = 'classic';
+      if (typeof trackEvent === 'function') trackEvent('mode_selected', 'classic');
       document.getElementById("mode-selection-screen").classList.add("hidden");
       document.getElementById("config-screen").classList.remove("hidden");
       renderConfigScreen();
@@ -1092,12 +1057,18 @@ function setupEventListeners() {
   }
   
   if (btnModeSurvivor) {
-    btnModeSurvivor.addEventListener("click", startSurvivorMode);
+    btnModeSurvivor.addEventListener("click", () => {
+      if (typeof trackEvent === 'function') trackEvent('mode_selected', 'survivor');
+      startSurvivorMode();
+    });
   }
   
   const btnModeQuiz = document.getElementById("btn-mode-quiz");
   if (btnModeQuiz) {
-    btnModeQuiz.addEventListener("click", startQuizMode);
+    btnModeQuiz.addEventListener("click", () => {
+      if (typeof trackEvent === 'function') trackEvent('mode_selected', 'quiz');
+      startQuizMode();
+    });
   }
   
   const btnModeStats = document.getElementById("btn-mode-stats");
@@ -1266,6 +1237,13 @@ function startTournament() {
   tournament.history = [];
   tournament.ranking = [];
 
+  // Analytics
+  if (typeof generateUUID === 'function') {
+    analyticsTournamentId = generateUUID();
+    analyticsTournamentStartMs = Date.now();
+    trackEvent('tournament_started', gameMode, { size: tournament.size, eras: selectedAlbums });
+  }
+
   // Ocultar inicio, mostrar batalla
   document.getElementById("config-screen").classList.add("hidden");
   document.getElementById("arena-screen").classList.remove("hidden");
@@ -1312,6 +1290,8 @@ function renderMatch() {
 
   // Parar cualquier audio que estuviera sonando del enfrentamiento anterior
   stopPreview();
+
+  analyticsMatchStartMs = Date.now();
 
   const cardLeft = document.getElementById("card-left");
   const cardRight = document.getElementById("card-right");
@@ -1375,8 +1355,11 @@ function vote(chosenIndex) {
   const chosen = chosenIndex === 0 ? songA : songB;
   const loser = chosenIndex === 0 ? songB : songA;
 
-  // Supabase Analytics: Guardar votación anónima (fire-and-forget)
-  saveMatchupVote(songA.id, songB.id, chosen.id, gameMode);
+  // Analytics
+  const responseTime = Date.now() - analyticsMatchStartMs;
+  if (typeof trackDuelVote === 'function') {
+    trackDuelVote(gameMode, analyticsTournamentId, tournament.roundNumber, songA.id, songB.id, chosen.id, loser.id, chosenIndex === 0 ? 'left' : 'right', responseTime);
+  }
 
   // Registrar en historial para el bracket
   tournament.history.push({
@@ -1529,9 +1512,17 @@ function showWinnerScreen(champion) {
 
   injectShareWinner(champion);
   
-  // Supabase Analytics: Guardar torneo completado
+  // Supabase Analytics
   const topSongs = [...tournament.ranking].reverse().slice(0, 8).map(r => r.song.id);
-  saveGameResult(champion.id, topSongs, gameMode);
+  const runnerUpId = tournament.ranking.length > 0 ? tournament.ranking[0].song.id : null;
+  if (typeof trackTournamentResult === 'function') {
+    const duration = Date.now() - analyticsTournamentStartMs;
+    const size = tournament.size;
+    const eras = Array.from(document.querySelectorAll(".album-checkbox:checked")).map(cb => cb.value);
+    const totalDuels = tournament.history.length;
+    trackTournamentResult(gameMode, size, eras, champion.id, runnerUpId, topSongs, totalDuels, duration, false);
+    trackEvent('tournament_completed', gameMode);
+  }
 
   // Renderizar Top 8 final
   renderRankingList();
@@ -2193,6 +2184,7 @@ function startSurvivorMode() {
 }
 
 function renderSurvivorMatch() {
+  analyticsMatchStartMs = Date.now();
   const songA = survivorState.reigningChamp;
   const songB = survivorState.challenger;
   
@@ -2242,8 +2234,11 @@ function handleSurvivorVote(winnerId) {
   const winner = isLeftWinner ? survivorState.reigningChamp : survivorState.challenger;
   const loser = isLeftWinner ? survivorState.challenger : survivorState.reigningChamp;
   
-  // Supabase Analytics: Guardar votación anónima
-  saveMatchupVote(survivorState.reigningChamp.id, survivorState.challenger.id, winner.id, gameMode);
+  // Analytics
+  const responseTime = Date.now() - analyticsMatchStartMs;
+  if (typeof trackDuelVote === 'function') {
+    trackDuelVote(gameMode, analyticsTournamentId, 1, survivorState.reigningChamp.id, survivorState.challenger.id, winner.id, loser.id, isLeftWinner ? 'left' : 'right', responseTime);
+  }
   
   // Animaciones
   const winningCard = document.getElementById(isLeftWinner ? "card-left" : "card-right");
@@ -2341,9 +2336,16 @@ function endSurvivorMode(winner) {
   
   triggerConfetti();
   
-  // Supabase Analytics: Guardar survivor completado
+  // Supabase Analytics
   const topSongs = survivors.map(s => s.id);
-  saveGameResult(winner.id, topSongs, gameMode);
+  if (typeof trackTournamentResult === 'function') {
+    const duration = Date.now() - analyticsTournamentStartMs;
+    const eras = Array.from(document.querySelectorAll(".album-checkbox:checked")).map(cb => cb.value);
+    // En survivor el totalDuels es cuantas veces ha cambiado el challenger o ganado (aprox total songs - 1)
+    const totalDuels = survivorState.pool.length + survivorState.eliminated.length; 
+    trackTournamentResult(gameMode, null, eras, winner.id, null, topSongs, totalDuels, duration, false);
+    trackEvent('tournament_completed', gameMode);
+  }
 }
 
 // =====================================================================
@@ -2390,6 +2392,7 @@ function startQuizMode() {
   quizState.correctSongs = 0;
   quizState.totalTime = 0;
   
+  trackEvent('trivia_started', gameMode);
   renderQuizQuestion();
 }
 
@@ -2467,6 +2470,10 @@ function handleQuizAnswer(selectedId, correctId, btnElement) {
   const timeTaken = (Date.now() - quizState.startTime) / 1000;
   quizState.totalTime += timeTaken;
   
+  if (typeof trackTriviaAnswer === 'function') {
+    trackTriviaAnswer(analyticsTournamentId, quizState.currentIndex + 1, correctId, selectedId, selectedId === correctId, Math.round(timeTaken * 1000), false);
+  }
+  
   const buttons = document.getElementById("quiz-options-container").querySelectorAll("button");
   buttons.forEach(b => b.disabled = true);
   
@@ -2517,6 +2524,13 @@ function endQuizMode() {
   const avgTime = (quizState.totalTime / 10).toFixed(1);
   document.getElementById("quiz-result-time").textContent = `${avgTime}s`;
   document.getElementById("quiz-result-score").textContent = Math.max(0, quizState.score);
+  
+  // Analytics
+  if (typeof trackTriviaResult === 'function') {
+    const duration = Date.now() - analyticsTournamentStartMs;
+    trackTriviaResult(analyticsTournamentId, 10, quizState.correctSongs, Math.max(0, quizState.score), Math.round((quizState.totalTime / 10) * 1000), duration, false);
+    trackEvent('trivia_completed', gameMode);
+  }
   
   // Guardar en LocalStorage
   let leaderboard = [];
