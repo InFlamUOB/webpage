@@ -11,6 +11,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <!-- html2canvas for image sharing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSK/6d104OxgKq+Fz0o2aA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css?v=2">
 </head>
@@ -284,7 +286,12 @@
       <!-- Pestañas del Torneo -->
       <div id="nav-bracket" class="flex justify-center gap-2 mb-6 hidden">
         <button id="tab-arena-btn" class="tab-btn active" onclick="switchTab('arena')" data-i18n="tab_arena">🏟️ La Arena (1v1)</button>
-        <button id="tab-bracket-btn" class="tab-btn" onclick="switchTab('bracket')" data-i18n="tab_bracket">📊 Cuadro (Bracket)</button>
+        <button class="btn-primary w-full py-2 bg-gray-800 border-gray-600 mb-4" onclick="shareAsImage('bracket-content', 'CopaConejo-Torneo')">
+          📸 Descargar Cuadro
+        </button>
+        <button id="close-bracket-btn" class="btn-primary w-full py-2 bg-gray-800 border-gray-600" data-i18n="bracket_close">
+          Cerrar
+        </button>
       </div>
 
       <!-- Contenido 1: Arena 1v1 -->
@@ -374,11 +381,17 @@
       </div>
 
       <p id="winner-personality" class="text-sm md:text-base text-gray-300 italic mb-6 px-4"></p>
-      
-      <button id="btn-share-tournament" class="btn-share mx-auto mb-8 flex items-center justify-center gap-2">
-        <span class="text-xl">📲</span> <span data-i18n="btn_share_winner">Compartir mi campeona 🐰</span>
-      </button>
 
+      <!-- Botones de Acción (Compartir / Jugar de Nuevo) -->
+      <div id="winner-actions" class="flex flex-col gap-3 max-w-sm mx-auto mb-8 relative z-10" style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <button id="btn-share-tournament" class="btn-share w-full flex items-center justify-center gap-2">
+          <span class="text-xl">📲</span> <span data-i18n="btn_share_winner">Compartir mi campeona 🐰</span>
+        </button>
+        <button id="btn-share-image" class="btn-primary w-full shadow-lg flex items-center justify-center gap-2" onclick="shareAsImage('winner-screen', 'CopaConejo-Setlist')">
+          <span>📸</span> <span>Descargar Imagen</span>
+        </button>
+      </div>
+      
       <!-- Sección de Ranking (Top 8) -->
       <div class="ranking-section max-w-lg mx-auto mb-8">
         <h3 class="subsection-title mb-4" data-i18n="ranking_title">Tu Top de Canciones</h3>

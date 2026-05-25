@@ -2696,3 +2696,89 @@ async function shareQuizResults(event) {
     }
   }
 }
+
+async function shareAsImage(elementId, filename) {
+  if (typeof html2canvas === 'undefined') {
+    alert("Error: Librería de captura no encontrada.");
+    return;
+  }
+  
+  const element = document.getElementById(elementId);
+  if (!element) return;
+  
+  // Guardamos referencia al boton si event está definido
+  const btn = window.event && window.event.currentTarget ? window.event.currentTarget : null;
+  const oldText = btn ? btn.innerHTML : "";
+  if (btn) btn.innerHTML = "Generando imagen... 📸";
+
+  try {
+    // Si el cuadro está oculto, lo mostramos momentaneamente pero escondido del usuario
+    const isHidden = element.classList.contains('hidden');
+    if (isHidden) {
+      element.classList.remove('hidden');
+      element.style.position = 'absolute';
+      element.style.left = '-9999px';
+    }
+    
+    // Capturamos el DOM
+    const canvas = await html2canvas(element, {
+      backgroundColor: '#0a0a0a', // Color de fondo del juego
+      scale: 2, // Retained display quality
+      useCORS: true, // Permitir cargar imágenes si las hubiera
+      logging: false
+    });
+    
+    if (isHidden) {
+      element.classList.add('hidden');
+      element.style.position = '';
+      element.style.left = '';
+    }
+
+    // Convertir canvas a blob
+    canvas.toBlob(async (blob) => {
+      if (!blob) throw new Error("Error generating blob");
+      
+      const file = new File([blob], `${filename}.png`, { type: 'image/png' });
+      
+      // Intentar Share API (nativo iOS/Android)
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            title: 'La Copa Conejo',
+            text: '¡Mira mis resultados en La Copa Conejo! 🐰🔥\nhttps://copaconejo.vercel.app',
+            files: [file]
+          });
+        } catch (shareErr) {
+          // El usuario canceló o hubo error. Como fallback siempre podemos forzar la descarga.
+          console.log("Share API falló o cancelado", shareErr);
+          if (shareErr.name !== 'AbortError') {
+             downloadFallback(blob, filename);
+          }
+        }
+      } else {
+        // Fallback: Descarga directa para escritorio u otros navegadores
+        downloadFallback(blob, filename);
+      }
+      
+      if (btn) btn.innerHTML = oldText;
+      if (typeof trackEvent === 'function') trackEvent('image_shared', elementId);
+      
+    }, 'image/png');
+    
+  } catch (err) {
+    console.error("Error generating image:", err);
+    alert("Hubo un error al generar la imagen. Inténtalo de nuevo.");
+    if (btn) btn.innerHTML = oldText;
+  }
+}
+
+function downloadFallback(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${filename}.png`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
