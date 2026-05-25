@@ -69,7 +69,7 @@ function renderGlobalStats(data) {
           <span style="font-size:1.2rem; width:24px; text-align:center;">${medals[index]}</span>
           <span style="font-size:1.1rem;">${emoji}</span>
           <div style="flex:1;">
-            <p style="font-weight:700; color:white; font-size:0.875rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${title}</p>
+            <p style="font-weight:700; color:white; font-size:0.875rem; line-height:1.3;">${title}</p>
           </div>
           <div style="display:flex; flex-direction:column; align-items:flex-end; gap:2px;">
             ${cupWins ? `<span style="font-size:0.7rem; color:#c084fc; font-weight:700;">${cupWins} ${currentLang === 'en' ? 'copa' : 'copa'}</span>` : ""}
