@@ -10,7 +10,7 @@ const SUPABASE_REST_URL = `${SUPABASE_URL}/rest/v1`;
 function getAnonymousId() {
   let id = localStorage.getItem('bb_anon_id');
   if (!id) {
-    id = 'anon_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    id = generateUUID();
     localStorage.setItem('bb_anon_id', id);
   }
   return id;
