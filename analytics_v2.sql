@@ -140,7 +140,8 @@ BEGIN
     -- COMMUNITY STATS
     'community_stats', (
       SELECT json_build_object(
-        'total_tournaments', (SELECT count(*) FROM public.tournament_results),
+        'total_classic', (SELECT count(*) FROM public.tournament_results WHERE mode = 'classic'),
+        'total_survivor', (SELECT count(*) FROM public.tournament_results WHERE mode = 'survivor'),
         'total_duels', (SELECT count(*) FROM public.duel_votes),
         'total_quizzes', (SELECT count(*) FROM public.trivia_results)
       )

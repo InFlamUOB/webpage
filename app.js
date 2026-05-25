@@ -28,8 +28,8 @@ function renderGlobalStats(data) {
   
   // Community Stats
   if (data.community_stats) {
-    document.getElementById("stat-comm-tournaments").textContent = (data.community_stats.total_tournaments || 0).toLocaleString();
-    document.getElementById("stat-comm-duels").textContent = (data.community_stats.total_duels || 0).toLocaleString();
+    document.getElementById("stat-comm-classic").textContent = (data.community_stats.total_classic || 0).toLocaleString();
+    document.getElementById("stat-comm-survivor").textContent = (data.community_stats.total_survivor || 0).toLocaleString();
     document.getElementById("stat-comm-quizzes").textContent = (data.community_stats.total_quizzes || 0).toLocaleString();
   }
   
@@ -66,13 +66,20 @@ function renderGlobalStats(data) {
       
       document.getElementById("stat-duel-percent").textContent = `${pctA}% - ${pctB}%`;
       document.getElementById("stat-duel-votes").textContent = currentLang === 'en' 
-        ? `${total.toLocaleString()} total votes` 
-        : `${total.toLocaleString()} votos totales`;
+        ? `${total.toLocaleString()} votes in this duel` 
+        : `${total.toLocaleString()} votos en este duelo`;
+      
+      const commDuels = data.community_stats ? data.community_stats.total_duels : 0;
+      document.getElementById("stat-duel-total").textContent = currentLang === 'en'
+        ? `Out of ${commDuels.toLocaleString()} total duels voted`
+        : `De un total de ${commDuels.toLocaleString()} duelos votados en la comunidad`;
     }
   } else {
     document.getElementById("stat-duel-song-a").textContent = "N/A";
     document.getElementById("stat-duel-song-b").textContent = "N/A";
     document.getElementById("stat-duel-percent").textContent = "-";
+    document.getElementById("stat-duel-votes").textContent = "-";
+    document.getElementById("stat-duel-total").textContent = "-";
   }
   
   // Tour Mode Insights
