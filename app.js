@@ -2437,6 +2437,10 @@ let quizState = {
 function startQuizMode() {
   gameMode = 'quiz';
   
+  if (typeof generateUUID === 'function') {
+    analyticsTournamentId = generateUUID();
+  }
+  
   // Setup UI
   document.getElementById("mode-selection-screen").classList.add("hidden");
   document.getElementById("config-screen").classList.add("hidden");
