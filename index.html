@@ -286,12 +286,7 @@
       <!-- Pestañas del Torneo -->
       <div id="nav-bracket" class="flex justify-center gap-2 mb-6 hidden">
         <button id="tab-arena-btn" class="tab-btn active" onclick="switchTab('arena')" data-i18n="tab_arena">🏟️ La Arena (1v1)</button>
-        <button class="btn-primary w-full py-2 bg-gray-800 border-gray-600 mb-4" onclick="shareAsImage('bracket-content', 'CopaConejo-Torneo')">
-          📸 Descargar Cuadro
-        </button>
-        <button id="close-bracket-btn" class="btn-primary w-full py-2 bg-gray-800 border-gray-600" data-i18n="bracket_close">
-          Cerrar
-        </button>
+        <button id="tab-bracket-btn" class="tab-btn" onclick="switchTab('bracket')" data-i18n="tab_bracket">📊 Cuadro (Bracket)</button>
       </div>
 
       <!-- Contenido 1: Arena 1v1 -->
@@ -400,10 +395,15 @@
         </div>
       </div>
 
-      <!-- Botón para ver cuadro completo -->
-      <button onclick="document.getElementById('winner-bracket-wrapper').classList.toggle('hidden')" class="btn-secondary w-full max-w-sm mb-4 p-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors border border-gray-600 font-bold text-white tracking-widest text-sm uppercase">
-        <span data-i18n="btn_view_bracket">Ver Cuadro Completo 📊</span>
-      </button>
+      <!-- Botones para ver y descargar cuadro completo -->
+      <div class="flex gap-2 w-full max-w-sm mx-auto mb-4">
+        <button onclick="document.getElementById('winner-bracket-wrapper').classList.toggle('hidden')" class="btn-secondary flex-1 p-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors border border-gray-600 font-bold text-white tracking-widest text-sm uppercase">
+          <span data-i18n="btn_view_bracket">Ver Cuadro 📊</span>
+        </button>
+        <button onclick="shareAsImage('winner-bracket-container', 'CopaConejo-Torneo')" class="btn-primary p-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors border border-gray-600 font-bold text-white tracking-widest text-sm uppercase">
+          📸 Descargar
+        </button>
+      </div>
 
       <!-- Contenedor del cuadro final (oculto por defecto) -->
       <div id="winner-bracket-wrapper" class="hidden bracket-scroll-wrapper mb-8 mt-4 rounded-xl bg-black bg-opacity-50 border border-gray-700 p-4">
