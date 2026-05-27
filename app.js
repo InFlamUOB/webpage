@@ -1655,39 +1655,49 @@ function renderRankingList() {
   // Es decir: [Loser_1_Cuartos, Loser_2_Cuartos, ..., Loser_1_Semis, Loser_Final, Campeon]
   // Invertimos para que el campeón quede al inicio.
   const sortedRanking = [...tournament.ranking].reverse();
+  const top3 = sortedRanking.slice(0, 3);
+  const medals = ['👑', '🥈', '🥉'];
+  const posClasses = [
+    'border-yellow-400 border-opacity-40 text-yellow-300 font-bold',
+    'border-gray-300 border-opacity-20 text-gray-200 font-semibold',
+    'border-yellow-700 border-opacity-20 text-yellow-600'
+  ];
+  const bgClasses = [
+    'bg-yellow-400 bg-opacity-15',
+    'bg-gray-300 bg-opacity-10',
+    'bg-yellow-700 bg-opacity-10'
+  ];
 
-  sortedRanking.forEach((rank, index) => {
-    const position = index + 1;
+  top3.forEach((rank, index) => {
     const song = rank.song;
     const item = document.createElement("div");
-    
-    // Clases según la posición
-    let posClass = "bg-white bg-opacity-5 border-white border-opacity-10 text-white";
-    let medal = "🎵";
-
-    if (position === 1) {
-      posClass = "bg-yellow-400 bg-opacity-15 border-yellow-400 border-opacity-30 text-yellow-300 font-bold scale-102";
-      medal = "👑";
-    } else if (position === 2) {
-      posClass = "bg-gray-300 bg-opacity-10 border-gray-300 border-opacity-20 text-gray-200 font-semibold";
-      medal = "🥈";
-    } else if (position === 3 || position === 4) {
-      posClass = "bg-yellow-700 bg-opacity-10 border-yellow-700 border-opacity-20 text-yellow-600";
-      medal = "🥉";
-    }
-
-    item.className = `flex justify-between items-center p-3 rounded-lg border ${posClass} transition-all hover:scale-101 duration-200`;
+    const isChamp = index === 0;
+    item.className = `flex items-center gap-3 p-3 rounded-lg border ${posClasses[index]} ${bgClasses[index]} transition-all duration-200`;
+    item.style.fontSize = isChamp ? '1rem' : '0.9rem';
     item.innerHTML = `
-      <div class="flex items-center gap-3">
-        <span class="text-lg font-bold w-6 text-center">${medal} ${position}</span>
-        <div>
-          <h4 class="font-medium text-white">${song.title}</h4>
-          <p class="text-xs text-gray-400">${song.album} (${song.year})</p>
-        </div>
+      <span style="font-size:${isChamp ? '2rem' : '1.4rem'}; width:36px; text-align:center;">${medals[index]}</span>
+      <span style="font-size:1.3rem;">${song.emoji}</span>
+      <div style="flex:1;">
+        <p style="font-weight:700; color:white;">${song.title}</p>
+        <p style="font-size:0.7rem; color:#9ca3af;">${song.album} (${song.year})</p>
       </div>
     `;
     rankingList.appendChild(item);
   });
+
+  // Rest collapsed
+  if (sortedRanking.length > 3) {
+    const rest = document.createElement('details');
+    rest.className = 'mt-2';
+    rest.innerHTML = `<summary style="cursor:pointer; color:#6b7280; font-size:0.75rem; text-align:center; padding:4px;">Ver resto (${sortedRanking.length - 3} más)</summary>`;
+    sortedRanking.slice(3).forEach((rank, i) => {
+      const d = document.createElement('div');
+      d.className = 'flex items-center gap-2 p-2 rounded mt-1 bg-white bg-opacity-5';
+      d.innerHTML = `<span style="width:20px; text-align:center; opacity:0.5; font-size:0.8rem;">${i+4}</span><span>${rank.song.emoji}</span><span style="font-size:0.85rem; color:#d1d5db;">${rank.song.title}</span>`;
+      rest.appendChild(d);
+    });
+    rankingList.appendChild(rest);
+  }
 }
 
 // Renderizar la estructura vacía del Bracket interactivo
@@ -2422,21 +2432,22 @@ function endSurvivorMode(winner) {
   const allSongs = [winner, ...survivorState.eliminated];
   allSongs.sort((a, b) => survivorState.streaks[b.id] - survivorState.streaks[a.id]);
   
-  // Filtrar solo las que ganaron al menos 1 tanda (o la ganadora) y limitar a un top 6 (Ganador + Top 5)
+  // Top 3: ganadora + las 2 siguientes más resistentes
   const survivors = allSongs
     .filter(s => survivorState.streaks[s.id] > 0 || s.id === winner.id)
-    .slice(0, 6);
+    .slice(0, 3);
   
+  const tourMedals = ['👑','🥈','🥉'];
   survivors.forEach((song, idx) => {
     const li = document.createElement("div");
-    li.className = "flex justify-between items-center p-3 rounded bg-white bg-opacity-5";
+    const isWinner = idx === 0;
+    li.style.cssText = `display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; background:${isWinner ? 'rgba(255,75,43,0.2)' : 'rgba(255,255,255,0.05)'}; border:1px solid ${isWinner ? 'rgba(255,75,43,0.5)' : 'rgba(255,255,255,0.08)'}; margin-bottom:6px;`;
     li.innerHTML = `
-      <div class="flex items-center gap-3">
-        <span class="text-xl font-bold opacity-50">${idx + 1}</span>
-        <span>${song.emoji} ${song.title}</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <span class="text-xs text-yellow-500 font-bold">${TRANSLATIONS[currentLang].survivor_leaderboard_wins.replace('{streak}', survivorState.streaks[song.id])}</span>
+      <span style="font-size:${isWinner ? '1.8rem' : '1.3rem'}; width:32px; text-align:center;">${tourMedals[idx]}</span>
+      <span style="font-size:1.2rem;">${song.emoji}</span>
+      <div style="flex:1;">
+        <p style="font-weight:700; color:white; font-size:${isWinner ? '1rem' : '0.875rem'};">${song.title}</p>
+        <p style="font-size:0.7rem; color:#f97316;">${TRANSLATIONS[currentLang].survivor_leaderboard_wins.replace('{streak}', survivorState.streaks[song.id])}</p>
       </div>
     `;
     topList.appendChild(li);
@@ -2662,7 +2673,7 @@ function endQuizMode() {
     date: new Date().toLocaleDateString()
   });
   leaderboard.sort((a, b) => b.score - a.score);
-  leaderboard = leaderboard.slice(0, 5); // Top 5
+  leaderboard = leaderboard.slice(0, 3); // Top 3
   try {
     localStorage.setItem("bb_quiz_leaderboard", JSON.stringify(leaderboard));
   } catch (e) {
@@ -2672,15 +2683,18 @@ function endQuizMode() {
   // Render Leaderboard
   const listEl = document.getElementById("quiz-leaderboard-list");
   listEl.innerHTML = "";
+  const quizMedals = ['🥇','🥈','🥉'];
   leaderboard.forEach((entry, idx) => {
     const div = document.createElement("div");
-    div.className = "flex justify-between items-center p-3 rounded bg-white bg-opacity-5 border border-gray-700";
+    const isTop = idx === 0;
+    div.style.cssText = `display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; background:${isTop ? 'rgba(56,239,125,0.1)' : 'rgba(255,255,255,0.04)'}; border:1px solid ${isTop ? 'rgba(56,239,125,0.3)' : 'rgba(255,255,255,0.08)'}; margin-bottom:6px;`;
     div.innerHTML = `
-      <div class="flex items-center gap-3">
-        <span class="text-xl font-bold opacity-50">#${idx + 1}</span>
-        <span>${entry.correct}/10 (${entry.time}s avg)</span>
+      <span style="font-size:${isTop ? '1.8rem' : '1.3rem'}; width:32px; text-align:center;">${quizMedals[idx]}</span>
+      <div style="flex:1;">
+        <p style="font-weight:700; color:white; font-size:${isTop ? '1rem' : '0.875rem'};">⚡ ${entry.correct}/10 correctas</p>
+        <p style="font-size:0.7rem; color:#9ca3af;">${entry.time}s promedio · ${entry.date}</p>
       </div>
-      <div class="font-bold text-yellow-500">${entry.score} pts</div>
+      <div style="font-weight:800; color:#ffd700; font-size:${isTop ? '1.1rem' : '0.95rem'}">${entry.score.toLocaleString()} pts</div>
     `;
     listEl.appendChild(div);
   });
