@@ -611,7 +611,7 @@ const SONGS_DATABASE = [
     year: 2022,
     theme: "uvst",
     emoji: "🌊",
-    previewUrl: null
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a2/ee/91/a2ee91d5-21d1-4174-e90c-150baf4e4c51/mzaf_10182620033683004497.plus.aac.p.m4a"
   },
   {
     id: "safaera",
@@ -845,7 +845,7 @@ const SONGS_DATABASE = [
     year: 2023,
     theme: "nadiesabe",
     emoji: "🔤",
-    previewUrl: null
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/a8/32/81/a83281b0-1951-2e69-3c3b-6b6731710821/mzaf_2505887871204591298.plus.aac.p.m4a"
   },
   {
     id: "thunder-y-lightning",
@@ -935,7 +935,7 @@ const SONGS_DATABASE = [
     year: 2020,
     theme: "eutdm",
     emoji: "💌",
-    previewUrl: null
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/62/9c/dd/629cdd0c-8d5c-f152-1df2-3b70219d2751/mzaf_3466764076716966357.plus.aac.p.m4a"
   },
   {
     id: "caro",
@@ -1034,7 +1034,7 @@ const SONGS_DATABASE = [
     year: 2018,
     theme: "x100pre",
     emoji: "🐐",
-    previewUrl: null
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/37/e1/92/37e192be-e833-777b-842a-e183ea5d314a/mzaf_16813614455874496310.plus.aac.p.m4a"
   },
   {
     id: "triste",
@@ -1052,7 +1052,7 @@ const SONGS_DATABASE = [
     year: 2018,
     theme: "x100pre",
     emoji: "🔞",
-    previewUrl: null
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/2d/c7/0c/2dc70cf6-c9cd-2152-02c1-c9d38060cf56/mzaf_3968478460303781646.plus.aac.p.m4a"
   },
   {
     id: "la-cancion",
