@@ -189,6 +189,27 @@ function showGlobalStats() {
   statsScreen.classList.remove("hidden");
   
   if (typeof trackEvent === 'function') trackEvent('global_results_viewed');
+
+  // Render personal best quiz scores from localStorage
+  const pbContainer = document.getElementById("stat-quiz-personal-best");
+  if (pbContainer) {
+    let lb = [];
+    try { lb = JSON.parse(localStorage.getItem("bb_quiz_leaderboard") || "[]"); if (!Array.isArray(lb)) lb = []; } catch(e) {}
+    if (lb.length > 0) {
+      const medals = ['🥇','🥈','🥉'];
+      pbContainer.innerHTML = lb.slice(0, 3).map((e, i) => `
+        <div style="display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:9px; background:${i===0?'rgba(253,224,71,0.1)':'rgba(255,255,255,0.04)'}; border:1px solid ${i===0?'rgba(253,224,71,0.3)':'rgba(255,255,255,0.08)'};">
+          <span style="font-size:${i===0?'1.6rem':'1.2rem'}; width:28px; text-align:center;">${medals[i]}</span>
+          <div style="flex:1;">
+            <p style="font-weight:700; color:white; font-size:${i===0?'0.95rem':'0.85rem'};">⚡ ${e.correct}/10 correctas &nbsp;·&nbsp; ${e.time}s promedio</p>
+            <p style="font-size:0.7rem; color:#9ca3af;">${e.date}</p>
+          </div>
+          <div style="font-weight:800; color:#ffd700; font-size:${i===0?'1.05rem':'0.9rem'};">${e.score.toLocaleString()} pts</div>
+        </div>`).join('');
+    } else {
+      pbContainer.innerHTML = `<p class="italic text-gray-500 text-sm">Juega un quiz para ver tu ranking aquí</p>`;
+    }
+  }
   
   // Show loading state
   document.getElementById("stats-loading").classList.remove("hidden");
