@@ -1150,7 +1150,7 @@ const ALBUM_PERSONALITIES = {
     "x100pre": "profunda, innovadora, sentimental 👁️🖤",
     "nadiesabe": "oscura, directa, sin filtros 🐎🦇",
     "eutdm": "experimental, vanguardista, alternativa 🚛🌍",
-    "dtmf": "visionaria, conceptual, fotográfica 📸🔥",
+    "dtmf": "visionaria, conceptual, fotográfica 🐸📸",
     "singles": "versátil, impredecible, siempre en tendencia 📈✨"
   },
   en: {
@@ -1159,7 +1159,7 @@ const ALBUM_PERSONALITIES = {
     "x100pre": "deep, innovative, sentimental 👁️🖤",
     "nadiesabe": "dark, direct, unfiltered 🐎🦇",
     "eutdm": "experimental, avant-garde, alternative 🚛🌍",
-    "dtmf": "visionary, conceptual, photographic 📸🔥",
+    "dtmf": "visionary, conceptual, photographic 🐸📸",
     "singles": "versatile, unpredictable, always trending 📈✨"
   }
 };
