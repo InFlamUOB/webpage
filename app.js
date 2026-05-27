@@ -596,15 +596,6 @@ const SONGS_DATABASE = [
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d2/5c/bc/d25cbc2c-9333-e77b-116b-97aa3df37dbd/mzaf_17984155223864039749.plus.aac.p.m4a"
   },
   {
-    id: "una-vez",
-    title: "Una Vez (feat. Mora)",
-    album: "Un Verano Sin Ti",
-    year: 2022,
-    theme: "uvst",
-    emoji: "1️⃣",
-    previewUrl: null
-  },
-  {
     id: "la-corriente",
     title: "La Corriente (feat. Tony Dize)",
     album: "Un Verano Sin Ti",
@@ -848,15 +839,6 @@ const SONGS_DATABASE = [
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/a8/32/81/a83281b0-1951-2e69-3c3b-6b6731710821/mzaf_2505887871204591298.plus.aac.p.m4a"
   },
   {
-    id: "thunder-y-lightning",
-    title: "Thunder y Lightning (feat. Eladio Carrión)",
-    album: "Nadie Sabe Lo Que Va A Pasar Mañana",
-    year: 2023,
-    theme: "nadiesabe",
-    emoji: "⛈️",
-    previewUrl: null
-  },
-  {
     id: "dakiti",
     title: "Dákiti (feat. Jhayco)",
     album: "El Último Tour Del Mundo",
@@ -1035,15 +1017,6 @@ const SONGS_DATABASE = [
     theme: "x100pre",
     emoji: "🐐",
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/37/e1/92/37e192be-e833-777b-842a-e183ea5d314a/mzaf_16813614455874496310.plus.aac.p.m4a"
-  },
-  {
-    id: "triste",
-    title: "Triste (feat. Bryant Myers)",
-    album: "X 100PRE",
-    year: 2018,
-    theme: "x100pre",
-    emoji: "😢",
-    previewUrl: null
   },
   {
     id: "mayores",
