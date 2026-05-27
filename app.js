@@ -81,6 +81,32 @@ function renderGlobalStats(data) {
   } else {
     copaTop5Container.innerHTML = `<p style="color:#6b7280; text-align:center; font-size:0.875rem;">Sin datos aún</p>`;
   }
+
+  // Hardest Duels (by avg response time)
+  const hardestDuelsContainer = document.getElementById("stat-hardest-duels");
+  if (hardestDuelsContainer) {
+    hardestDuelsContainer.innerHTML = "";
+    if (data.hardest_duel && data.hardest_duel.length > 0) {
+      const thinkEmojis = ["🤔","😤","😬"];
+      data.hardest_duel.forEach((item, idx) => {
+        const songA = findSongById(item.song_a);
+        const songB = findSongById(item.song_b);
+        const titleA = songA ? `${songA.emoji} ${songA.title}` : item.song_a;
+        const titleB = songB ? `${songB.emoji} ${songB.title}` : item.song_b;
+        hardestDuelsContainer.innerHTML += `
+          <div style="display:flex; align-items:center; gap:8px; padding:9px 12px; border-radius:9px; background:rgba(126,34,206,0.12); border:1px solid rgba(168,85,247,0.25); margin-bottom:5px;">
+            <span style="font-size:1.2rem; width:24px; text-align:center;">${thinkEmojis[idx]}</span>
+            <div style="flex:1; min-width:0;">
+              <p style="font-weight:700; color:white; font-size:0.8rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${titleA} <span style="color:#a78bfa;">vs</span> ${titleB}</p>
+              <p style="font-size:0.7rem; color:#9ca3af;">${item.total_votes} votos</p>
+            </div>
+            <span style="font-weight:800; color:#c084fc; font-size:0.9rem; white-space:nowrap;">${item.avg_seconds}s avg</span>
+          </div>`;
+      });
+    } else {
+      hardestDuelsContainer.innerHTML = `<p style="color:#6b7280; font-size:0.85rem; text-align:center; font-style:italic;">Acumulando datos de partidas...</p>`;
+    }
+  }
   
   // Tour Mode Insights
   if (data.tour_champion && data.tour_champion.song_id) {

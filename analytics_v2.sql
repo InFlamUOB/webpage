@@ -148,6 +148,26 @@ BEGIN
         LIMIT 3
       ) t
     ),
+
+    -- COPA: Hardest Duels (pairs where players took longest to decide)
+    -- Filters: completed games only (response < 90s), min 2 votes per pair
+    'hardest_duel', (
+      SELECT COALESCE(json_agg(t), '[]'::json) FROM (
+        SELECT
+          LEAST(song_a_id, song_b_id) AS song_a,
+          GREATEST(song_a_id, song_b_id) AS song_b,
+          ROUND(AVG(response_time_ms)::numeric / 1000, 1) AS avg_seconds,
+          COUNT(*) AS total_votes
+        FROM public.duel_votes
+        WHERE mode = 'classic'
+          AND response_time_ms IS NOT NULL
+          AND response_time_ms BETWEEN 500 AND 90000  -- ignore instant clicks and tabbed-away sessions
+        GROUP BY LEAST(song_a_id, song_b_id), GREATEST(song_a_id, song_b_id)
+        HAVING COUNT(*) >= 2
+        ORDER BY avg_seconds DESC
+        LIMIT 3
+      ) t
+    ),
     
     -- COMMUNITY STATS
     'community_stats', (
@@ -183,3 +203,7 @@ BEGIN
   RETURN result;
 END;
 $$;
+
+-- 3. GRANT PERMISSIONS SO anon CAN INSERT AND SELECT duel_votes
+-- ==============================================================================
+GRANT INSERT, SELECT ON public.duel_votes TO anon;
