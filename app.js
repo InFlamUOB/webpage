@@ -596,6 +596,24 @@ const SONGS_DATABASE = [
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d2/5c/bc/d25cbc2c-9333-e77b-116b-97aa3df37dbd/mzaf_17984155223864039749.plus.aac.p.m4a"
   },
   {
+    id: "una-vez",
+    title: "Una Vez (feat. Mora)",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "1️⃣",
+    previewUrl: null
+  },
+  {
+    id: "la-corriente",
+    title: "La Corriente (feat. Tony Dize)",
+    album: "Un Verano Sin Ti",
+    year: 2022,
+    theme: "uvst",
+    emoji: "🌊",
+    previewUrl: null
+  },
+  {
     id: "safaera",
     title: "Safaera (feat. Jowell & Randy)",
     album: "YHLQMDLG",
@@ -821,6 +839,24 @@ const SONGS_DATABASE = [
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/53/2a/cf/532acfbf-bc5d-0cdb-fd0e-21c13e91bb37/mzaf_7342393327582022930.plus.aac.p.m4a"
   },
   {
+    id: "dema",
+    title: "Dema Ga Ge Gi Go Gu",
+    album: "Nadie Sabe Lo Que Va A Pasar Mañana",
+    year: 2023,
+    theme: "nadiesabe",
+    emoji: "🔤",
+    previewUrl: null
+  },
+  {
+    id: "thunder-y-lightning",
+    title: "Thunder y Lightning (feat. Eladio Carrión)",
+    album: "Nadie Sabe Lo Que Va A Pasar Mañana",
+    year: 2023,
+    theme: "nadiesabe",
+    emoji: "⛈️",
+    previewUrl: null
+  },
+  {
     id: "dakiti",
     title: "Dákiti (feat. Jhayco)",
     album: "El Último Tour Del Mundo",
@@ -891,6 +927,15 @@ const SONGS_DATABASE = [
     theme: "eutdm",
     emoji: "💸",
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/75/e0/39/75e039d8-f18b-92e2-5f87-fee0494eead8/mzaf_14320473857455168528.plus.aac.p.m4a"
+  },
+  {
+    id: "te-deseo-lo-mejor",
+    title: "Te Deseo lo Mejor",
+    album: "El Último Tour Del Mundo",
+    year: 2020,
+    theme: "eutdm",
+    emoji: "💌",
+    previewUrl: null
   },
   {
     id: "caro",
@@ -981,6 +1026,33 @@ const SONGS_DATABASE = [
     theme: "x100pre",
     emoji: "🌴",
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a9/bb/1a/a9bb1a7e-9b23-8d9f-9f9e-226b1df72f2a/mzaf_12214025847237217238.plus.aac.p.m4a"
+  },
+  {
+    id: "tu-no-metes-cabra",
+    title: "Tú No Metes Cabra",
+    album: "X 100PRE",
+    year: 2018,
+    theme: "x100pre",
+    emoji: "🐐",
+    previewUrl: null
+  },
+  {
+    id: "triste",
+    title: "Triste (feat. Bryant Myers)",
+    album: "X 100PRE",
+    year: 2018,
+    theme: "x100pre",
+    emoji: "😢",
+    previewUrl: null
+  },
+  {
+    id: "mayores",
+    title: "Mayores (feat. Becky G)",
+    album: "X 100PRE",
+    year: 2018,
+    theme: "x100pre",
+    emoji: "🔞",
+    previewUrl: null
   },
   {
     id: "la-cancion",
