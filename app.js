@@ -100,7 +100,7 @@ function renderGlobalStats(data) {
               <p style="font-weight:700; color:white; font-size:0.8rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${titleA} <span style="color:#a78bfa;">vs</span> ${titleB}</p>
               <p style="font-size:0.7rem; color:#9ca3af;">${item.total_votes} votos</p>
             </div>
-            <span style="font-weight:800; color:#c084fc; font-size:0.9rem; white-space:nowrap;">${item.avg_seconds}s avg</span>
+            <span style="font-weight:800; color:#c084fc; font-size:0.9rem; white-space:nowrap;">${item.avg_seconds}s máx</span>
           </div>`;
       });
     } else {
