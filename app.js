@@ -138,30 +138,47 @@ function renderGlobalStats(data) {
   const hardestContainer = document.getElementById("stat-quiz-hardest");
   hardestContainer.innerHTML = "";
   if (data.quiz_hardest && data.quiz_hardest.length > 0) {
-    data.quiz_hardest.forEach((item) => {
+    const hMedals = ['💀','😅','😬'];
+    data.quiz_hardest.slice(0, 3).forEach((item, idx) => {
       const song = findSongById(item.song_id);
-      if (song) {
-        // Fallback for total_attempts if using old data structure
-        const total = item.total_attempts || item.fails;
-        hardestContainer.innerHTML += `<li><span class="font-bold text-white">${song.title}</span> <span class="text-xs text-red-400 ml-1">(${item.fails}/${total} fallos)</span></li>`;
-      }
+      if (!song) return;
+      const total = item.total_attempts || item.fails;
+      const failRate = total > 0 ? Math.round((item.fails / total) * 100) : 0;
+      hardestContainer.innerHTML += `
+        <div style="display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; background:rgba(255,75,43,0.08); border:1px solid rgba(255,75,43,0.2); margin-bottom:5px;">
+          <span style="font-size:1.1rem; width:24px; text-align:center;">${hMedals[idx]}</span>
+          <span style="font-size:1rem;">${song.emoji}</span>
+          <div style="flex:1;">
+            <p style="font-weight:700; color:white; font-size:0.8rem;">${song.title}</p>
+          </div>
+          <span style="font-size:0.75rem; font-weight:700; color:#f87171;">${failRate}% fallos</span>
+        </div>`;
     });
   } else {
-    hardestContainer.innerHTML = `<li class="italic text-gray-500">N/A</li>`;
+    hardestContainer.innerHTML = `<p style="color:#6b7280; font-size:0.85rem; font-style:italic;">N/A</p>`;
   }
   
   // Quiz Insights: Fastest
   const fastestContainer = document.getElementById("stat-quiz-fastest");
   fastestContainer.innerHTML = "";
   if (data.quiz_fastest && data.quiz_fastest.length > 0) {
-    data.quiz_fastest.forEach((item) => {
+    const fMedals = ['⚡','🎵','🎶'];
+    data.quiz_fastest.slice(0, 3).forEach((item, idx) => {
       const song = findSongById(item.song_id);
-      if (song) {
-        fastestContainer.innerHTML += `<li><span class="font-bold text-white">${song.title}</span> <span class="text-xs text-green-400 ml-1">(${(item.avg_time/1000).toFixed(1)}s avg)</span></li>`;
-      }
+      if (!song) return;
+      const secs = (item.avg_time / 1000).toFixed(1);
+      fastestContainer.innerHTML += `
+        <div style="display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; background:rgba(56,239,125,0.08); border:1px solid rgba(56,239,125,0.2); margin-bottom:5px;">
+          <span style="font-size:1.1rem; width:24px; text-align:center;">${fMedals[idx]}</span>
+          <span style="font-size:1rem;">${song.emoji}</span>
+          <div style="flex:1;">
+            <p style="font-weight:700; color:white; font-size:0.8rem;">${song.title}</p>
+          </div>
+          <span style="font-size:0.8rem; font-weight:700; color:#34d399;">${secs}s</span>
+        </div>`;
     });
   } else {
-    fastestContainer.innerHTML = `<li class="italic text-gray-500">N/A</li>`;
+    fastestContainer.innerHTML = `<p style="color:#6b7280; font-size:0.85rem; font-style:italic;">N/A</p>`;
   }
 }
 
