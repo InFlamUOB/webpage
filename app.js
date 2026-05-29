@@ -965,6 +965,9 @@ function setLanguage(lang) {
 // Call on init
 document.addEventListener("DOMContentLoaded", () => {
   setLanguage(currentLang);
+  // Predictions are session-only (like quizzes): reset on every fresh page load
+  localStorage.removeItem('bb_mad30_top3');
+  localStorage.removeItem('bb_mad30_confirmed');
 });
 
 // Base de datos de canciones de Bad Bunny con metadatos y estilos visuales por era/álbum (Álbumes y Singles Originales)
