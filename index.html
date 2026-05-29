@@ -61,6 +61,11 @@
           <span class="text-xs text-gray-200 font-normal opacity-80" style="text-transform: none;" data-i18n="mode_quiz_desc">Adivina la canción escuchando a ciegas lo más rápido posible.</span>
         </button>
         
+        <button id="btn-mode-tracker" class="btn-primary flex flex-col items-center justify-center p-4" style="background: linear-gradient(135deg, #1f0050, #7c3aed);">
+          <span class="text-xl mb-1">🎲 Tour Tracker</span>
+          <span class="text-xs text-gray-200 font-normal opacity-80" style="text-transform: none;">Canción sorpresa · Setlist · Invitados</span>
+        </button>
+
         <button id="btn-mode-stats" class="btn-primary flex flex-col items-center justify-center p-4 mt-4" style="background: linear-gradient(135deg, #8E2DE2, #4A00E0);">
           <span class="text-xl mb-1" data-i18n="mode_stats_title">📊 Resultados Globales</span>
           <span class="text-xs text-gray-200 font-normal opacity-80" style="text-transform: none;" data-i18n="mode_stats_desc">Descubre lo que vota el resto del mundo en tiempo real.</span>
@@ -118,24 +123,6 @@
           <div id="stat-hardest-duels" class="flex flex-col gap-2">
             <!-- Injected by JS -->
             <p class="italic text-gray-500 text-sm text-center">Acumulando datos de partidas...</p>
-          </div>
-        </div>
-
-        <!-- 2c. CANCIÓN SORPRESA HEATMAP -->
-        <div class="p-5 rounded-2xl shadow-xl col-span-full" style="background:linear-gradient(135deg,rgba(30,10,60,0.95),rgba(0,0,0,0.9));border:1px solid rgba(139,92,246,0.5);">
-          <h3 class="text-violet-300 font-bold uppercase text-sm tracking-[0.2em] mb-1 text-center">🎲 CANCIÓN SORPRESA</h3>
-          <p class="text-xs text-gray-500 text-center mb-4">La exclusiva que solo se toca una noche — ¿cuál será en el próximo show?</p>
-          <div class="flex flex-col lg:flex-row gap-4">
-            <!-- Heatmap -->
-            <div class="flex-1 overflow-x-auto" id="stat-surprise-heatmap">
-              <p class="italic text-gray-500 text-sm text-center">Cargando datos...</p>
-            </div>
-            <!-- Core Setlist Sidebar -->
-            <div class="lg:w-52 shrink-0">
-              <p class="text-xs text-purple-400 uppercase tracking-widest font-bold mb-2">📋 Setlist Fijo</p>
-              <div id="stat-core-setlist" class="flex flex-col gap-1">
-              </div>
-            </div>
           </div>
         </div>
 
@@ -209,6 +196,51 @@
             <p id="stat-comm-quizzes" class="text-xl font-bold text-white font-display drop-shadow-md">0</p>
             <p class="text-[9px] md:text-[10px] text-gray-400 uppercase tracking-widest">Quizzes Jugados</p>
           </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TOUR TRACKER SCREEN -->
+    <section id="tour-tracker-screen" class="glass-panel hidden fade-in relative mb-8" style="border:1px solid rgba(139,92,246,0.4);">
+      <button class="btn-back-to-menu absolute top-4 left-4" onclick="location.reload()">
+        <span>🏠 Volver</span>
+      </button>
+      <h2 class="text-2xl font-bold mb-1 font-display neon-text uppercase tracking-widest mt-8 text-center" style="color:#c084fc;">🎲 TOUR TRACKER</h2>
+      <p class="text-gray-400 text-sm text-center mb-6">DeBÍ TiRAR MáS FOToS World Tour · datos de <a href="https://dtmftracker.com" target="_blank" class="text-violet-400 underline">dtmftracker.com</a> &amp; Billboard</p>
+
+      <div class="flex flex-col gap-6 text-left max-w-5xl mx-auto pb-10 px-2">
+
+        <!-- Section 1: Surprise Song Heatmap + Core Setlist -->
+        <div class="p-5 rounded-2xl" style="background:rgba(30,10,60,0.6);border:1px solid rgba(139,92,246,0.3);">
+          <p class="text-xs text-violet-300 uppercase tracking-widest font-bold mb-1">🎲 Canción Sorpresa</p>
+          <p class="text-xs text-gray-500 mb-4">Exclusiva de cada noche. Vota cuál crees que tocará en los próximos shows.</p>
+          <div class="flex flex-col lg:flex-row gap-4">
+            <div class="flex-1 overflow-x-auto" id="stat-surprise-heatmap">
+              <p class="italic text-gray-500 text-sm text-center">Cargando...</p>
+            </div>
+            <div class="lg:w-52 shrink-0">
+              <p class="text-xs text-purple-400 uppercase tracking-widest font-bold mb-2">📋 Setlist Fijo (32 canciones)</p>
+              <div id="stat-core-setlist" class="flex flex-col gap-1"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Guest Tracker -->
+        <div class="p-5 rounded-2xl" style="background:rgba(10,30,50,0.6);border:1px solid rgba(56,189,248,0.2);">
+          <p class="text-xs text-sky-300 uppercase tracking-widest font-bold mb-1">🌟 Invitados Sorpresa</p>
+          <p class="text-xs text-gray-500 mb-4">Todos los artistas que han subido al escenario · fuente: Billboard</p>
+          <div id="stat-guest-tracker" class="flex flex-col gap-1"></div>
+        </div>
+
+        <!-- CSV Download -->
+        <div class="text-center">
+          <a href="dtmf_concerts.csv" download class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold" style="background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.4);color:#c084fc;">
+            📥 Descargar CSV de conciertos
+          </a>
+          <a href="dtmf_core_setlist.csv" download class="ml-3 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold" style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.3);color:#a78bfa;">
+            📥 Descargar setlist CSV
+          </a>
         </div>
 
       </div>

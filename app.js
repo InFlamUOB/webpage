@@ -71,6 +71,41 @@ const CORE_SETLIST = [
   {pos:31,title:"DTMF",               emoji:"📸"}, {pos:32, title:"Eoo",                 emoji:"🗣️"},
 ];
 
+// =========================================
+// INVITADOS SORPRESA — GUEST TRACKER DATA
+// =========================================
+const TOUR_GUESTS = [
+  { flag:"🇩🇴", city:"Santo Domingo",  date:"22 Nov 25", artist:"Romeo Santos",       song:"BOKeTE",                          emoji:"🎸" },
+  { flag:"🇨🇷", city:"San José",       date:"5 Dic 25",  artist:"Jhayco",             song:"No Me Conoce / Dákiti / Tarot",    emoji:"🎤" },
+  { flag:"🇲🇽", city:"México (N2)",    date:"11 Dic 25", artist:"Feid",               song:"Perro Negro",                      emoji:"🐾" },
+  { flag:"🇲🇽", city:"México (N4)",    date:"15 Dic 25", artist:"Grupo Frontera",      song:"un x100to",                        emoji:"🪗" },
+  { flag:"🇲🇽", city:"México (N6)",    date:"18 Dic 25", artist:"Julieta Venegas",     song:"Lo Siento BB:/ / Ojitos Lindos",   emoji:"🎹" },
+  { flag:"🇲🇽", city:"México (N8)",    date:"21 Dic 25", artist:"Natanael Cano",       song:"Soy El Diablo Remix",              emoji:"🎸" },
+  { flag:"🇲🇽", city:"México (N8)",    date:"21 Dic 25", artist:"J Balvin",            song:"La Canción",                       emoji:"🦎" },
+  { flag:"🇨🇱", city:"Santiago (N2)",  date:"10 Ene 26", artist:"Becky G",             song:"Mayores / MAMIII",                 emoji:"💫" },
+  { flag:"🇨🇱", city:"Santiago (N3)",  date:"11 Ene 26", artist:"Jowell y Randy",      song:"Safaera",                          emoji:"🛹" },
+  { flag:"🇨🇴", city:"Medellín (N1)",  date:"23 Ene 26", artist:"Li Saumet",           song:"Ojitos Lindos",                    emoji:"🌿" },
+  { flag:"🇨🇴", city:"Medellín (N2)",  date:"24 Ene 26", artist:"Arcángel",            song:"Me Acostumbré",                    emoji:"🎭" },
+  { flag:"🇨🇴", city:"Medellín (N3)",  date:"25 Ene 26", artist:"Karol G",             song:"Ahora Me Llama / Si Antes...",     emoji:"🌸" },
+  { flag:"🇪🇸", city:"Barcelona (N2)", date:"23 May 26", artist:"Bryant Myers",        song:"Triste",                           emoji:"😢" },
+  { flag:"🇵🇹", city:"Lisboa (N2)",    date:"27 May 26", artist:"Sech",               song:"Ignorantes / Otro Trago",           emoji:"🎶" },
+];
+
+function renderGuestTracker() {
+  const el = document.getElementById('stat-guest-tracker');
+  if (!el) return;
+  el.innerHTML = TOUR_GUESTS.map((g, i) => `
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);margin-bottom:3px;">
+      <span style="font-size:1rem;">${g.flag}</span>
+      <span style="font-size:1.1rem;">${g.emoji}</span>
+      <div style="flex:1;min-width:0;">
+        <p style="color:white;font-size:0.75rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${g.artist}</p>
+        <p style="color:#9ca3af;font-size:0.62rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${g.city} · ${g.date}</p>
+      </div>
+      <p style="color:#c084fc;font-size:0.6rem;text-align:right;max-width:90px;line-height:1.2;">${g.song}</p>
+    </div>`).join('');
+}
+
 function castExclusiveVote(showSlug, songId) {
   const key = `bb_excl_vote_${showSlug}`;
   const current = localStorage.getItem(key);
@@ -389,8 +424,17 @@ function renderGlobalStats(data) {
     }
   }
 
-  // Canción Sorpresa heatmap (static data, always render)
+  // Canción Sorpresa heatmap + guests (static data)
   renderSurpriseSection();
+  renderGuestTracker();
+}
+
+function showTourTracker() {
+  document.getElementById("mode-selection-screen").classList.add("hidden");
+  document.getElementById("tour-tracker-screen").classList.remove("hidden");
+  if (typeof trackEvent === 'function') trackEvent('tour_tracker_viewed');
+  renderSurpriseSection();
+  renderGuestTracker();
 }
 
 function showGlobalStats() {
@@ -1450,6 +1494,10 @@ function setupEventListeners() {
   const btnModeStats = document.getElementById("btn-mode-stats");
   if (btnModeStats) {
     btnModeStats.addEventListener("click", showGlobalStats);
+  }
+  const btnModeTracker = document.getElementById("btn-mode-tracker");
+  if (btnModeTracker) {
+    btnModeTracker.addEventListener("click", showTourTracker);
   }
   document.querySelectorAll(".btn-size").forEach(btn => {
     btn.addEventListener("click", () => {
