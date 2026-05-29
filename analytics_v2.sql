@@ -167,6 +167,21 @@ BEGIN
       ) t
     ),
     
+    -- QUIZ: Global Top 3 scores
+    'quiz_top3', (
+      SELECT COALESCE(json_agg(t), '[]'::json) FROM (
+        SELECT
+          score,
+          correct_answers,
+          ROUND(avg_response_time_ms::numeric / 1000, 1) AS avg_seconds,
+          created_at::date AS played_date
+        FROM public.trivia_results
+        WHERE score IS NOT NULL AND score > 0
+        ORDER BY score DESC
+        LIMIT 3
+      ) t
+    ),
+
     -- COMMUNITY STATS
     'community_stats', (
       SELECT json_build_object(
