@@ -128,6 +128,7 @@ const EX_ALIAS = {
 const ALBUM_META = {
   uvst:      { emoji:'☀️', label:'Un Verano Sin Ti' },
   nadiesabe: { emoji:'🌌', label:'Nadie Sabe Lo Que Va a Pasar Mañana' },
+  lqnias:    { emoji:'🏠', label:'Las Que No Iban a Salir' },
   eutdm:     { emoji:'🖤', label:'El Último Tour Del Mundo' },
   yhlqmdlg:  { emoji:'🏎️', label:'YHLQMDLG' },
   x100pre:   { emoji:'🎙️', label:'X 100PRE' },
@@ -399,7 +400,7 @@ function renderSurpriseSection() {
   const songs = getHeatmapSongs();
 
   // Group by album theme in order
-  const ALBUM_ORDER = ['uvst','nadiesabe','eutdm','yhlqmdlg','x100pre','oasis','singles'];
+  const ALBUM_ORDER = ['uvst','nadiesabe','eutdm','lqnias','yhlqmdlg','x100pre','oasis','singles'];
   const grouped = {};
   ALBUM_ORDER.forEach(t => { grouped[t] = []; });
   songs.forEach(s => {
@@ -1129,27 +1130,27 @@ const SONGS_DATABASE = [
   {
     id: "la-dificil",
     title: "La Difícil",
-    album: "YHLQMDLG",
+    album: "Las Que No Iban a Salir",
     year: 2020,
-    theme: "yhlqmdlg",
+    theme: "lqnias",
     emoji: "👑",
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3d/bb/07/3dbb070e-7def-6973-fb9d-a2ba6e23ade2/mzaf_10872476211479128210.plus.aac.p.m4a"
   },
   {
     id: "yo-perreo-sola",
     title: "Yo Perreo Sola",
-    album: "YHLQMDLG",
+    album: "Las Que No Iban a Salir",
     year: 2020,
-    theme: "yhlqmdlg",
+    theme: "lqnias",
     emoji: "💃",
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/dd/45/0c/dd450c77-20ac-97a8-4b6f-189de32647b5/mzaf_3088503985720431976.plus.aac.p.m4a"
   },
   {
     id: "ignorantes",
     title: "Ignorantes (feat. Sech)",
-    album: "YHLQMDLG",
+    album: "Las Que No Iban a Salir",
     year: 2020,
-    theme: "yhlqmdlg",
+    theme: "lqnias",
     emoji: "💔",
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e5/cd/6f/e5cd6f7a-846c-791b-6ecc-519f85fa94da/mzaf_1308995959799076230.plus.aac.p.m4a"
   },
@@ -1165,18 +1166,18 @@ const SONGS_DATABASE = [
   {
     id: "vete",
     title: "Vete",
-    album: "YHLQMDLG",
+    album: "Las Que No Iban a Salir",
     year: 2020,
-    theme: "yhlqmdlg",
+    theme: "lqnias",
     emoji: "🚪",
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/9e/ed/26/9eed26a0-2242-8bb7-6232-03248ff65f38/mzaf_11531603017291507693.plus.aac.p.m4a"
   },
   {
     id: "25-8",
     title: "25/8",
-    album: "YHLQMDLG",
+    album: "Las Que No Iban a Salir",
     year: 2020,
-    theme: "yhlqmdlg",
+    theme: "lqnias",
     emoji: "⏰",
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/9a/36/f2/9a36f259-8848-2071-4c41-4824e67a495b/mzaf_14902156511595530735.plus.aac.p.m4a"
   },
@@ -1654,7 +1655,12 @@ const SONGS_DATABASE = [
   { id:"yo-no-soy-celoso",         title:"Yo No Soy Celoso",        album:"Un Verano Sin Ti",      year:2022, theme:"uvst",      emoji:"😌", previewUrl:null },
   { id:"me-fui-de-vacaciones",     title:"Me Fui de Vacaciones",    album:"Un Verano Sin Ti",      year:2022, theme:"uvst",      emoji:"✈️", previewUrl:null },
   { id:"un-verano-sin-ti-title",   title:"Un Verano Sin Ti",        album:"Un Verano Sin Ti",      year:2022, theme:"uvst",      emoji:"🏝️", previewUrl:null },
-  { id:"agosto",                   title:"Agosto",                  album:"Un Verano Sin Ti",      year:2022, theme:"uvst",      emoji:"☀️", previewUrl:null }
+  { id:"agosto",                   title:"Agosto",                  album:"Un Verano Sin Ti",      year:2022, theme:"uvst",      emoji:"☀️",  previewUrl:null },
+  // ── Las Que No Iban a Salir (2020) — missing tracks ──
+  { id:"pero-ya-no",               title:"Pero Ya No",              album:"Las Que No Iban a Salir", year:2020, theme:"lqnias", emoji:"🚫",  previewUrl:null },
+  { id:"en-casita",                title:"En Casita",               album:"Las Que No Iban a Salir", year:2020, theme:"lqnias", emoji:"🏡",  previewUrl:null },
+  { id:"p-fkn-r",                  title:"P FKN R",                 album:"Las Que No Iban a Salir", year:2020, theme:"lqnias", emoji:"🇵🇷",  previewUrl:null },
+  { id:"entre-nosotros",           title:"Entre Nosotros (feat. Romeo Santos)", album:"Las Que No Iban a Salir", year:2020, theme:"lqnias", emoji:"🥂", previewUrl:null }
 ];
 
 // Diccionario de personalidades basado en el álbum
