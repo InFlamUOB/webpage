@@ -363,12 +363,16 @@ async function fetchSurprisePicksStats() {
 }
 
 function renderSurprisePicksStats(data, el) {
+  // Always update the community stat counter
+  const counterEl = document.getElementById('stat-comm-predictions');
+  const total = data?.total_voters || 0;
+  if (counterEl) counterEl.textContent = total || '—';
+
   if (!data || !data.top_picks || !data.top_picks.length) {
     el.innerHTML = '<p style="font-size:0.65rem;color:#6b7280;text-align:center;padding:8px;">Sin predicciones aún — ¡sé el primero! 🔮</p>';
     return;
   }
   const allSongs = getHeatmapSongs();
-  const total = data.total_voters || 0;
   const top = data.top_picks.slice(0, 10);
   const maxCount = top[0]?.pick_count || 1;
   el.innerHTML = `
