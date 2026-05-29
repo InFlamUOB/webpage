@@ -236,8 +236,11 @@ CREATE TABLE IF NOT EXISTS public.surprise_picks (
 
 ALTER TABLE public.surprise_picks ENABLE ROW LEVEL SECURITY;
 
--- Allow anon to insert and delete their own rows (matched by session_id header is not available,
--- so we open insert/delete to anon and rely on session_id as soft ownership)
+-- Drop policies first so re-running the whole file is safe
+DROP POLICY IF EXISTS "anon insert picks" ON public.surprise_picks;
+DROP POLICY IF EXISTS "anon delete picks" ON public.surprise_picks;
+DROP POLICY IF EXISTS "anon select picks" ON public.surprise_picks;
+
 CREATE POLICY "anon insert picks"  ON public.surprise_picks FOR INSERT TO anon WITH CHECK (true);
 CREATE POLICY "anon delete picks"  ON public.surprise_picks FOR DELETE TO anon USING (true);
 CREATE POLICY "anon select picks"  ON public.surprise_picks FOR SELECT TO anon USING (true);
