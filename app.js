@@ -246,43 +246,63 @@ async function savePicksToSupabase(picks) {
     });
   } catch(e) { console.log('Could not save picks:', e); }
 }
-async function confirmPicks() {
+
+// ---- CONFIRM + SHARE (non-blocking Supabase) ----
+function confirmPicks() {
   const picks = JSON.parse(localStorage.getItem('bb_mad30_top3') || '[]');
   if (!picks.length) return;
-  await savePicksToSupabase(picks);
-  // Visual feedback
-  const bar = document.querySelector('#stat-surprise-heatmap > div:first-child');
-  if (bar) {
-    bar.style.background = 'rgba(139,92,246,0.3)';
-    bar.style.borderColor = 'rgba(139,92,246,0.7)';
-    const msg = document.createElement('span');
-    msg.textContent = '✓ Picks guardados!';
-    msg.style.cssText = 'font-size:0.65rem;color:#a78bfa;font-weight:700;width:100%;text-align:center;';
-    bar.appendChild(msg);
-    setTimeout(() => { msg.remove(); bar.style.background=''; bar.style.borderColor=''; }, 2500);
-  }
+  // Mark as confirmed locally
+  localStorage.setItem('bb_mad30_confirmed', 'true');
+  // Fire-and-forget to Supabase — never blocks the UI
+  savePicksToSupabase(picks).catch(() => {});
+  // Update card UI
+  updateShareCard(true);
 }
 
-function updateShareCard() {
-  const preview = document.getElementById('share-picks-preview');
-  const btn = document.getElementById('btn-share-picks');
-  if (!preview || !btn) return;
-  const picks = JSON.parse(localStorage.getItem('bb_mad30_top3') || '[]');
-  const songs = getHeatmapSongs();
+function updateShareCard(justConfirmed) {
+  const preview  = document.getElementById('share-picks-preview');
+  const btnConf  = document.getElementById('btn-confirm-picks');
+  const btnShare = document.getElementById('btn-share-picks');
+  if (!preview) return;
+
+  const picks     = JSON.parse(localStorage.getItem('bb_mad30_top3') || '[]');
+  const confirmed = localStorage.getItem('bb_mad30_confirmed') === 'true';
+  const songs     = getHeatmapSongs();
+
   if (!picks.length) {
-    preview.innerHTML = '<p style="font-size:0.65rem;color:#4b5563;text-align:center;">Elige canciones en la tabla de arriba</p>';
-    btn.disabled = true; btn.style.opacity = '0.4';
+    preview.innerHTML = '<p style="font-size:0.65rem;color:#4b5563;text-align:center;padding:6px 0;">← Pulsa canciones en la tabla para elegir tu Top 3</p>';
+    if (btnConf)  { btnConf.disabled  = true;  btnConf.style.opacity  = '0.35'; }
+    if (btnShare) { btnShare.disabled = true;  btnShare.style.opacity = '0.35'; }
     return;
   }
+
   preview.innerHTML = picks.map((id, i) => {
     const s = songs.find(x => x.id === id);
-    return `<div style="display:flex;align-items:center;gap:6px;padding:4px 0;">
-      <span style="font-size:0.7rem;color:#7c3aed;font-weight:700;width:18px;">#${i+1}</span>
+    return `<div style="display:flex;align-items:center;gap:8px;padding:3px 0;">
+      <span style="font-size:0.72rem;color:#7c3aed;font-weight:700;width:20px;">#${i+1}</span>
       <span style="font-size:1rem;">${s?.emoji || '🎵'}</span>
       <span style="font-size:0.75rem;color:#e9d5ff;">${s?.title?.split(' (')[0] || id}</span>
     </div>`;
   }).join('');
-  btn.disabled = false; btn.style.opacity = '1';
+
+  if (btnConf) {
+    if (confirmed && !justConfirmed) {
+      btnConf.textContent = '✓ Predicción confirmada';
+      btnConf.style.background = 'rgba(22,163,74,0.4)';
+      btnConf.style.borderColor = 'rgba(22,163,74,0.6)';
+    } else if (justConfirmed) {
+      btnConf.textContent = '✓ ¡Guardada!';
+      btnConf.style.background = 'rgba(22,163,74,0.4)';
+      setTimeout(() => {
+        btnConf.textContent = '✓ Predicción confirmada';
+      }, 2000);
+    } else {
+      btnConf.textContent = '🔮 Confirmar predicción';
+      btnConf.style.background = 'linear-gradient(135deg,#7c3aed,#a855f7)';
+    }
+    btnConf.disabled = false; btnConf.style.opacity = '1';
+  }
+  if (btnShare) { btnShare.disabled = false; btnShare.style.opacity = '1'; }
 }
 
 async function sharePicks() {
@@ -294,15 +314,18 @@ async function sharePicks() {
     return `#${i+1} ${s?.emoji || '🎵'} ${s?.title?.split(' (')[0] || id}`;
   });
   const text = `🔮 Mi predicción para Madrid 30 May — DeBÍ TiRAR MáS FOToS Tour:\n${lines.join('\n')}\n\n¿Cuál crees tú? → inflam.github.io/webpage`;
+  const btnShare = document.getElementById('btn-share-picks');
   if (navigator.share) {
     try { await navigator.share({ title: '🎲 Mi predicción tour Bad Bunny', text }); return; }
-    catch(e) { /* fallback */ }
+    catch(e) { /* fallback to clipboard */ }
   }
-  await navigator.clipboard.writeText(text);
-  const btn = document.getElementById('btn-share-picks');
-  if (btn) { btn.textContent = '✓ Copiado al portapapeles!'; setTimeout(() => { btn.textContent = '🌍 Compartir mi Top 3'; }, 2500); }
+  try {
+    await navigator.clipboard.writeText(text);
+    if (btnShare) { btnShare.textContent = '✓ Copiado!'; setTimeout(() => { btnShare.textContent = '🌍 Compartir'; }, 2000); }
+  } catch(e) {
+    if (btnShare) { btnShare.textContent = '⚠️ No se pudo copiar'; setTimeout(() => { btnShare.textContent = '🌍 Compartir'; }, 2000); }
+  }
 }
-
 
 async function fetchSurprisePicksStats() {
   const el = document.getElementById('surprise-picks-stats');
@@ -321,7 +344,7 @@ async function fetchSurprisePicksStats() {
     const data = await res.json();
     renderSurprisePicksStats(data, el);
   } catch(e) {
-    el.innerHTML = '<p style="font-size:0.65rem;color:#6b7280;">Sin datos aún.</p>';
+    el.innerHTML = '<p style="font-size:0.65rem;color:#6b7280;text-align:center;padding:8px;">Sin predicciones aún — ¡ejecuta el SQL en Supabase y sé el primero! 🔮</p>';
   }
 }
 
@@ -396,7 +419,6 @@ function renderSurpriseSection() {
         </span>`;
       }).join('')}
       <span style="font-size:0.58rem;color:#6b7280;margin-left:auto;">Pulsa una canción · max 3</span>
-      <button onclick="confirmPicks()" style="padding:3px 10px;border-radius:20px;font-size:0.62rem;font-weight:700;cursor:pointer;background:rgba(139,92,246,0.6);border:1px solid rgba(139,92,246,0.8);color:white;transition:all 0.2s;" onmouseover="this.style.background='rgba(139,92,246,0.85)'" onmouseout="this.style.background='rgba(139,92,246,0.6)'">${picks.length > 0 ? '🔮 Confirmar picks' : '— elige canciones'}</button>
     </div>`;
 
   // Build rows grouped by album
