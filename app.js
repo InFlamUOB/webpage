@@ -195,9 +195,6 @@ const CORE_SETLIST = [
 // INVITADOS SORPRESA — GUEST TRACKER DATA
 // =========================================
 const TOUR_GUESTS = [
-  { flag:"🇵🇷", city:"Puerto Rico",    date:"Oct 25",   artist:"RaiNao",              song:"Perfumito Nuevo",                  emoji:"🌸" },
-  { flag:"🇵🇷", city:"Puerto Rico",    date:"Oct 25",   artist:"Ñengo Flow",           song:"Safaera",                          emoji:"🔥" },
-  { flag:"🇵🇷", city:"Puerto Rico",    date:"Oct 25",   artist:"Jowell & Randy",       song:"Safaera",                          emoji:"🛹" },
   { flag:"🇩🇴", city:"Santo Domingo", date:"22 Nov 25", artist:"Romeo Santos",          song:"BOKeTE",                           emoji:"🎸" },
   { flag:"🇨🇷", city:"San José",       date:"5 Dic 25",  artist:"Jhayco",              song:"No Me Conoce / Dákiti / Tarot",    emoji:"🎤" },
   { flag:"🇧🇷", city:"São Paulo 2",    date:"21 Feb 26", artist:"RaiNao",              song:"Perfumito Nuevo",                  emoji:"🌸" },
@@ -749,6 +746,7 @@ function showGlobalStats() {
   `;
   
   fetchGlobalStats();
+  fetchSurprisePicksStats(); // load community predictions concurrently
 }
 
 // =========================================
