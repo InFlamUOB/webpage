@@ -250,13 +250,9 @@ function renderGuestTracker() {
 
 async function savePicksToSupabase(picks) {
   if (!picks.length) return;
-  const sessionId = localStorage.getItem('bb_session_id') ||
-    (() => { const id = crypto.randomUUID(); localStorage.setItem('bb_session_id', id); return id; })();
+  // Fresh UUID per confirmation — no DELETE, picks accumulate across sessions
+  const sessionId = crypto.randomUUID();
   try {
-    await fetch(`${SUPABASE_REST_URL}/surprise_picks?session_id=eq.${sessionId}`, {
-      method: 'DELETE',
-      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` }
-    });
     await fetch(`${SUPABASE_REST_URL}/surprise_picks`, {
       method: 'POST',
       headers: {
