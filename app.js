@@ -217,11 +217,18 @@ function renderGuestTracker() {
     <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);margin-bottom:3px;">
       <span style="font-size:1rem;">${g.flag}</span>
       <span style="font-size:1.1rem;">${g.emoji}</span>
-      <div style="flex:1;min-width:0;async function savePicksToSupabase(picks) {
+      <div style="flex:1;min-width:0;">
+        <p style="color:white;font-size:0.75rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${g.artist}</p>
+        <p style="color:#9ca3af;font-size:0.62rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${g.city} · ${g.date}</p>
+      </div>
+      <p style="color:#c084fc;font-size:0.6rem;text-align:right;max-width:90px;line-height:1.2;">${g.song}</p>
+    </div>`).join('');
+}
+
+async function savePicksToSupabase(picks) {
   if (!picks.length) return;
   const sessionId = localStorage.getItem('bb_session_id') ||
     (() => { const id = crypto.randomUUID(); localStorage.setItem('bb_session_id', id); return id; })();
-  // Upsert picks: delete old then insert new
   try {
     await fetch(`${SUPABASE_REST_URL}/rest/v1/surprise_picks?session_id=eq.${sessionId}`, {
       method: 'DELETE',
@@ -239,6 +246,7 @@ function renderGuestTracker() {
     });
   } catch(e) { console.log('Could not save picks:', e); }
 }
+
 
 function renderSurpriseSection() {
   const heatmapEl = document.getElementById('stat-surprise-heatmap');
