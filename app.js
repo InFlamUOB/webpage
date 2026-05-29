@@ -296,51 +296,8 @@ function showPredictionResult() {
   }).join('');
 }
 
-function updateShareCard(justConfirmed) {
-  const preview  = document.getElementById('share-picks-preview');
-  const btnConf  = document.getElementById('btn-confirm-picks');
-  const btnShare = document.getElementById('btn-share-picks');
-  if (!preview) return;
-
-  const picks     = JSON.parse(localStorage.getItem('bb_mad30_top3') || '[]');
-  const confirmed = localStorage.getItem('bb_mad30_confirmed') === 'true';
-  const songs     = getHeatmapSongs();
-
-  if (!picks.length) {
-    preview.innerHTML = '<p style="font-size:0.65rem;color:#4b5563;text-align:center;padding:6px 0;">← Pulsa canciones en la tabla para elegir tu Top 3</p>';
-    if (btnConf)  { btnConf.disabled  = true;  btnConf.style.opacity  = '0.35'; }
-    if (btnShare) { btnShare.disabled = true;  btnShare.style.opacity = '0.35'; }
-    return;
-  }
-
-  preview.innerHTML = picks.map((id, i) => {
-    const s = songs.find(x => x.id === id);
-    return `<div style="display:flex;align-items:center;gap:8px;padding:3px 0;">
-      <span style="font-size:0.72rem;color:#7c3aed;font-weight:700;width:20px;">#${i+1}</span>
-      <span style="font-size:1rem;">${s?.emoji || '🎵'}</span>
-      <span style="font-size:0.75rem;color:#e9d5ff;">${s?.title?.split(' (')[0] || id}</span>
-    </div>`;
-  }).join('');
-
-  if (btnConf) {
-    if (confirmed && !justConfirmed) {
-      btnConf.textContent = '✓ Predicción confirmada';
-      btnConf.style.background = 'rgba(22,163,74,0.4)';
-      btnConf.style.borderColor = 'rgba(22,163,74,0.6)';
-    } else if (justConfirmed) {
-      btnConf.textContent = '✓ ¡Guardada!';
-      btnConf.style.background = 'rgba(22,163,74,0.4)';
-      setTimeout(() => {
-        btnConf.textContent = '✓ Predicción confirmada';
-      }, 2000);
-    } else {
-      btnConf.textContent = '🔮 Confirmar predicción';
-      btnConf.style.background = 'linear-gradient(135deg,#7c3aed,#a855f7)';
-    }
-    btnConf.disabled = false; btnConf.style.opacity = '1';
-  }
-  if (btnShare) { btnShare.disabled = false; btnShare.style.opacity = '1'; }
-}
+// updateShareCard: stub — confirm button is now inline in the heatmap
+function updateShareCard() {}
 
 async function sharePicks() {
   const picks = JSON.parse(localStorage.getItem('bb_mad30_top3') || '[]');
@@ -351,7 +308,6 @@ async function sharePicks() {
     return `#${i+1} ${s?.emoji || '🎵'} ${s?.title?.split(' (')[0] || id}`;
   });
   const text = `🔮 Mi predicción para Madrid 30 May — DeBÍ TiRAR MáS FOToS Tour:\n${lines.join('\n')}\n\n¿Cuál crees tú? → inflam.github.io/webpage`;
-  const btnShare = document.getElementById('btn-share-picks');
   if (navigator.share) {
     try { await navigator.share({ title: '🎲 Mi predicción tour Bad Bunny', text }); return; }
     catch(e) { /* fallback to clipboard */ }
@@ -535,8 +491,12 @@ function renderSurpriseSection() {
       <tbody>${rowsHtml}</tbody>
     </table>
     </div>
+    ${!confirmed && picks.length > 0 ? `
+    <button onclick="confirmPicks()"
+      style="display:block;width:100%;margin-top:10px;padding:10px;border-radius:12px;font-size:0.78rem;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#a855f7);color:white;border:1px solid rgba(139,92,246,0.6);">
+      🔮 Confirmar mi predicción (${picks.length}/3)
+    </button>` : ''}
     <p style="font-size:0.55rem;color:#4b5563;text-align:right;margin-top:6px;">★ tocada como exclusiva · hover para ver concierto · <a href="https://dtmftracker.com/exclusives" target="_blank" style="color:#6b7280;">dtmftracker.com</a></p>`;
-  updateShareCard();
 }
 
 
