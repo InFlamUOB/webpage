@@ -190,7 +190,7 @@ function renderSurpriseSection() {
     if (s.exclusive) songToShow[s.exclusive] = s;
   });
 
-  // M  // Song rows split: played exclusives, then separator, then candidates
+  // Song rows split: played exclusives, then separator, then candidates
   const playedSongs   = columns.filter(s => s.played);
   const candidateSongs = columns.filter(s => !s.played);
 
@@ -248,6 +248,15 @@ function renderSurpriseSection() {
     + candidateSongs.map(s => buildRow(s, true)).join('');
 
 
+  // Madrid column headers
+  const madridHeaders = upcomingShows.map(show => `
+    <th style="min-width:58px;max-width:58px;padding:4px 2px;vertical-align:bottom;text-align:center;background:rgba(139,92,246,0.08);border-radius:6px 6px 0 0;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+        <span style="font-size:0.75rem;">🔮</span>
+        <span style="font-size:0.62rem;color:#c084fc;font-weight:700;">${show.label}</span>
+        <span style="font-size:0.5rem;color:#6b7280;">${show.date}</span>
+      </div>
+    </th>`).join('');
 
   heatmapEl.innerHTML = `
     <table style="border-collapse:separate;border-spacing:2px 1px;width:100%;">
