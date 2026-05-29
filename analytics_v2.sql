@@ -248,7 +248,7 @@ CREATE POLICY "anon select picks"  ON public.surprise_picks FOR SELECT TO anon U
 GRANT INSERT, SELECT, DELETE ON public.surprise_picks TO anon;
 GRANT USAGE, SELECT ON SEQUENCE public.surprise_picks_id_seq TO anon;
 
--- RPC: aggregate top picks per show
+-- RPC: aggregate top picks per show with weighted scoring (#1=3pts, #2=2pts, #3=1pt)
 CREATE OR REPLACE FUNCTION public.get_surprise_picks_stats(p_show_slug TEXT DEFAULT 'mad1')
 RETURNS json
 LANGUAGE plpgsql
@@ -265,18 +265,21 @@ BEGIN
       WHERE show_slug = p_show_slug
     ),
     'top_picks', (
-      SELECT json_agg(t ORDER BY t.pick_count DESC)
+      SELECT json_agg(t ORDER BY t.weighted_score DESC, t.rank1_count DESC)
       FROM (
         SELECT
           song_id,
           COUNT(*) AS pick_count,
+          SUM(CASE WHEN pick_rank = 1 THEN 3
+                   WHEN pick_rank = 2 THEN 2
+                   WHEN pick_rank = 3 THEN 1 ELSE 0 END) AS weighted_score,
           SUM(CASE WHEN pick_rank = 1 THEN 1 ELSE 0 END) AS rank1_count,
           SUM(CASE WHEN pick_rank = 2 THEN 1 ELSE 0 END) AS rank2_count,
           SUM(CASE WHEN pick_rank = 3 THEN 1 ELSE 0 END) AS rank3_count
         FROM public.surprise_picks
         WHERE show_slug = p_show_slug
         GROUP BY song_id
-        ORDER BY pick_count DESC
+        ORDER BY weighted_score DESC, rank1_count DESC
         LIMIT 10
       ) t
     )

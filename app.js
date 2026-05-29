@@ -369,22 +369,30 @@ function renderSurprisePicksStats(data, el) {
   }
   const allSongs = getHeatmapSongs();
   const top = data.top_picks.slice(0, 10);
-  const maxCount = top[0]?.pick_count || 1;
+  const maxScore = top[0]?.weighted_score || top[0]?.pick_count || 1;
+  const medals = ['🥇','🥈','🥉'];
   el.innerHTML = `
-    <p style="font-size:0.6rem;color:#6b7280;margin-bottom:6px;">${total} fan${total!==1?'s':''} ha${total!==1?'n':''} confirmado su Top 3 · Madrid 30 May</p>
+    <p style="font-size:0.6rem;color:#6b7280;margin-bottom:2px;">${total} fan${total!==1?'s':''} ha${total!==1?'n':''} confirmado su Top 3 · Madrid 30 May</p>
+    <p style="font-size:0.52rem;color:#4b5563;margin-bottom:8px;">Puntuación ponderada: #1 = 3pts · #2 = 2pts · #3 = 1pt</p>
     ${top.map((p, i) => {
       const song = allSongs.find(s => s.id === p.song_id);
-      const pct = Math.round((p.pick_count / (total * 3 || 1)) * 100);
-      const bar = Math.round((p.pick_count / maxCount) * 100);
-      return `<div style="margin-bottom:5px;">
+      const score = p.weighted_score || p.pick_count;
+      const bar = Math.round((score / maxScore) * 100);
+      const rankBadge = i < 3 ? medals[i] : `<span style="font-size:0.65rem;color:#6b7280;width:18px;text-align:center;">${i+1}</span>`;
+      const rankLine = [
+        p.rank1_count > 0 ? `<span style="color:#fde047;">${p.rank1_count}×#1</span>` : '',
+        p.rank2_count > 0 ? `<span style="color:#9ca3af;">${p.rank2_count}×#2</span>` : '',
+        p.rank3_count > 0 ? `<span style="color:#92400e;">${p.rank3_count}×#3</span>` : ''
+      ].filter(Boolean).join(' ');
+      return `<div style="margin-bottom:6px;">
         <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
-          <span style="font-size:0.7rem;color:#6b7280;width:14px;text-align:right;">${i+1}</span>
+          <span style="font-size:${i<3?'0.9':'0.7'}rem;min-width:18px;text-align:center;">${rankBadge}</span>
           <span style="font-size:0.8rem;">${song?.emoji || '🎵'}</span>
           <span style="font-size:0.68rem;color:#e5e7eb;flex:1;">${song?.title?.split(' (')[0] || p.song_id}</span>
-          <span style="font-size:0.65rem;color:#c084fc;font-weight:700;">${p.pick_count}×</span>
-          <span style="font-size:0.58rem;color:#6b7280;">${pct}%</span>
+          <span style="font-size:0.55rem;color:#6b7280;">${rankLine}</span>
+          <span style="font-size:0.65rem;color:#c084fc;font-weight:700;min-width:28px;text-align:right;">${score}pts</span>
         </div>
-        <div style="height:4px;border-radius:2px;background:rgba(255,255,255,0.05);overflow:hidden;margin-left:20px;">
+        <div style="height:4px;border-radius:2px;background:rgba(255,255,255,0.05);overflow:hidden;margin-left:24px;">
           <div style="height:100%;width:${bar}%;background:linear-gradient(90deg,#7c3aed,#c084fc);border-radius:2px;transition:width 0.6s;"></div>
         </div>
       </div>`;
