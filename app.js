@@ -111,11 +111,12 @@ const SETLIST_IDS = new Set([
 
 // Canciones tocadas como exclusivas pero no en SONGS_DATABASE
 const EXTRA_EXCLUSIVE_SONGS = [
-  {id:'thunder-y-lightning', title:'THUNDER Y LIGHTNING',       theme:'nadiesabe', emoji:'⚡'},
-  {id:'mojabi-ghost',        title:'MOJABI GHOST',              theme:'nadiesabe', emoji:'👻'},
-  {id:'triste-br',           title:'Triste (feat. Bryant Myers)',theme:'eutdm',    emoji:'😢'},
-  {id:'una-vez',             title:'Una Vez (feat. Mora)',      theme:'eutdm',    emoji:'1️⃣'},
-  {id:'soy-el-diablo',       title:'Soy El Diablo',            theme:'singles',  emoji:'👿'},
+  {id:'thunder-y-lightning', title:'THUNDER Y LIGHTNING',              theme:'nadiesabe', emoji:'⚡'},
+  {id:'mojabi-ghost',        title:'MOJABI GHOST',                     theme:'nadiesabe', emoji:'👻'},
+  {id:'coco-chanel',         title:'Coco Chanel (feat. Eladio Carrión)',theme:'nadiesabe', emoji:'💎'},
+  {id:'triste-br',           title:'Triste (feat. Bryant Myers)',       theme:'eutdm',    emoji:'😢'},
+  {id:'una-vez',             title:'Una Vez (feat. Mora)',              theme:'eutdm',    emoji:'1️⃣'},
+  {id:'soy-el-diablo',       title:'Soy El Diablo',                    theme:'singles',  emoji:'👿'},
 ];
 
 // Alias: exclusive slug → SONGS_DATABASE id
@@ -1633,7 +1634,27 @@ const SONGS_DATABASE = [
   {
     id: "sp-eoo", title: "Eoo", album: "DeBÍ TiRAR MáS FOToS", year: 2025, theme: "dtmf", emoji: "🗣️",
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/bb/b7/ad/bbb7adc0-e19a-de2c-f5fa-7aa7597c018f/mzaf_3830528517982749933.plus.aac.p.m4a"
-  }
+  },
+  // ── DeBÍ TiRAR MáS FOToS (2025) — NOT in fixed setlist ──
+  { id:"perfumito-nuevo",          title:"Perfumito Nuevo",         album:"DeBÍ TiRAR MáS FOToS", year:2025, theme:"dtmf",      emoji:"🌸", previewUrl:null },
+  { id:"el-club",                  title:"El Clúb",                 album:"DeBÍ TiRAR MáS FOToS", year:2025, theme:"dtmf",      emoji:"🎪", previewUrl:null },
+  { id:"ketu-tecre",               title:"Ketu Tecrè",              album:"DeBÍ TiRAR MáS FOToS", year:2025, theme:"dtmf",      emoji:"🕺", previewUrl:null },
+  { id:"lo-que-le-paso-hawaii",    title:"Lo Que Le Pasó a Hawaii", album:"DeBÍ TiRAR MáS FOToS", year:2025, theme:"dtmf",      emoji:"🌺", previewUrl:null },
+  // ── Nadie Sabe Lo Que Va A Pasar Mañana (2023) — not performed yet ──
+  { id:"telefono-nuevo",           title:"Teléfono Nuevo",          album:"Nadie Sabe",            year:2023, theme:"nadiesabe", emoji:"📱", previewUrl:null },
+  { id:"baby-nueva",               title:"Baby Nueva",              album:"Nadie Sabe",            year:2023, theme:"nadiesabe", emoji:"👶", previewUrl:null },
+  { id:"mercedes-carota",          title:"Mercedes Carota",         album:"Nadie Sabe",            year:2023, theme:"nadiesabe", emoji:"🚗", previewUrl:null },
+  { id:"los-pits",                 title:"Los Pits",                album:"Nadie Sabe",            year:2023, theme:"nadiesabe", emoji:"🏎️", previewUrl:null },
+  { id:"vuelve-candy-b",           title:"Vuelve Candy B",          album:"Nadie Sabe",            year:2023, theme:"nadiesabe", emoji:"🍬", previewUrl:null },
+  { id:"europa",                   title:"Europa :)",               album:"Nadie Sabe",            year:2023, theme:"nadiesabe", emoji:"🇪🇺", previewUrl:null },
+  { id:"acho-pr",                  title:"Acho PR",                 album:"Nadie Sabe",            year:2023, theme:"nadiesabe", emoji:"🇵🇷", previewUrl:null },
+  // ── 3MEN2 KBRN (2023) — Coco Chanel: exclusive performance ──
+  { id:"coco-chanel",              title:"Coco Chanel (feat. Eladio Carrión)", album:"3MEN2 KBRN", year:2023, theme:"nadiesabe", emoji:"💎", previewUrl:null },
+  // ── Un Verano Sin Ti (2022) — not performed yet ──
+  { id:"yo-no-soy-celoso",         title:"Yo No Soy Celoso",        album:"Un Verano Sin Ti",      year:2022, theme:"uvst",      emoji:"😌", previewUrl:null },
+  { id:"me-fui-de-vacaciones",     title:"Me Fui de Vacaciones",    album:"Un Verano Sin Ti",      year:2022, theme:"uvst",      emoji:"✈️", previewUrl:null },
+  { id:"un-verano-sin-ti-title",   title:"Un Verano Sin Ti",        album:"Un Verano Sin Ti",      year:2022, theme:"uvst",      emoji:"🏝️", previewUrl:null },
+  { id:"agosto",                   title:"Agosto",                  album:"Un Verano Sin Ti",      year:2022, theme:"uvst",      emoji:"☀️", previewUrl:null }
 ];
 
 // Diccionario de personalidades basado en el álbum
