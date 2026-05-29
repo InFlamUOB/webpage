@@ -107,8 +107,9 @@ const TOUR_GUESTS = [
   { flag:"🇨🇴", city:"Medellín (N1)",  date:"23 Ene 26", artist:"Li Saumet",           song:"Ojitos Lindos",                    emoji:"🌿" },
   { flag:"🇨🇴", city:"Medellín (N2)",  date:"24 Ene 26", artist:"Arcángel",            song:"Me Acostumbré",                    emoji:"🎭" },
   { flag:"🇨🇴", city:"Medellín (N3)",  date:"25 Ene 26", artist:"Karol G",             song:"Ahora Me Llama / Si Antes...",     emoji:"🌸" },
-  { flag:"🇪🇸", city:"Barcelona (N2)", date:"23 May 26", artist:"Bryant Myers",        song:"Triste",                           emoji:"😢" },
-  { flag:"🇵🇹", city:"Lisboa (N2)",    date:"27 May 26", artist:"Sech",               song:"Ignorantes / Otro Trago",           emoji:"🎶" },
+  { flag:"🇪🇸", city:"Barcelona 1",  date:"22 May 26", artist:"Bad Gyal",          song:"Toca Toca / Yo Lo Tengo",              emoji:"💎" },
+  { flag:"🇪🇸", city:"Barcelona 2", date:"23 May 26", artist:"Bryant Myers",        song:"Triste",                           emoji:"😢" },
+  { flag:"🇵🇹", city:"Lisboa 2",    date:"27 May 26", artist:"Sech",               song:"Ignorantes / Otro Trago",           emoji:"🎶" },
 ];
 
 function renderGuestTracker() {
