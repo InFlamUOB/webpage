@@ -220,7 +220,23 @@ const TOUR_GUESTS = [
 function renderGuestTracker() {
   const el = document.getElementById('stat-guest-tracker');
   if (!el) return;
-  el.innerHTML = TOUR_GUESTS.map((g, i) => `
+
+  const MONTHS = {ene:1,feb:2,mar:3,abr:4,may:5,jun:6,jul:7,ago:8,sep:9,oct:10,nov:11,dic:12};
+  function dateSortKey(d) {
+    // formats: "22 Nov 25", "Nov 25", "Feb 26", "21 Feb 26", "22 May 26"
+    const parts = d.toLowerCase().split(' ');
+    let day = 1, month = 1, year = 2025;
+    parts.forEach(p => {
+      if (MONTHS[p.slice(0,3)]) month = MONTHS[p.slice(0,3)];
+      else if (/^\d{2}$/.test(p) && parseInt(p) <= 31) day = parseInt(p);
+      else if (/^\d{2}$/.test(p) && parseInt(p) > 31) year = 2000 + parseInt(p);
+    });
+    return year * 10000 + month * 100 + day;
+  }
+
+  const sorted = [...TOUR_GUESTS].sort((a, b) => dateSortKey(a.date) - dateSortKey(b.date));
+
+  el.innerHTML = sorted.map((g) => `
     <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);margin-bottom:3px;">
       <span style="font-size:1rem;">${g.flag}</span>
       <span style="font-size:1.1rem;">${g.emoji}</span>
