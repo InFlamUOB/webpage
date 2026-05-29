@@ -42,10 +42,7 @@ const TOUR_EXCLUSIVE_DATA = {
     { slug:"lis2", flag:"🇵🇹", label:"Lisboa 2",       date:"27 May", exclusive:"ignorantes",        guest:"Sech" },
   ],
   upcomingShows: [
-    { slug:"mad1", flag:"🇪🇸", label:"Madrid 1", date:"30 May" },
-    { slug:"mad2", flag:"🇪🇸", label:"Madrid 2", date:"31 May" },
-    { slug:"mad3", flag:"🇪🇸", label:"Madrid 3", date:"2 Jun"  },
-    { slug:"mad4", flag:"🇪🇸", label:"Madrid 4", date:"3 Jun"  },
+    { slug:"mad1", flag:"🇪🇸", label:"Madrid", date:"30 May" },
   ],
   columns: [
     { id:"25-8",              label:"25/8",            emoji:"♾️",  played:true },
@@ -103,6 +100,76 @@ const TOUR_EXCLUSIVE_DATA = {
   ]
 };
 
+// IDs in setlist fijo — excluidos del heatmap de predicción
+const SETLIST_IDS = new Set([
+  'titi-me-pregunto','me-porto-bonito','ojitos-lindos','efecto','neverita','el-apagon',
+  'safaera','si-veo-a-tu-mama','yo-perreo-sola','bichiyal','monaco','dakiti',
+  'callaita','yonaguni','la-cancion',
+  'sp-mudanza','sp-pitorro','sp-weltita','sp-turista','sp-baile','sp-nuevayol',
+  'sp-velda','sp-voy','sp-cafe','sp-kloufrens','sp-dtmf','sp-eoo'
+]);
+
+// Canciones tocadas como exclusivas pero no en SONGS_DATABASE
+const EXTRA_EXCLUSIVE_SONGS = [
+  {id:'thunder-y-lightning', title:'THUNDER Y LIGHTNING',       theme:'nadiesabe', emoji:'⚡'},
+  {id:'mojabi-ghost',        title:'MOJABI GHOST',              theme:'nadiesabe', emoji:'👻'},
+  {id:'triste-br',           title:'Triste (feat. Bryant Myers)',theme:'eutdm',    emoji:'😢'},
+  {id:'una-vez',             title:'Una Vez (feat. Mora)',      theme:'eutdm',    emoji:'1️⃣'},
+  {id:'soy-el-diablo',       title:'Soy El Diablo',            theme:'singles',  emoji:'👿'},
+];
+
+// Alias: exclusive slug → SONGS_DATABASE id
+const EX_ALIAS = {
+  'despues-playa':'despues-de-la-playa', 'te-deseo':'te-deseo-lo-mejor',
+  'si-estuviesemos':'si-estuviesemos-juntos', 'otra-noche-miami':'otra-noche-en-miami',
+};
+
+const ALBUM_META = {
+  uvst:      { emoji:'☀️', label:'Un Verano Sin Ti' },
+  nadiesabe: { emoji:'🌌', label:'Nadie Sabe Lo Que Va a Pasar Mañana' },
+  eutdm:     { emoji:'🖤', label:'El Último Tour Del Mundo' },
+  yhlqmdlg:  { emoji:'🏎️', label:'YHLQMDLG' },
+  x100pre:   { emoji:'🎙️', label:'X 100PRE' },
+  oasis:     { emoji:'🦎', label:'Oasis' },
+  singles:   { emoji:'⭐', label:'Singles & Trap Era' },
+};
+
+function getHeatmapSongs() {
+  // Build played-exclusive lookup (exclusive slug → show)
+  const playedMap = {};
+  TOUR_EXCLUSIVE_DATA.pastShows.forEach(s => {
+    if (s.exclusive) {
+      const dbId = EX_ALIAS[s.exclusive] || s.exclusive;
+      playedMap[dbId] = s;
+    }
+  });
+
+  // Songs from DB, filtered to exclude core setlist
+  const songs = SONGS_DATABASE
+    .filter(s => !SETLIST_IDS.has(s.id))
+    .map(s => ({ ...s, playedShow: playedMap[s.id] || null }));
+
+  // Add extras (played exclusives not in DB)
+  EXTRA_EXCLUSIVE_SONGS.forEach(ex => {
+    if (!songs.find(s => s.id === ex.id)) {
+      songs.push({ ...ex, year: 0, album: '', playedShow: playedMap[ex.id] || null });
+    }
+  });
+
+  return songs;
+}
+
+function toggleMadrid30Pick(songId) {
+  const KEY = 'bb_mad30_top3';
+  let picks = JSON.parse(localStorage.getItem(KEY) || '[]');
+  const idx = picks.indexOf(songId);
+  if (idx > -1) picks.splice(idx, 1);
+  else if (picks.length < 3) picks.push(songId);
+  else { picks.shift(); picks.push(songId); } // reemplaza el más antiguo
+  localStorage.setItem(KEY, JSON.stringify(picks));
+  renderSurpriseSection();
+}
+
 const CORE_SETLIST = [
   {pos:1, title:"La Mudanza",         emoji:"📦"}, {pos:2,  title:"Callaita",           emoji:"🤫"},
   {pos:3, title:"Pitorro de Coco",    emoji:"🥥"}, {pos:4,  title:"Weltita",             emoji:"🌍"},
@@ -150,31 +217,35 @@ function renderGuestTracker() {
     <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);margin-bottom:3px;">
       <span style="font-size:1rem;">${g.flag}</span>
       <span style="font-size:1.1rem;">${g.emoji}</span>
-      <div style="flex:1;min-width:0;">
-        <p style="color:white;font-size:0.75rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${g.artist}</p>
-        <p style="color:#9ca3af;font-size:0.62rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${g.city} · ${g.date}</p>
-      </div>
-      <p style="color:#c084fc;font-size:0.6rem;text-align:right;max-width:90px;line-height:1.2;">${g.song}</p>
-    </div>`).join('');
+      <div style="flex:1;min-width:0;async function savePicksToSupabase(picks) {
+  if (!picks.length) return;
+  const sessionId = localStorage.getItem('bb_session_id') ||
+    (() => { const id = crypto.randomUUID(); localStorage.setItem('bb_session_id', id); return id; })();
+  // Upsert picks: delete old then insert new
+  try {
+    await fetch(`${SUPABASE_REST_URL}/rest/v1/surprise_picks?session_id=eq.${sessionId}`, {
+      method: 'DELETE',
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` }
+    });
+    await fetch(`${SUPABASE_REST_URL}/rest/v1/surprise_picks`, {
+      method: 'POST',
+      headers: {
+        apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json', Prefer: 'return=minimal'
+      },
+      body: JSON.stringify(picks.map((songId, i) => ({
+        session_id: sessionId, song_id: songId, pick_rank: i + 1, show_slug: 'mad1'
+      })))
+    });
+  } catch(e) { console.log('Could not save picks:', e); }
 }
-
-function castExclusiveVote(showSlug, songId) {
-  const key = `bb_excl_vote_${showSlug}`;
-  const current = localStorage.getItem(key);
-  // Toggle off if same, else set new vote
-  localStorage.setItem(key, current === songId ? '' : songId);
-  renderSurpriseSection();
-}
-
 
 function renderSurpriseSection() {
   const heatmapEl = document.getElementById('stat-surprise-heatmap');
   const setlistEl = document.getElementById('stat-core-setlist');
   if (!heatmapEl) return;
 
-  const { pastShows, upcomingShows, columns } = TOUR_EXCLUSIVE_DATA;
-
-  // --- Core setlist sidebar ---
+  // Core setlist sidebar
   if (setlistEl) {
     setlistEl.innerHTML = CORE_SETLIST.map(s => `
       <div style="display:flex;align-items:center;gap:5px;padding:2px 4px;border-radius:4px;background:${s.title.startsWith('🎲')?'rgba(139,92,246,0.2)':'rgba(255,255,255,0.03)'}">
@@ -184,95 +255,96 @@ function renderSurpriseSection() {
       </div>`).join('');
   }
 
-  // Build lookup: songId → show info (where it was played)
-  const songToShow = {};
-  pastShows.forEach(s => {
-    if (s.exclusive) songToShow[s.exclusive] = s;
+  const picks = JSON.parse(localStorage.getItem('bb_mad30_top3') || '[]');
+  const songs = getHeatmapSongs();
+
+  // Group by album theme in order
+  const ALBUM_ORDER = ['uvst','nadiesabe','eutdm','yhlqmdlg','x100pre','oasis','singles'];
+  const grouped = {};
+  ALBUM_ORDER.forEach(t => { grouped[t] = []; });
+  songs.forEach(s => {
+    const t = s.theme || 'singles';
+    if (!grouped[t]) grouped[t] = [];
+    grouped[t].push(s);
   });
 
-  // Song rows split: played exclusives, then separator, then candidates
-  const playedSongs   = columns.filter(s => s.played);
-  const candidateSongs = columns.filter(s => !s.played);
+  // Top 3 pick bar
+  const pickBar = `
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;margin-bottom:8px;border-radius:8px;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);">
+      <span style="font-size:0.65rem;color:#c084fc;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">🔮 Tu Top 3 · Madrid 30 May</span>
+      ${[0,1,2].map(i => {
+        const id = picks[i];
+        const song = id ? songs.find(s => s.id === id) : null;
+        return `<span style="padding:2px 8px;border-radius:20px;font-size:0.62rem;background:${song?'rgba(139,92,246,0.3)':'rgba(255,255,255,0.05)'};border:1px solid ${song?'rgba(139,92,246,0.5)':'rgba(255,255,255,0.1)'};color:${song?'#e9d5ff':'#4b5563'};">
+          ${song ? `#${i+1} ${song.emoji} ${song.title.split(' (')[0]}` : `#${i+1} —`}
+        </span>`;
+      }).join('')}
+      <span style="font-size:0.58rem;color:#6b7280;margin-left:auto;">Pulsa una canción para elegir</span>
+    </div>`;
 
-  const buildRow = (song, isCandidate) => {
-    const playedShow = songToShow[song.id];
-    const tooltipText = playedShow
-      ? `${playedShow.flag} ${playedShow.label} · ${playedShow.date}${playedShow.guest ? ' · 🌟 ' + playedShow.guest : ''}`
-      : '';
+  // Build rows grouped by album
+  let rowsHtml = '';
+  ALBUM_ORDER.forEach(theme => {
+    const albumSongs = grouped[theme];
+    if (!albumSongs || !albumSongs.length) return;
+    const meta = ALBUM_META[theme] || { emoji: '🎵', label: theme };
 
-    const pastCell = playedShow
-      ? `<td title="${tooltipText}" style="text-align:center;padding:3px 4px;cursor:default;">
-          <span style="font-size:1rem;color:#fde047;filter:drop-shadow(0 0 4px rgba(253,224,71,0.5));">★</span>
-          <div style="font-size:0.48rem;color:#6b7280;margin-top:1px;max-width:52px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${playedShow.flag} ${playedShow.label}</div>
-        </td>`
-      : `<td style="text-align:center;padding:3px 4px;"><span style="font-size:0.4rem;color:#111827;">·</span></td>`;
-
-    const madridCells = upcomingShows.map(show => {
-      const myVote = localStorage.getItem(`bb_excl_vote_${show.slug}`) || '';
-      const isVoted = myVote === song.id;
-      return `<td title="${isVoted ? '✓ Tu predicción' : 'Votar: ' + song.label + ' en ' + show.label}"
-        onclick="castExclusiveVote('${show.slug}','${song.id}')"
-        style="text-align:center;padding:3px 2px;cursor:pointer;
-               background:${isVoted ? 'rgba(139,92,246,0.35)' : 'rgba(139,92,246,0.04)'};
-               border-radius:4px;transition:all 0.15s;"
-        onmouseover="this.style.background='rgba(139,92,246,0.22)';this.style.transform='scale(1.1)'"
-        onmouseout="this.style.background='${isVoted ? 'rgba(139,92,246,0.35)' : 'rgba(139,92,246,0.04)'}";this.style.transform='scale(1)'">
-        <span style="font-size:${isVoted ? '1rem' : '0.6rem'};color:${isVoted ? '#c084fc' : '#374151'};">${isVoted ? '✓' : '·'}</span>
-      </td>`;
-    }).join('');
-
-    const rowBg = playedShow ? 'rgba(253,224,71,0.03)' : 'rgba(139,92,246,0.04)';
-    return `<tr style="background:${rowBg};" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='${rowBg}'">
-      <td style="padding:3px 10px 3px 2px;white-space:nowrap;min-width:130px;">
-        <span style="font-size:0.9rem;">${song.emoji}</span>
-        <span style="font-size:0.72rem;color:${playedShow ? '#e5e7eb' : '#c084fc'};font-weight:${playedShow ? 400 : 600};margin-left:3px;">${song.label}</span>
+    rowsHtml += `<tr>
+      <td colspan="3" style="padding:8px 4px 3px;pointer-events:none;">
+        <span style="font-size:0.62rem;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.07em;">${meta.emoji} ${meta.label}</span>
       </td>
-      ${pastCell}
-      <td style="width:6px;border-left:1px solid rgba(139,92,246,0.2);"></td>
-      ${madridCells}
     </tr>`;
-  };
 
-  const separatorRow = `<tr>
-    <td colspan="${2 + upcomingShows.length + 1}" style="padding:6px 2px 3px;">
-      <div style="display:flex;align-items:center;gap:6px;">
-        <div style="flex:1;height:1px;background:rgba(139,92,246,0.25);"></div>
-        <span style="font-size:0.58rem;color:#7c3aed;white-space:nowrap;">🔮 Candidatas para Madrid — vota tu predicción</span>
-        <div style="flex:1;height:1px;background:rgba(139,92,246,0.25);"></div>
-      </div>
-    </td>
-  </tr>`;
+    albumSongs.forEach(song => {
+      const playedShow = song.playedShow;
+      const pickIdx = picks.indexOf(song.id);
+      const isPicked = pickIdx > -1;
+      const tooltip = playedShow
+        ? `★ ${playedShow.flag} ${playedShow.label} · ${playedShow.date}${playedShow.guest ? ' · 🌟 ' + playedShow.guest : ''}`
+        : (isPicked ? `#${pickIdx+1} en tu top 3` : 'Añadir a tu Top 3');
 
-  const songRows = playedSongs.map(s => buildRow(s, false)).join('')
-    + separatorRow
-    + candidateSongs.map(s => buildRow(s, true)).join('');
+      const rowBg = playedShow
+        ? 'rgba(253,224,71,0.04)'
+        : (isPicked ? 'rgba(139,92,246,0.12)' : 'transparent');
 
-
-  // Madrid column headers
-  const madridHeaders = upcomingShows.map(show => `
-    <th style="min-width:58px;max-width:58px;padding:4px 2px;vertical-align:bottom;text-align:center;background:rgba(139,92,246,0.08);border-radius:6px 6px 0 0;">
-      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-        <span style="font-size:0.75rem;">🔮</span>
-        <span style="font-size:0.62rem;color:#c084fc;font-weight:700;">${show.label}</span>
-        <span style="font-size:0.5rem;color:#6b7280;">${show.date}</span>
-      </div>
-    </th>`).join('');
+      rowsHtml += `<tr title="${tooltip}" onclick="${playedShow ? '' : `toggleMadrid30Pick('${song.id}')`}"
+        style="background:${rowBg};cursor:${playedShow?'default':'pointer'};border-radius:4px;"
+        onmouseover="if(!${!!playedShow})this.style.background='rgba(255,255,255,0.05)'"
+        onmouseout="this.style.background='${rowBg}'">
+        <td style="padding:3px 6px 3px 2px;white-space:nowrap;">
+          <span style="font-size:0.85rem;">${song.emoji}</span>
+          <span style="font-size:0.72rem;color:${playedShow?'#9ca3af':(isPicked?'#e9d5ff':'#d1d5db')};margin-left:3px;${playedShow?'text-decoration:line-through;opacity:0.7':''}">${song.title.split(' (')[0]}</span>
+          ${song.title.includes('(') ? `<span style="font-size:0.58rem;color:#6b7280;"> ${song.title.match(/\(.*\)/)?.[0]||''}</span>` : ''}
+        </td>
+        <td style="text-align:center;padding:3px 4px;min-width:44px;">
+          ${playedShow
+            ? `<span style="font-size:0.9rem;color:#fde047;" title="${tooltip}">★</span><div style="font-size:0.45rem;color:#6b7280;">${playedShow.flag} ${playedShow.label}</div>`
+            : `<span style="font-size:0.4rem;color:#1f2937;">·</span>`}
+        </td>
+        <td style="text-align:center;padding:3px 4px;min-width:44px;">
+          ${playedShow
+            ? `<span style="font-size:0.4rem;color:#1f2937;">—</span>`
+            : (isPicked
+              ? `<span style="font-size:0.75rem;font-weight:700;color:#c084fc;">#${pickIdx+1}</span>`
+              : `<span style="font-size:0.5rem;color:#374151;">·</span>`)}
+        </td>
+      </tr>`;
+    });
+  });
 
   heatmapEl.innerHTML = `
-    <table style="border-collapse:separate;border-spacing:2px 1px;width:100%;">
+    ${pickBar}
+    <div style="overflow-x:auto;">
+    <table style="border-collapse:separate;border-spacing:1px;width:100%;min-width:280px;">
       <thead><tr style="vertical-align:bottom;">
-        <th style="text-align:left;padding-bottom:6px;min-width:130px;">
-          <span style="font-size:0.6rem;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;">Canción Exclusiva</span>
-        </th>
-        <th style="min-width:60px;max-width:60px;padding:4px 2px;text-align:center;vertical-align:bottom;">
-          <span style="font-size:0.6rem;color:#fde047;text-transform:uppercase;letter-spacing:0.05em;">★ Tocada</span>
-        </th>
-        <th style="width:6px;border-left:1px solid rgba(139,92,246,0.2);"></th>
-        ${madridHeaders}
+        <th style="text-align:left;padding-bottom:4px;font-size:0.58rem;color:#6b7280;text-transform:uppercase;">Canción</th>
+        <th style="min-width:44px;text-align:center;padding-bottom:4px;font-size:0.58rem;color:#fde047;text-transform:uppercase;">★ Tocada</th>
+        <th style="min-width:44px;text-align:center;padding-bottom:4px;font-size:0.58rem;color:#c084fc;text-transform:uppercase;background:rgba(139,92,246,0.08);border-radius:4px 4px 0 0;">🔮 30 May</th>
       </tr></thead>
-      <tbody>${songRows}</tbody>
+      <tbody>${rowsHtml}</tbody>
     </table>
-    <p style="font-size:0.58rem;color:#4b5563;text-align:right;margin-top:6px;">Hover ★ para ver el concierto · Pulsa columna Madrid para votar · <a href="https://dtmftracker.com/exclusives" target="_blank" style="color:#6b7280;">dtmftracker.com</a></p>`;
+    </div>
+    <p style="font-size:0.55rem;color:#4b5563;text-align:right;margin-top:6px;">★ tocada como exclusiva · hover para ver concierto · <a href="https://dtmftracker.com/exclusives" target="_blank" style="color:#6b7280;">dtmftracker.com</a></p>`;
 }
 
 
