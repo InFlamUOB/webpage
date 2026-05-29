@@ -266,6 +266,13 @@ function confirmPicks() {
   updateShareCard(true);
 }
 
+function resetPicks() {
+  localStorage.removeItem('bb_mad30_top3');
+  localStorage.removeItem('bb_mad30_confirmed');
+  renderSurpriseSection();
+  updateShareCard();
+}
+
 function updateShareCard(justConfirmed) {
   const preview  = document.getElementById('share-picks-preview');
   const btnConf  = document.getElementById('btn-confirm-picks');
@@ -414,19 +421,32 @@ function renderSurpriseSection() {
     grouped[t].push(s);
   });
 
-  // Top 3 pick bar
-  const pickBar = `
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;margin-bottom:8px;border-radius:8px;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);">
-      <span style="font-size:0.65rem;color:#c084fc;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">🔮 Tu Top 3 · Madrid 30 May</span>
-      ${[0,1,2].map(i => {
-        const id = picks[i];
-        const song = id ? songs.find(s => s.id === id) : null;
-        return `<span style="padding:2px 8px;border-radius:20px;font-size:0.62rem;background:${song?'rgba(139,92,246,0.3)':'rgba(255,255,255,0.05)'};border:1px solid ${song?'rgba(139,92,246,0.5)':'rgba(255,255,255,0.1)'};color:${song?'#e9d5ff':'#4b5563'};">
-          ${song ? `#${i+1} ${song.emoji} ${song.title.split(' (')[0]}` : `#${i+1} —`}
-        </span>`;
-      }).join('')}
-      <span style="font-size:0.58rem;color:#6b7280;margin-left:auto;">Pulsa una canción · max 3</span>
-    </div>`;
+  const confirmed = localStorage.getItem('bb_mad30_confirmed') === 'true';
+
+  // Top 3 pick bar — locked state if already confirmed
+  const pickBar = confirmed
+    ? `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;margin-bottom:8px;border-radius:8px;background:rgba(22,163,74,0.1);border:1px solid rgba(22,163,74,0.35);">
+        <span style="font-size:0.65rem;color:#4ade80;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">✅ Tus picks · Madrid 30 May</span>
+        ${[0,1,2].map(i => {
+          const id = picks[i];
+          const song = id ? songs.find(s => s.id === id) : null;
+          return `<span style="padding:2px 8px;border-radius:20px;font-size:0.62rem;background:rgba(22,163,74,0.2);border:1px solid rgba(22,163,74,0.4);color:#bbf7d0;">
+            ${song ? `#${i+1} ${song.emoji} ${song.title.split(' (')[0]}` : ''}
+          </span>`;
+        }).filter(x=>!x.includes('undefined')).join('')}
+        <button onclick="resetPicks()" style="margin-left:auto;font-size:0.5rem;color:#4b5563;background:none;border:none;cursor:pointer;text-decoration:underline;">cambiar predicción</button>
+      </div>`
+    : `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;margin-bottom:8px;border-radius:8px;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);">
+        <span style="font-size:0.65rem;color:#c084fc;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">🔮 Tu Top 3 · Madrid 30 May</span>
+        ${[0,1,2].map(i => {
+          const id = picks[i];
+          const song = id ? songs.find(s => s.id === id) : null;
+          return `<span style="padding:2px 8px;border-radius:20px;font-size:0.62rem;background:${song?'rgba(139,92,246,0.3)':'rgba(255,255,255,0.05)'};border:1px solid ${song?'rgba(139,92,246,0.5)':'rgba(255,255,255,0.1)'};color:${song?'#e9d5ff':'#4b5563'};">
+            ${song ? `#${i+1} ${song.emoji} ${song.title.split(' (')[0]}` : `#${i+1} —`}
+          </span>`;
+        }).join('')}
+        <span style="font-size:0.58rem;color:#6b7280;margin-left:auto;">Pulsa una canción · max 3</span>
+      </div>`;
 
   // Build rows grouped by album
   let rowsHtml = '';
@@ -452,11 +472,11 @@ function renderSurpriseSection() {
       const rowBg = playedShow
         ? 'rgba(253,224,71,0.04)'
         : (isPicked ? 'rgba(139,92,246,0.12)' : 'transparent');
+      const rowClickable = !playedShow && !confirmed;
 
-      rowsHtml += `<tr title="${tooltip}" onclick="${playedShow ? '' : `toggleMadrid30Pick('${song.id}')`}"
-        style="background:${rowBg};cursor:${playedShow?'default':'pointer'};border-radius:4px;"
-        onmouseover="if(!${!!playedShow})this.style.background='rgba(255,255,255,0.05)'"
-        onmouseout="this.style.background='${rowBg}'">
+      rowsHtml += `<tr title="${tooltip}" ${rowClickable ? `onclick="toggleMadrid30Pick('${song.id}')"` : ''}
+        style="background:${rowBg};cursor:${(playedShow||confirmed)?'default':'pointer'};border-radius:4px;${confirmed&&!playedShow?'opacity:0.75':''}"
+        ${rowClickable ? `onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='${rowBg}'"` : ''}>
         <td style="padding:3px 6px 3px 2px;white-space:nowrap;">
           <span style="font-size:0.85rem;">${song.emoji}</span>
           <span style="font-size:0.72rem;color:${playedShow?'#9ca3af':(isPicked?'#e9d5ff':'#d1d5db')};margin-left:3px;${playedShow?'text-decoration:line-through;opacity:0.7':''}">${song.title.split(' (')[0]}</span>
@@ -517,7 +537,9 @@ async function fetchGlobalStats() {
 function renderGlobalStats(data) {
   document.getElementById("stats-loading").classList.add("hidden");
   document.getElementById("stats-content").classList.remove("hidden");
-  
+  // Now that stats-content is visible, load predictions
+  fetchSurprisePicksStats();
+
   // Community Stats
   if (data.community_stats) {
     document.getElementById("stat-comm-classic").textContent = (data.community_stats.total_classic || 0).toLocaleString();
@@ -746,7 +768,6 @@ function showGlobalStats() {
   `;
   
   fetchGlobalStats();
-  fetchSurprisePicksStats(); // load community predictions concurrently
 }
 
 // =========================================
