@@ -131,7 +131,7 @@ const ALBUM_META = {
   yhlqmdlg:  { emoji:'🏎️', label:'YHLQMDLG' },
   x100pre:   { emoji:'🎙️', label:'X 100PRE' },
   oasis:     { emoji:'🦎', label:'Oasis' },
-  singles:   { emoji:'⭐', label:'Singles & Trap Era' },
+  singles:   { emoji:'⭐', label:'Singles & TRAP Era' },
 };
 
 function getHeatmapSongs() {
