@@ -217,6 +217,67 @@ BEGIN
 END;
 $$;
 
--- 3. GRANT PERMISSIONS SO anon CAN INSERT AND SELECT duel_votes
--- ==============================================================================
 GRANT INSERT, SELECT ON public.duel_votes TO anon;
+
+-- ==============================================================================
+-- 4. SURPRISE PICKS — Madrid 30 May Predictions
+-- ==============================================================================
+
+-- Table: one row per session per pick (up to 3 per session)
+CREATE TABLE IF NOT EXISTS public.surprise_picks (
+  id           BIGSERIAL PRIMARY KEY,
+  session_id   TEXT        NOT NULL,
+  song_id      TEXT        NOT NULL,
+  pick_rank    SMALLINT    NOT NULL CHECK (pick_rank BETWEEN 1 AND 3),
+  show_slug    TEXT        NOT NULL DEFAULT 'mad1',
+  created_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE (session_id, show_slug, pick_rank)
+);
+
+ALTER TABLE public.surprise_picks ENABLE ROW LEVEL SECURITY;
+
+-- Allow anon to insert and delete their own rows (matched by session_id header is not available,
+-- so we open insert/delete to anon and rely on session_id as soft ownership)
+CREATE POLICY "anon insert picks"  ON public.surprise_picks FOR INSERT TO anon WITH CHECK (true);
+CREATE POLICY "anon delete picks"  ON public.surprise_picks FOR DELETE TO anon USING (true);
+CREATE POLICY "anon select picks"  ON public.surprise_picks FOR SELECT TO anon USING (true);
+
+GRANT INSERT, SELECT, DELETE ON public.surprise_picks TO anon;
+GRANT USAGE, SELECT ON SEQUENCE public.surprise_picks_id_seq TO anon;
+
+-- RPC: aggregate top picks per show
+CREATE OR REPLACE FUNCTION public.get_surprise_picks_stats(p_show_slug TEXT DEFAULT 'mad1')
+RETURNS json
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+  result json;
+BEGIN
+  SELECT json_build_object(
+    'show_slug', p_show_slug,
+    'total_voters', (
+      SELECT COUNT(DISTINCT session_id)
+      FROM public.surprise_picks
+      WHERE show_slug = p_show_slug
+    ),
+    'top_picks', (
+      SELECT json_agg(t ORDER BY t.pick_count DESC)
+      FROM (
+        SELECT
+          song_id,
+          COUNT(*) AS pick_count,
+          SUM(CASE WHEN pick_rank = 1 THEN 1 ELSE 0 END) AS rank1_count,
+          SUM(CASE WHEN pick_rank = 2 THEN 1 ELSE 0 END) AS rank2_count,
+          SUM(CASE WHEN pick_rank = 3 THEN 1 ELSE 0 END) AS rank3_count
+        FROM public.surprise_picks
+        WHERE show_slug = p_show_slug
+        GROUP BY song_id
+        ORDER BY pick_count DESC
+        LIMIT 10
+      ) t
+    )
+  ) INTO result;
+  RETURN result;
+END;
+$$;

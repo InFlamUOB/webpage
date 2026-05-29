@@ -246,6 +246,75 @@ async function savePicksToSupabase(picks) {
     });
   } catch(e) { console.log('Could not save picks:', e); }
 }
+async function confirmPicks() {
+  const picks = JSON.parse(localStorage.getItem('bb_mad30_top3') || '[]');
+  if (!picks.length) return;
+  await savePicksToSupabase(picks);
+  // Visual feedback
+  const bar = document.querySelector('#stat-surprise-heatmap > div:first-child');
+  if (bar) {
+    bar.style.background = 'rgba(139,92,246,0.3)';
+    bar.style.borderColor = 'rgba(139,92,246,0.7)';
+    const msg = document.createElement('span');
+    msg.textContent = '✓ Picks guardados!';
+    msg.style.cssText = 'font-size:0.65rem;color:#a78bfa;font-weight:700;width:100%;text-align:center;';
+    bar.appendChild(msg);
+    setTimeout(() => { msg.remove(); bar.style.background=''; bar.style.borderColor=''; }, 2500);
+  }
+  // Refresh analytics card if visible
+  fetchSurprisePicksStats();
+}
+
+async function fetchSurprisePicksStats() {
+  const el = document.getElementById('surprise-picks-stats');
+  if (!el) return;
+  try {
+    const res = await fetch(`${SUPABASE_REST_URL}/rpc/get_surprise_picks_stats`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+      },
+      body: JSON.stringify({ p_show_slug: 'mad1' })
+    });
+    if (!res.ok) throw new Error('API error');
+    const data = await res.json();
+    renderSurprisePicksStats(data, el);
+  } catch(e) {
+    el.innerHTML = '<p style="font-size:0.65rem;color:#6b7280;">Sin datos aún.</p>';
+  }
+}
+
+function renderSurprisePicksStats(data, el) {
+  if (!data || !data.top_picks || !data.top_picks.length) {
+    el.innerHTML = '<p style="font-size:0.65rem;color:#6b7280;text-align:center;padding:8px;">Sin predicciones aún — ¡sé el primero! 🔮</p>';
+    return;
+  }
+  const allSongs = getHeatmapSongs();
+  const total = data.total_voters || 0;
+  const top = data.top_picks.slice(0, 10);
+  const maxCount = top[0]?.pick_count || 1;
+  el.innerHTML = `
+    <p style="font-size:0.6rem;color:#6b7280;margin-bottom:6px;">${total} fan${total!==1?'s':''} ha${total!==1?'n':''} confirmado su Top 3 · Madrid 30 May</p>
+    ${top.map((p, i) => {
+      const song = allSongs.find(s => s.id === p.song_id);
+      const pct = Math.round((p.pick_count / (total * 3 || 1)) * 100);
+      const bar = Math.round((p.pick_count / maxCount) * 100);
+      return `<div style="margin-bottom:5px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+          <span style="font-size:0.7rem;color:#6b7280;width:14px;text-align:right;">${i+1}</span>
+          <span style="font-size:0.8rem;">${song?.emoji || '🎵'}</span>
+          <span style="font-size:0.68rem;color:#e5e7eb;flex:1;">${song?.title?.split(' (')[0] || p.song_id}</span>
+          <span style="font-size:0.65rem;color:#c084fc;font-weight:700;">${p.pick_count}×</span>
+          <span style="font-size:0.58rem;color:#6b7280;">${pct}%</span>
+        </div>
+        <div style="height:4px;border-radius:2px;background:rgba(255,255,255,0.05);overflow:hidden;margin-left:20px;">
+          <div style="height:100%;width:${bar}%;background:linear-gradient(90deg,#7c3aed,#c084fc);border-radius:2px;transition:width 0.6s;"></div>
+        </div>
+      </div>`;
+    }).join('')}`;
+}
 
 
 function renderSurpriseSection() {
@@ -287,7 +356,8 @@ function renderSurpriseSection() {
           ${song ? `#${i+1} ${song.emoji} ${song.title.split(' (')[0]}` : `#${i+1} —`}
         </span>`;
       }).join('')}
-      <span style="font-size:0.58rem;color:#6b7280;margin-left:auto;">Pulsa una canción para elegir</span>
+      <span style="font-size:0.58rem;color:#6b7280;margin-left:auto;">Pulsa una canción · max 3</span>
+      <button onclick="confirmPicks()" style="padding:3px 10px;border-radius:20px;font-size:0.62rem;font-weight:700;cursor:pointer;background:rgba(139,92,246,0.6);border:1px solid rgba(139,92,246,0.8);color:white;transition:all 0.2s;" onmouseover="this.style.background='rgba(139,92,246,0.85)'" onmouseout="this.style.background='rgba(139,92,246,0.6)'">${picks.length > 0 ? '🔮 Confirmar picks' : '— elige canciones'}</button>
     </div>`;
 
   // Build rows grouped by album
@@ -580,6 +650,7 @@ function renderGlobalStats(data) {
   // Canción Sorpresa heatmap + guests (static data)
   renderSurpriseSection();
   renderGuestTracker();
+  fetchSurprisePicksStats();
 }
 
 function showTourTracker() {

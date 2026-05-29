@@ -1,0 +1,33 @@
+position,song_title,album,era_code,type,notes
+1,La Mudanza,DeBÍ TiRAR MáS FOToS,dtmf,core,Opening song every show
+2,Callaita,Singles,singles,core,
+3,Pitorro de Coco,DeBÍ TiRAR MáS FOToS,dtmf,core,
+4,Weltita,DeBÍ TiRAR MáS FOToS,dtmf,core,
+5,Turista,DeBÍ TiRAR MáS FOToS,dtmf,core,
+6,Baile Inolvidable,DeBÍ TiRAR MáS FOToS,dtmf,core,
+7,Nuevayol,DeBÍ TiRAR MáS FOToS,dtmf,core,
+8,Veldá,DeBÍ TiRAR MáS FOToS,dtmf,core,
+9,Tití Me Preguntó,Un Verano Sin Ti,uvst,core,
+10,Neverita,Un Verano Sin Ti,uvst,core,
+11,Voy a LLevarte Pa PR,DeBÍ TiRAR MáS FOToS,dtmf,core,
+12,Si Veo a Tu Mamá,Un Verano Sin Ti,uvst,core,
+13,Me Porto Bonito,Un Verano Sin Ti,uvst,core,
+14,No Me Conoce Remix,YHLQMDLG,yhlqmdlg,core,feat. Jhayco & J Balvin
+15,Bichiyal,YHLQMDLG,yhlqmdlg,core,
+16,Yo Perreo Sola,YHLQMDLG,yhlqmdlg,core,
+17,Efecto,Un Verano Sin Ti,uvst,core,
+18,Safaera,YHLQMDLG,yhlqmdlg,core,feat. Jowell & Randy
+19,Diles,X 100PRE,x100pre,core,
+20,MONACO,Nadie Sabe Lo Que Va A Pasar Mañana,nadiesabe,core,
+21,VARIES BY SHOW,,varies,exclusive,One-night only song — see dtmf_concerts.csv for each show's exclusive
+22,Otro Trago,External (Sech),external,core,Sech feat. Bad Bunny
+23,Café con Ron,DeBÍ TiRAR MáS FOToS,dtmf,core,
+24,Ábreme Paso,DeBÍ TiRAR MáS FOToS,dtmf,core,
+25,Ojitos Lindos,Un Verano Sin Ti,uvst,core,feat. Bomba Estéreo
+26,La Canción,Oasis,oasis,core,with J Balvin
+27,Kloufrens,DeBÍ TiRAR MáS FOToS,dtmf,core,
+28,Dákiti,El Último Tour Del Mundo,eutdm,core,feat. Jhayco
+29,Yonaguni,El Último Tour Del Mundo,eutdm,core,
+30,El Apagón,Un Verano Sin Ti,uvst,core,
+31,DTMF,DeBÍ TiRAR MáS FOToS,dtmf,core,
+32,Eoo,DeBÍ TiRAR MáS FOToS,dtmf,core,Closing song every show

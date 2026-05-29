@@ -1,0 +1,32 @@
+show_id,city,country,country_code,venue,date,exclusive_song,guest_artist,songs_played,notes
+dr1,Santo Domingo,Dominican Republic,🇩🇴,Estadio Olímpico Félix Sánchez,2025-11-21,,,~32,Opening night
+dr2,Santo Domingo,Dominican Republic,🇩🇴,Estadio Olímpico Félix Sánchez,2025-11-22,,,~32,Romeo Santos appeared (BOKeTE)
+cr1,San José,Costa Rica,🇨🇷,Estadio Nacional,2025-12-04,,,~32,
+cr2,San José,Costa Rica,🇨🇷,Estadio Nacional,2025-12-05,,,~32,Jhayco guest (No Me Conoce Remix / Dákiti / Tarot)
+mx1,Ciudad de México,Mexico,🇲🇽,Estadio GNP Seguros,2025-12-10,,,~32,
+mx2,Ciudad de México,Mexico,🇲🇽,Estadio GNP Seguros,2025-12-11,,,~32,Feid guest (Perro Negro)
+mx3,Ciudad de México,Mexico,🇲🇽,Estadio GNP Seguros,2025-12-12,,,~32,
+mx4,Ciudad de México,Mexico,🇲🇽,Estadio GNP Seguros,2025-12-15,,,~32,Grupo Frontera guest (un x100to)
+mx5,Ciudad de México,Mexico,🇲🇽,Estadio GNP Seguros,2025-12-16,,,~32,
+mx6,Ciudad de México,Mexico,🇲🇽,Estadio GNP Seguros,2025-12-18,,,~32,Julieta Venegas guest (Lo Siento BB:/ / Lento / Ojitos Lindos)
+mx7,Ciudad de México,Mexico,🇲🇽,Estadio GNP Seguros,2025-12-19,,,~32,
+mx8,Ciudad de México,Mexico,🇲🇽,Estadio GNP Seguros,2025-12-21,,,~32,Natanael Cano + J Balvin guests (Soy El Diablo / La Canción)
+cl1,Santiago,Chile,🇨🇱,Estadio Nacional,2026-01-09,,,~32,
+cl2,Santiago,Chile,🇨🇱,Estadio Nacional,2026-01-10,,,~32,Becky G guest (Mayores / MAMIII)
+cl3,Santiago,Chile,🇨🇱,Estadio Nacional,2026-01-11,,,~32,Jowell y Randy guest (Safaera)
+pe1,Lima,Peru,🇵🇪,Estadio Nacional,2026-01-17,,,~32,
+pe2,Lima,Peru,🇵🇪,Estadio Nacional,2026-01-18,,,~32,
+co1,Medellín,Colombia,🇨🇴,Estadio Atanasio Girardot,2026-01-23,,,~32,Li Saumet (Bomba Estéreo) guest (Ojitos Lindos)
+co2,Medellín,Colombia,🇨🇴,Estadio Atanasio Girardot,2026-01-24,,,~32,Arcángel guest (Me Acostumbré)
+co3,Medellín,Colombia,🇨🇴,Estadio Atanasio Girardot,2026-01-25,,,~32,Karol G guest (Ahora Me Llama / Si Antes Te Hubiera Conocido)
+ar1,Buenos Aires,Argentina,🇦🇷,Estadio River Plate,2026-02-13,,,~32,
+ar2,Buenos Aires,Argentina,🇦🇷,Estadio River Plate,2026-02-14,,,~32,
+ar3,Buenos Aires,Argentina,🇦🇷,Estadio River Plate,2026-02-15,Thunder y Lightning,,,~32,
+br1,São Paulo,Brazil,🇧🇷,Allianz Parque,2026-02-20,Vete,,,~32,
+br2,São Paulo,Brazil,🇧🇷,Allianz Parque,2026-02-21,Te Boté Remix,,,~32,
+au1,Sydney,Australia,🇦🇺,ENGIE Stadium,2026-02-28,UN PREVIEW,,,~32,
+au2,Sydney,Australia,🇦🇺,ENGIE Stadium,2026-03-01,Un Ratito,,,~32,
+es1,Barcelona,Spain,🇪🇸,Estadi Olímpic Lluís Companys,2026-05-22,La Santa,,,~32,
+es2,Barcelona,Spain,🇪🇸,Estadi Olímpic Lluís Companys,2026-05-23,Triste,Bryant Myers,,~33,
+pt1,Lisbon,Portugal,🇵🇹,Estádio Da Luz,2026-05-26,Estamos Bien,,,31,No guests
+pt2,Lisbon,Portugal,🇵🇹,Estádio Da Luz,2026-05-27,Ignorantes,Sech,,32,Source: dtmftracker.com
