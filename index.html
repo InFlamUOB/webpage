@@ -546,6 +546,36 @@
       </button>
     </section>
 
+    <!-- PANTALLA: RESULTADO PREDICCIÓN MADRID 30 MAY -->
+    <section id="prediction-result-screen" class="glass-panel text-center hidden fade-in w-full max-w-lg mx-auto relative" style="border:1px solid rgba(139,92,246,0.5);">
+      <button class="btn-back-to-menu absolute top-4 left-4" onclick="showTourTracker()">
+        <span>← Tracker</span>
+      </button>
+      <!-- Emoji burst -->
+      <div class="text-5xl mb-2 mt-8">🔮</div>
+      <h2 class="text-2xl font-black font-display uppercase tracking-widest mb-1" style="color:#c084fc;text-shadow:0 0 20px rgba(192,132,252,0.5);">Tu Predicción</h2>
+      <p class="text-sm text-gray-400 mb-1">Madrid 30 May · DeBÍ TiRAR MáS FOToS World Tour</p>
+      <p class="text-xs text-violet-400 mb-6">¿Cuál será la exclusiva sorpresa? 🎲</p>
+
+      <!-- Picks card -->
+      <div class="mx-4 mb-6 p-5 rounded-2xl text-left" style="background:rgba(50,10,80,0.6);border:1px solid rgba(139,92,246,0.4);">
+        <div id="pred-result-picks" class="flex flex-col gap-3">
+          <!-- Filled by JS -->
+        </div>
+      </div>
+
+      <!-- Share button -->
+      <button onclick="sharePicks()" class="w-full max-w-xs mx-auto mb-3 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2"
+        style="background:linear-gradient(135deg,#7c3aed,#c084fc);color:white;border:none;cursor:pointer;">
+        📲 Compartir mi predicción
+      </button>
+
+      <button onclick="showTourTracker()" class="w-full max-w-xs mx-auto mb-6 py-2 rounded-xl font-bold text-xs"
+        style="background:rgba(255,255,255,0.05);color:#6b7280;border:1px solid rgba(255,255,255,0.1);cursor:pointer;">
+        Ver el Tour Tracker →
+      </button>
+    </section>
+
   </main>
 
     <footer class="mt-12 text-center text-gray-500 text-sm mb-4">

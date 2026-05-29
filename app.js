@@ -258,19 +258,42 @@ async function savePicksToSupabase(picks) {
 function confirmPicks() {
   const picks = JSON.parse(localStorage.getItem('bb_mad30_top3') || '[]');
   if (!picks.length) return;
-  // Mark as confirmed locally
   localStorage.setItem('bb_mad30_confirmed', 'true');
-  // Fire-and-forget to Supabase — never blocks the UI
   savePicksToSupabase(picks).catch(() => {});
-  // Update card UI
-  updateShareCard(true);
+  showPredictionResult();
 }
 
-function resetPicks() {
-  localStorage.removeItem('bb_mad30_top3');
-  localStorage.removeItem('bb_mad30_confirmed');
-  renderSurpriseSection();
-  updateShareCard();
+function showPredictionResult() {
+  const picks = JSON.parse(localStorage.getItem('bb_mad30_top3') || '[]');
+  const songs = getHeatmapSongs();
+  // Hide other screens, show result
+  ['mode-selection-screen','tour-tracker-screen','global-stats-screen'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('hidden');
+  });
+  const screen = document.getElementById('prediction-result-screen');
+  if (!screen) return;
+  screen.classList.remove('hidden');
+  screen.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Render picks
+  const container = document.getElementById('pred-result-picks');
+  if (!container) return;
+  const medals = ['🥇','🥈','🥉'];
+  if (!picks.length) {
+    container.innerHTML = '<p style="color:#6b7280;font-size:0.75rem;text-align:center;">No hay picks guardados.</p>';
+    return;
+  }
+  container.innerHTML = picks.map((id, i) => {
+    const s = songs.find(x => x.id === id);
+    return `<div style="display:flex;align-items:center;gap:12px;padding:10px 8px;border-radius:12px;background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.25);">
+      <span style="font-size:1.6rem;min-width:32px;text-align:center;">${medals[i]}</span>
+      <span style="font-size:1.4rem;">${s?.emoji || '🎵'}</span>
+      <div style="flex:1;">
+        <p style="font-size:0.85rem;font-weight:700;color:#e9d5ff;margin:0;">${s?.title?.split(' (')[0] || id}</p>
+        <p style="font-size:0.6rem;color:#6b7280;margin:0;">${s?.album || ''}</p>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 function updateShareCard(justConfirmed) {
@@ -429,16 +452,14 @@ function renderSurpriseSection() {
 
   // Top 3 pick bar — locked state if already confirmed
   const pickBar = confirmed
-    ? `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;margin-bottom:8px;border-radius:8px;background:rgba(22,163,74,0.1);border:1px solid rgba(22,163,74,0.35);">
-        <span style="font-size:0.65rem;color:#4ade80;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">✅ Tus picks · Madrid 30 May</span>
+    ? `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;margin-bottom:8px;border-radius:8px;background:rgba(22,163,74,0.1);border:1px solid rgba(22,163,74,0.35);cursor:pointer;" onclick="showPredictionResult()">
+        <span style="font-size:0.65rem;color:#4ade80;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">✅ Predicción confirmada · Madrid 30 May</span>
         ${[0,1,2].map(i => {
           const id = picks[i];
           const song = id ? songs.find(s => s.id === id) : null;
-          return `<span style="padding:2px 8px;border-radius:20px;font-size:0.62rem;background:rgba(22,163,74,0.2);border:1px solid rgba(22,163,74,0.4);color:#bbf7d0;">
-            ${song ? `#${i+1} ${song.emoji} ${song.title.split(' (')[0]}` : ''}
-          </span>`;
-        }).filter(x=>!x.includes('undefined')).join('')}
-        <button onclick="resetPicks()" style="margin-left:auto;font-size:0.5rem;color:#4b5563;background:none;border:none;cursor:pointer;text-decoration:underline;">cambiar predicción</button>
+          return song ? `<span style="padding:2px 8px;border-radius:20px;font-size:0.62rem;background:rgba(22,163,74,0.2);border:1px solid rgba(22,163,74,0.4);color:#bbf7d0;">#${i+1} ${song.emoji} ${song.title.split(' (')[0]}</span>` : '';
+        }).filter(Boolean).join('')}
+        <span style="margin-left:auto;font-size:0.6rem;color:#4ade80;">Ver picks →</span>
       </div>`
     : `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;margin-bottom:8px;border-radius:8px;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);">
         <span style="font-size:0.65rem;color:#c084fc;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">🔮 Tu Top 3 · Madrid 30 May</span>
@@ -748,8 +769,11 @@ function renderGlobalStats(data) {
 }
 
 function showTourTracker() {
-  document.getElementById("mode-selection-screen").classList.add("hidden");
-  document.getElementById("tour-tracker-screen").classList.remove("hidden");
+  ['mode-selection-screen','global-stats-screen','prediction-result-screen'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('hidden');
+  });
+  document.getElementById('tour-tracker-screen').classList.remove('hidden');
   if (typeof trackEvent === 'function') trackEvent('tour_tracker_viewed');
   renderSurpriseSection();
   renderGuestTracker();
