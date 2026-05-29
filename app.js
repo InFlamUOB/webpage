@@ -253,11 +253,11 @@ async function savePicksToSupabase(picks) {
   const sessionId = localStorage.getItem('bb_session_id') ||
     (() => { const id = crypto.randomUUID(); localStorage.setItem('bb_session_id', id); return id; })();
   try {
-    await fetch(`${SUPABASE_REST_URL}/rest/v1/surprise_picks?session_id=eq.${sessionId}`, {
+    await fetch(`${SUPABASE_REST_URL}/surprise_picks?session_id=eq.${sessionId}`, {
       method: 'DELETE',
       headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` }
     });
-    await fetch(`${SUPABASE_REST_URL}/rest/v1/surprise_picks`, {
+    await fetch(`${SUPABASE_REST_URL}/surprise_picks`, {
       method: 'POST',
       headers: {
         apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
