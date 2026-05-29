@@ -64,6 +64,7 @@
         <button id="btn-mode-tracker" class="btn-primary flex flex-col items-center justify-center p-4" style="background: linear-gradient(135deg, #b91c1c, #ff4b2b);">
           <span class="text-xl mb-1">🔮 Predicciones Tour</span>
           <span class="text-xs text-gray-200 font-normal opacity-80" style="text-transform: none;">¿Qué tocará en Madrid 30 May? · Canción sorpresa · Invitados</span>
+          <span id="home-countdown" class="text-xs font-bold mt-1" style="color:#fde047;text-transform:none;letter-spacing:0;"></span>
         </button>
 
         <button id="btn-mode-stats" class="btn-primary flex flex-col items-center justify-center p-4 mt-4" style="background: linear-gradient(135deg, #8E2DE2, #4A00E0);">
@@ -219,8 +220,35 @@
       <button class="btn-back-to-menu absolute top-4 left-4" onclick="location.reload()">
         <span>🏠 Volver</span>
       </button>
-      <h2 class="text-2xl font-bold mb-1 font-display neon-text uppercase tracking-widest mt-8 text-center" style="color:#ff6b4a;text-shadow:0 0 20px rgba(255,75,43,0.5);">🔮 PREDICCIONES TOUR</h2>
-      <p class="text-gray-400 text-sm text-center mb-6">DeBÍ TiRAR MáS FOToS World Tour · datos de <a href="https://dtmftracker.com" target="_blank" class="text-violet-400 underline">dtmftracker.com</a></p>
+
+      <!-- Header: dtmftracker-style -->
+      <div class="text-center pt-8 pb-4 px-4">
+        <h2 class="text-2xl font-black font-display uppercase tracking-widest" style="color:#ff6b4a;text-shadow:0 0 20px rgba(255,75,43,0.4);">🔮 PREDICCIONES TOUR</h2>
+        <p class="text-gray-500 text-xs mt-1">DeBÍ TiRAR MáS FOToS World Tour &nbsp;·&nbsp; datos: <a href="https://dtmftracker.com" target="_blank" class="text-orange-400 underline">dtmftracker.com</a></p>
+        <!-- Stats strip (dtmftracker-style) -->
+        <div class="flex justify-center gap-6 mt-4">
+          <div class="text-center">
+            <p class="text-2xl font-black" style="color:#ff6b4a;">32</p>
+            <p class="text-[9px] text-gray-500 uppercase tracking-widest">Shows</p>
+          </div>
+          <div class="text-center">
+            <p class="text-2xl font-black text-white" id="tracker-excl-count">—</p>
+            <p class="text-[9px] text-gray-500 uppercase tracking-widest">Exclusivas</p>
+          </div>
+          <div class="text-center">
+            <p class="text-2xl font-black text-white">20</p>
+            <p class="text-[9px] text-gray-500 uppercase tracking-widest">Invitados</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEXT SHOW banner -->
+      <div class="mx-4 mb-4 p-4 rounded-2xl text-center" style="background:linear-gradient(135deg,rgba(180,15,15,0.35),rgba(255,75,43,0.2));border:1px solid rgba(255,75,43,0.5);">
+        <p class="text-[9px] text-orange-400 uppercase tracking-widest font-bold mb-1">NEXT SHOW</p>
+        <p class="text-lg font-black text-white">Madrid &nbsp;·&nbsp; 30 May 2026</p>
+        <p class="text-xs text-gray-400">Riyadh Air Metropolitano &nbsp;·&nbsp; <a href="https://depuertoricopalmundo.com" target="_blank" class="text-orange-400 underline">depuertoricopalmundo.com</a></p>
+        <p id="tracker-countdown" class="text-xl font-black mt-2" style="color:#fde047;"></p>
+      </div>
 
       <div class="flex flex-col gap-6 text-left max-w-5xl mx-auto pb-10 px-2">
 

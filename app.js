@@ -757,6 +757,40 @@ function showTourTracker() {
   if (typeof trackEvent === 'function') trackEvent('tour_tracker_viewed');
   renderSurpriseSection();
   renderGuestTracker();
+  startCountdown();
+  // Fill exclusives count from heatmap songs
+  const exclEl = document.getElementById('tracker-excl-count');
+  if (exclEl) {
+    const n = getHeatmapSongs().filter(s => s.playedShow).length;
+    exclEl.textContent = n || '—';
+  }
+}
+
+function getCountdownStr(targetDate) {
+  const now = new Date();
+  const diff = targetDate - now;
+  if (diff <= 0) return '🎉 ¡ES HOY!';
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  if (d > 0) return `${d}d ${h}h ${m}m`;
+  return `${h}h ${m}m ${s}s`;
+}
+
+let _countdownTimer = null;
+function startCountdown() {
+  const target = new Date('2026-05-30T20:00:00+02:00'); // Madrid 30 May 20:00 CEST
+  function tick() {
+    const str = getCountdownStr(target);
+    const el = document.getElementById('tracker-countdown');
+    if (el) el.textContent = str;
+    const homeEl = document.getElementById('home-countdown');
+    if (homeEl) homeEl.textContent = str !== '🎉 ¡ES HOY!' ? `⏱ ${str}` : '🎉 ¡ES HOY!';
+  }
+  tick();
+  if (_countdownTimer) clearInterval(_countdownTimer);
+  _countdownTimer = setInterval(tick, 1000);
 }
 
 function showGlobalStats() {
@@ -972,6 +1006,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Predictions are session-only (like quizzes): reset on every fresh page load
   localStorage.removeItem('bb_mad30_top3');
   localStorage.removeItem('bb_mad30_confirmed');
+  // Start home button countdown immediately
+  startCountdown();
 });
 
 // Base de datos de canciones de Bad Bunny con metadatos y estilos visuales por era/álbum (Álbumes y Singles Originales)
