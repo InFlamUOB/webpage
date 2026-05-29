@@ -261,9 +261,48 @@ async function confirmPicks() {
     bar.appendChild(msg);
     setTimeout(() => { msg.remove(); bar.style.background=''; bar.style.borderColor=''; }, 2500);
   }
-  // Refresh analytics card if visible
-  fetchSurprisePicksStats();
 }
+
+function updateShareCard() {
+  const preview = document.getElementById('share-picks-preview');
+  const btn = document.getElementById('btn-share-picks');
+  if (!preview || !btn) return;
+  const picks = JSON.parse(localStorage.getItem('bb_mad30_top3') || '[]');
+  const songs = getHeatmapSongs();
+  if (!picks.length) {
+    preview.innerHTML = '<p style="font-size:0.65rem;color:#4b5563;text-align:center;">Elige canciones en la tabla de arriba</p>';
+    btn.disabled = true; btn.style.opacity = '0.4';
+    return;
+  }
+  preview.innerHTML = picks.map((id, i) => {
+    const s = songs.find(x => x.id === id);
+    return `<div style="display:flex;align-items:center;gap:6px;padding:4px 0;">
+      <span style="font-size:0.7rem;color:#7c3aed;font-weight:700;width:18px;">#${i+1}</span>
+      <span style="font-size:1rem;">${s?.emoji || '🎵'}</span>
+      <span style="font-size:0.75rem;color:#e9d5ff;">${s?.title?.split(' (')[0] || id}</span>
+    </div>`;
+  }).join('');
+  btn.disabled = false; btn.style.opacity = '1';
+}
+
+async function sharePicks() {
+  const picks = JSON.parse(localStorage.getItem('bb_mad30_top3') || '[]');
+  if (!picks.length) return;
+  const songs = getHeatmapSongs();
+  const lines = picks.map((id, i) => {
+    const s = songs.find(x => x.id === id);
+    return `#${i+1} ${s?.emoji || '🎵'} ${s?.title?.split(' (')[0] || id}`;
+  });
+  const text = `🔮 Mi predicción para Madrid 30 May — DeBÍ TiRAR MáS FOToS Tour:\n${lines.join('\n')}\n\n¿Cuál crees tú? → inflam.github.io/webpage`;
+  if (navigator.share) {
+    try { await navigator.share({ title: '🎲 Mi predicción tour Bad Bunny', text }); return; }
+    catch(e) { /* fallback */ }
+  }
+  await navigator.clipboard.writeText(text);
+  const btn = document.getElementById('btn-share-picks');
+  if (btn) { btn.textContent = '✓ Copiado al portapapeles!'; setTimeout(() => { btn.textContent = '🌍 Compartir mi Top 3'; }, 2500); }
+}
+
 
 async function fetchSurprisePicksStats() {
   const el = document.getElementById('surprise-picks-stats');
@@ -423,6 +462,7 @@ function renderSurpriseSection() {
     </table>
     </div>
     <p style="font-size:0.55rem;color:#4b5563;text-align:right;margin-top:6px;">★ tocada como exclusiva · hover para ver concierto · <a href="https://dtmftracker.com/exclusives" target="_blank" style="color:#6b7280;">dtmftracker.com</a></p>`;
+  updateShareCard();
 }
 
 
@@ -650,7 +690,6 @@ function renderGlobalStats(data) {
   // Canción Sorpresa heatmap + guests (static data)
   renderSurpriseSection();
   renderGuestTracker();
-  fetchSurprisePicksStats();
 }
 
 function showTourTracker() {

@@ -196,8 +196,15 @@
             <p id="stat-comm-quizzes" class="text-xl font-bold text-white font-display drop-shadow-md">0</p>
             <p class="text-[9px] md:text-[10px] text-gray-400 uppercase tracking-widest">Quizzes Jugados</p>
           </div>
-        </div>
 
+        <!-- 6. PREDICCIONES TOUR — Madrid 30 May -->
+        <div class="p-5 rounded-2xl" style="background:linear-gradient(135deg,rgba(50,10,80,0.7),rgba(20,5,40,0.9));border:1px solid rgba(139,92,246,0.4);">
+          <h3 class="text-violet-300 font-bold uppercase text-sm tracking-widest mb-1 text-center">🔮 Predicciones · Madrid 30 May</h3>
+          <p class="text-xs text-gray-500 text-center mb-4">Las canciones más votadas por los fans como exclusiva sorpresa</p>
+          <div id="surprise-picks-stats">
+            <p class="italic text-gray-500 text-sm text-center">Cargando predicciones...</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -226,13 +233,15 @@
           </div>
         </div>
 
-        <!-- Section 1b: Community Predictions -->
-        <div class="p-5 rounded-2xl" style="background:rgba(50,10,80,0.5);border:1px solid rgba(139,92,246,0.25);">
-          <p class="text-xs text-violet-300 uppercase tracking-widest font-bold mb-1">🔮 Predicciones de la Comunidad · Madrid 30 May</p>
-          <p class="text-xs text-gray-500 mb-3">Top 10 canciones más votadas por los fans como exclusiva.</p>
-          <div id="surprise-picks-stats">
-            <p class="italic text-gray-500 text-sm text-center">Cargando predicciones...</p>
-          </div>
+
+        <!-- Section 1b: Share your Top 3 -->
+        <div class="p-5 rounded-2xl" id="share-top3-card" style="background:rgba(50,10,80,0.5);border:1px solid rgba(139,92,246,0.3);">
+          <p class="text-xs text-violet-300 uppercase tracking-widest font-bold mb-1">🌍 Comparte tu predicción</p>
+          <p class="text-xs text-gray-500 mb-3">Elige tu Top 3 arriba y comparte con el mundo.</p>
+          <div id="share-picks-preview" class="mb-3"></div>
+          <button id="btn-share-picks" onclick="sharePicks()" class="w-full py-2 rounded-xl font-bold text-sm" style="background:linear-gradient(135deg,#7c3aed,#c084fc);color:white;border:none;cursor:pointer;opacity:0.4;" disabled>
+            🌍 Compartir mi Top 3
+          </button>
         </div>
 
         <!-- Section 2: Guest Tracker -->
