@@ -4,6 +4,170 @@
 // =========================================
 let gameMode = 'classic'; // 'classic', 'survivor', or 'quiz'
 
+// =========================================
+// CANCIÓN SORPRESA — TOUR HEATMAP DATA
+// =========================================
+const TOUR_EXCLUSIVE_DATA = {
+  pastShows: [
+    { slug:"ba3",  flag:"🇦🇷", label:"Buenos Aires", date:"15 Feb", exclusive:"thunder-y-lightning", guest:null },
+    { slug:"sp1",  flag:"🇧🇷", label:"São Paulo 1",  date:"20 Feb", exclusive:"vete",             guest:null },
+    { slug:"sp2",  flag:"🇧🇷", label:"São Paulo 2",  date:"21 Feb", exclusive:"te-bote",          guest:null },
+    { slug:"syd1", flag:"🇦🇺", label:"Sydney 1",     date:"28 Feb", exclusive:"un-preview",       guest:null },
+    { slug:"syd2", flag:"🇦🇺", label:"Sydney 2",     date:"1 Mar",  exclusive:"un-ratito",        guest:null },
+    { slug:"bcn1", flag:"🇪🇸", label:"Barcelona 1",  date:"22 May", exclusive:"la-santa",         guest:null },
+    { slug:"bcn2", flag:"🇪🇸", label:"Barcelona 2",  date:"23 May", exclusive:"triste-br",        guest:"Bryant Myers" },
+    { slug:"lis1", flag:"🇵🇹", label:"Lisboa 1",     date:"26 May", exclusive:"estamos-bien",     guest:null },
+    { slug:"lis2", flag:"🇵🇹", label:"Lisboa 2",     date:"27 May", exclusive:"ignorantes",       guest:"Sech" },
+  ],
+  upcomingShows: [
+    { slug:"mad1", flag:"🇪🇸", label:"Madrid 1",      date:"30 May" },
+    { slug:"mad2", flag:"🇪🇸", label:"Madrid 2",      date:"31 May" },
+    { slug:"mad3", flag:"🇪🇸", label:"Madrid 3",      date:"2 Jun"  },
+    { slug:"mad4", flag:"🇪🇸", label:"Madrid 4",      date:"3 Jun"  },
+    { slug:"dus1", flag:"🇩🇪", label:"Düsseldorf 1",  date:"20 Jun" },
+    { slug:"lon1", flag:"🇬🇧", label:"London 1",      date:"27 Jun" },
+    { slug:"lon2", flag:"🇬🇧", label:"London 2",      date:"28 Jun" },
+    { slug:"par1", flag:"🇫🇷", label:"París 1",       date:"4 Jul"  },
+    { slug:"par2", flag:"🇫🇷", label:"París 2",       date:"5 Jul"  },
+  ],
+  columns: [
+    // Played exclusives
+    { id:"ignorantes",        label:"Ignorantes",     emoji:"🎭", played:true },
+    { id:"estamos-bien",      label:"Estamos Bien",   emoji:"🤙", played:true },
+    { id:"triste-br",         label:"Triste",         emoji:"😢", played:true },
+    { id:"la-santa",          label:"La Santa",       emoji:"⛪", played:true },
+    { id:"un-ratito",         label:"Un Ratito",      emoji:"⏰", played:true },
+    { id:"un-preview",        label:"UN PREVIEW",     emoji:"👁️", played:true },
+    { id:"vete",              label:"Vete",           emoji:"💨", played:true },
+    { id:"te-bote",           label:"Te Boté",        emoji:"🗑️", played:true },
+    { id:"thunder-y-lightning",label:"Thunder⚡",      emoji:"⛈️", played:true },
+    // Candidate exclusives (not yet played)
+    { id:"callaita",          label:"Callaita",       emoji:"🤫", played:false },
+    { id:"25-8",              label:"25/8",           emoji:"♾️", played:false },
+    { id:"solia",             label:"Soliá",          emoji:"⭐", played:false },
+    { id:"bichiyal",          label:"Bichiyal",       emoji:"🦅", played:false },
+    { id:"no-me-quiero-casar",label:"No Me Quiero",   emoji:"💍", played:false },
+    { id:"la-corriente",      label:"La Corriente",   emoji:"🌊", played:false },
+    { id:"mayores",           label:"Mayores",        emoji:"🔞", played:false },
+  ]
+};
+
+const CORE_SETLIST = [
+  {pos:1, title:"La Mudanza",         emoji:"📦"}, {pos:2,  title:"Callaita",           emoji:"🤫"},
+  {pos:3, title:"Pitorro de Coco",    emoji:"🥥"}, {pos:4,  title:"Weltita",             emoji:"🌍"},
+  {pos:5, title:"Turista",            emoji:"🧳"}, {pos:6,  title:"Baile Inolvidable",   emoji:"💃"},
+  {pos:7, title:"Nuevayol",           emoji:"🗽"}, {pos:8,  title:"Veldá",               emoji:"🔥"},
+  {pos:9, title:"Tití Me Preguntó",   emoji:"👵"}, {pos:10, title:"Neverita",            emoji:"🧊"},
+  {pos:11,title:"Voy a LLevarte Pa PR",emoji:"🇵🇷"},{pos:12, title:"Si Veo a Tu Mamá",   emoji:"👀"},
+  {pos:13,title:"Me Porto Bonito",    emoji:"🩷"}, {pos:14, title:"No Me Conoce Remix",  emoji:"🎭"},
+  {pos:15,title:"Bichiyal",           emoji:"🦅"}, {pos:16, title:"Yo Perreo Sola",      emoji:"🕺"},
+  {pos:17,title:"Efecto",             emoji:"✨"}, {pos:18, title:"Safaera",             emoji:"🛹"},
+  {pos:19,title:"Diles",              emoji:"🗣️"}, {pos:20, title:"MONACO",              emoji:"🏎️"},
+  {pos:21,title:"🎲 EXCLUSIVA",        emoji:"🎲"}, {pos:22, title:"Otro Trago",          emoji:"🥃"},
+  {pos:23,title:"Café con Ron",       emoji:"☕"}, {pos:24, title:"Ábreme Paso",         emoji:"🚪"},
+  {pos:25,title:"Ojitos Lindos",      emoji:"👁️"}, {pos:26, title:"La Canción",          emoji:"🦎"},
+  {pos:27,title:"Kloufrens",          emoji:"🔒"}, {pos:28, title:"Dákiti",              emoji:"🚛"},
+  {pos:29,title:"Yonaguni",           emoji:"🏝️"}, {pos:30, title:"El Apagón",           emoji:"💡"},
+  {pos:31,title:"DTMF",               emoji:"📸"}, {pos:32, title:"Eoo",                 emoji:"🗣️"},
+];
+
+function castExclusiveVote(showSlug, songId) {
+  const key = `bb_excl_vote_${showSlug}`;
+  const current = localStorage.getItem(key);
+  // Toggle off if same, else set new vote
+  localStorage.setItem(key, current === songId ? '' : songId);
+  renderSurpriseSection();
+}
+
+function renderSurpriseSection() {
+  const heatmapEl = document.getElementById('stat-surprise-heatmap');
+  const setlistEl = document.getElementById('stat-core-setlist');
+  if (!heatmapEl) return;
+
+  const { pastShows, upcomingShows, columns } = TOUR_EXCLUSIVE_DATA;
+
+  // --- Core setlist ---
+  if (setlistEl) {
+    setlistEl.innerHTML = CORE_SETLIST.map(s => `
+      <div style="display:flex;align-items:center;gap:5px;padding:2px 4px;border-radius:4px;background:${s.title.startsWith('🎲')?'rgba(139,92,246,0.2)':'rgba(255,255,255,0.03)'}">
+        <span style="color:#6b7280;font-size:0.65rem;width:16px;text-align:right;">${s.pos}</span>
+        <span style="font-size:0.8rem;">${s.emoji}</span>
+        <span style="color:${s.title.startsWith('🎲')?'#c084fc':'#d1d5db'};font-size:0.7rem;font-weight:${s.title.startsWith('🎲')?700:400};">${s.title}</span>
+      </div>`).join('');
+  }
+
+  // --- Heatmap ---
+  const cellW = 48; // px per column
+  const th = (col) => `
+    <th style="min-width:${cellW}px;max-width:${cellW}px;padding:2px;vertical-align:bottom;text-align:center;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+        <span style="font-size:0.9rem;">${col.emoji}</span>
+        <span style="writing-mode:vertical-rl;transform:rotate(180deg);font-size:0.6rem;color:${col.played?'#fde047':'#9ca3af'};white-space:nowrap;max-height:70px;overflow:hidden;">${col.label}</span>
+      </div>
+    </th>`;
+
+  const pastRows = pastShows.map(show => {
+    const cells = columns.map(col => {
+      const isPlayed = col.id === show.exclusive;
+      return `<td title="${col.label}" style="text-align:center;padding:2px;border-radius:4px;background:${isPlayed?'rgba(253,224,71,0.25)':'rgba(255,255,255,0.02)'};border:1px solid ${isPlayed?'rgba(253,224,71,0.5)':'transparent'};">
+        <span style="font-size:${isPlayed?'1rem':'0.5rem'};color:${isPlayed?'#fde047':'#374151'};">${isPlayed?'★':'·'}</span>
+        ${isPlayed&&show.guest?`<div style="font-size:0.5rem;color:#fde047;white-space:nowrap;">${show.guest}</div>`:''}
+      </td>`;
+    }).join('');
+    return `<tr>
+      <td style="white-space:nowrap;padding:3px 8px 3px 0;font-size:0.7rem;">
+        <span>${show.flag}</span>
+        <span style="color:#d1d5db;">${show.label}</span>
+        <span style="color:#6b7280;font-size:0.6rem;"> ${show.date}</span>
+      </td>
+      ${cells}
+    </tr>`;
+  }).join('');
+
+  const upcomingRows = upcomingShows.map(show => {
+    const myVote = localStorage.getItem(`bb_excl_vote_${show.slug}`) || '';
+    const cells = columns.map(col => {
+      const isVoted = myVote === col.id;
+      return `<td title="Votar: ${col.label}" onclick="castExclusiveVote('${show.slug}','${col.id}')"
+        style="text-align:center;padding:2px;border-radius:4px;cursor:pointer;
+        background:${isVoted?'rgba(139,92,246,0.4)':'rgba(255,255,255,0.03)'};
+        border:1px solid ${isVoted?'rgba(139,92,246,0.7)':'rgba(255,255,255,0.06)'};
+        transition:background 0.15s;"
+        onmouseover="this.style.background='${isVoted?'rgba(139,92,246,0.5)':'rgba(139,92,246,0.15)'}'"
+        onmouseout="this.style.background='${isVoted?'rgba(139,92,246,0.4)':'rgba(255,255,255,0.03)'}'">
+        <span style="font-size:${isVoted?'0.9rem':'0.6rem'};color:${isVoted?'#c084fc':'#4b5563'};">${isVoted?'✓':'·'}</span>
+      </td>`;
+    }).join('');
+    return `<tr style="background:rgba(139,92,246,0.04);">
+      <td style="white-space:nowrap;padding:3px 8px 3px 0;font-size:0.7rem;">
+        <span style="color:#a78bfa;font-size:0.6rem;">🔮</span>
+        <span>${show.flag}</span>
+        <span style="color:#c4b5fd;">${show.label}</span>
+        <span style="color:#6b7280;font-size:0.6rem;"> ${show.date}</span>
+      </td>
+      ${cells}
+    </tr>`;
+  }).join('');
+
+  const divider = `<tr><td colspan="${columns.length+1}" style="padding:4px 0;">
+    <div style="height:1px;background:rgba(139,92,246,0.3);margin:2px 0;"></div>
+    <span style="font-size:0.6rem;color:#7c3aed;padding-left:2px;">▼ PRÓXIMOS SHOWS — vota tu predicción</span>
+  </td></tr>`;
+
+  heatmapEl.innerHTML = `
+    <table style="border-collapse:separate;border-spacing:2px;width:100%;">
+      <thead><tr>
+        <th style="min-width:110px;text-align:left;padding-bottom:4px;">
+          <span style="font-size:0.6rem;color:#6b7280;text-transform:uppercase;">Concierto</span>
+        </th>
+        ${columns.map(th).join('')}
+      </tr></thead>
+      <tbody>${pastRows}${divider}${upcomingRows}</tbody>
+    </table>
+    <p style="font-size:0.6rem;color:#4b5563;text-align:right;margin-top:4px;">★ confirmada &nbsp;·&nbsp; ✓ tu voto &nbsp;·&nbsp; Fuente: dtmftracker.com</p>`;
+}
+
+
 async function fetchGlobalStats() {
   try {
     const res = await fetch(`${SUPABASE_REST_URL}/rpc/get_global_stats`, {
@@ -224,6 +388,9 @@ function renderGlobalStats(data) {
       pbContainer.innerHTML = `<p class="italic text-gray-500 text-sm">Sin quizzes jugados aún — ¡sé el primero!</p>`;
     }
   }
+
+  // Canción Sorpresa heatmap (static data, always render)
+  renderSurpriseSection();
 }
 
 function showGlobalStats() {

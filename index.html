@@ -121,6 +121,24 @@
           </div>
         </div>
 
+        <!-- 2c. CANCIÓN SORPRESA HEATMAP -->
+        <div class="p-5 rounded-2xl shadow-xl col-span-full" style="background:linear-gradient(135deg,rgba(30,10,60,0.95),rgba(0,0,0,0.9));border:1px solid rgba(139,92,246,0.5);">
+          <h3 class="text-violet-300 font-bold uppercase text-sm tracking-[0.2em] mb-1 text-center">🎲 CANCIÓN SORPRESA</h3>
+          <p class="text-xs text-gray-500 text-center mb-4">La exclusiva que solo se toca una noche — ¿cuál será en el próximo show?</p>
+          <div class="flex flex-col lg:flex-row gap-4">
+            <!-- Heatmap -->
+            <div class="flex-1 overflow-x-auto" id="stat-surprise-heatmap">
+              <p class="italic text-gray-500 text-sm text-center">Cargando datos...</p>
+            </div>
+            <!-- Core Setlist Sidebar -->
+            <div class="lg:w-52 shrink-0">
+              <p class="text-xs text-purple-400 uppercase tracking-widest font-bold mb-2">📋 Setlist Fijo</p>
+              <div id="stat-core-setlist" class="flex flex-col gap-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- 3. TOUR MODE INSIGHTS -->
         <div class="p-6 rounded-2xl shadow-xl" style="background: linear-gradient(135deg, rgba(255,75,43,0.3), rgba(0,0,0,0.8)); border: 1px solid #ff4b2b;">
           <h3 class="text-orange-400 font-bold uppercase text-sm tracking-[0.2em] mb-6 text-center">🎟️ EL TOUR HA HABLADO</h3>
