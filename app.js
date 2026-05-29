@@ -319,16 +319,17 @@ async function sharePicks() {
     const s = songs.find(x => x.id === id);
     return `#${i+1} ${s?.emoji || '🎵'} ${s?.title?.split(' (')[0] || id}`;
   });
-  const text = `🔮 Mi predicción para Madrid 30 May — DeBÍ TiRAR MáS FOToS Tour:\n${lines.join('\n')}\n\n¿Cuál crees tú? → inflam.github.io/webpage`;
+  const text = `🔮 Mi predicción para Madrid 30 May — DeBÍ TiRAR MáS FOToS Tour:\n${lines.join('\n')}\n\n¿Cuál crees tú? → https://copaconejo.vercel.app`;
+  const btnShare = document.getElementById('btn-share-prediction');
   if (navigator.share) {
     try { await navigator.share({ title: '🎲 Mi predicción tour Bad Bunny', text }); return; }
     catch(e) { /* fallback to clipboard */ }
   }
   try {
     await navigator.clipboard.writeText(text);
-    if (btnShare) { btnShare.textContent = '✓ Copiado!'; setTimeout(() => { btnShare.textContent = '🌍 Compartir'; }, 2000); }
+    if (btnShare) { btnShare.textContent = '✓ Copiado!'; setTimeout(() => { btnShare.textContent = '📲 Compartir mi predicción'; }, 2000); }
   } catch(e) {
-    if (btnShare) { btnShare.textContent = '⚠️ No se pudo copiar'; setTimeout(() => { btnShare.textContent = '🌍 Compartir'; }, 2000); }
+    if (btnShare) { btnShare.textContent = '⚠️ No se pudo copiar'; setTimeout(() => { btnShare.textContent = '📲 Compartir mi predicción'; }, 2000); }
   }
 }
 
