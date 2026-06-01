@@ -40,9 +40,11 @@ const TOUR_EXCLUSIVE_DATA = {
     { slug:"bcn2", flag:"🇪🇸", label:"Barcelona 2",    date:"23 May", exclusive:"triste-br",         guest:"Bryant Myers" },
     { slug:"lis1", flag:"🇵🇹", label:"Lisboa 1",       date:"26 May", exclusive:"estamos-bien",      guest:null },
     { slug:"lis2", flag:"🇵🇹", label:"Lisboa 2",       date:"27 May", exclusive:"ignorantes",        guest:"Sech" },
+    { slug:"mad1", flag:"🇪🇸", label:"Madrid 1",       date:"30 May", exclusive:"adivino",           guest:"Myke Towers" },
+    { slug:"mad2", flag:"🇪🇸", label:"Madrid 2",       date:"31 May", exclusive:"telefono-nuevo",    guest:"Luar la L" },
   ],
   upcomingShows: [
-    { slug:"mad1", flag:"🇪🇸", label:"Madrid", date:"30 May" },
+    { slug:"mad3", flag:"🇪🇸", label:"Madrid 3",       date:"2 Jun" },
   ],
   columns: [
     { id:"25-8",              label:"25/8",            emoji:"♾️",  played:true },
@@ -76,6 +78,8 @@ const TOUR_EXCLUSIVE_DATA = {
     { id:"triste-br",         label:"Triste",           emoji:"😢",  played:true },
     { id:"estamos-bien",      label:"Estamos Bien",     emoji:"🤙",  played:true },
     { id:"ignorantes",        label:"Ignorantes",       emoji:"🎭",  played:true },
+    { id:"adivino",           label:"Adivino",          emoji:"🔮",  played:true },
+    { id:"telefono-nuevo",    label:"Teléfono Nuevo",   emoji:"📱",  played:true },
     // --- CANDIDATAS para Madrid (no en setlist fijo) ---
     { id:"mia",            label:"Mía ft. Drake",     emoji:"💎",  played:false },
     { id:"callaita",       label:"Callaita",           emoji:"🤫",  played:false },
@@ -117,6 +121,7 @@ const EXTRA_EXCLUSIVE_SONGS = [
   {id:'triste-br',           title:'Triste (feat. Bryant Myers)',       theme:'eutdm',    emoji:'😢'},
   {id:'una-vez',             title:'Una Vez (feat. Mora)',              theme:'eutdm',    emoji:'1️⃣'},
   {id:'soy-el-diablo',       title:'Soy El Diablo',                    theme:'singles',  emoji:'👿'},
+  {id:'adivino',             title:'ADIVINO (with Myke Towers)',       theme:'singles',  emoji:'🔮'},
 ];
 
 // Alias: exclusive slug → SONGS_DATABASE id
@@ -162,7 +167,7 @@ function getHeatmapSongs() {
 }
 
 function toggleMadrid30Pick(songId) {
-  const KEY = 'bb_mad30_top3';
+  const KEY = 'bb_mad3_top3';
   let picks = JSON.parse(localStorage.getItem(KEY) || '[]');
   const idx = picks.indexOf(songId);
   if (idx > -1) picks.splice(idx, 1);
@@ -215,6 +220,8 @@ const TOUR_GUESTS = [
   { flag:"🇪🇸", city:"Barcelona 1",    date:"22 May 26", artist:"Bad Gyal",             song:"Toca Toca / Yo Lo Tengo",          emoji:"💎" },
   { flag:"🇪🇸", city:"Barcelona 2",    date:"23 May 26", artist:"Bryant Myers",         song:"Triste",                           emoji:"😢" },
   { flag:"🇵🇹", city:"Lisboa 2",       date:"27 May 26", artist:"Sech",                 song:"Ignorantes / Otro Trago",          emoji:"🎶" },
+  { flag:"🇪🇸", city:"Madrid 1",       date:"30 May 26", artist:"Myke Towers",          song:"Adivino",                          emoji:"🔮" },
+  { flag:"🇪🇸", city:"Madrid 2",       date:"31 May 26", artist:"Luar la L",            song:"Teléfono Nuevo",                   emoji:"📱" },
 ];
 
 function renderGuestTracker() {
@@ -260,7 +267,7 @@ async function savePicksToSupabase(picks) {
         'Content-Type': 'application/json', Prefer: 'return=minimal'
       },
       body: JSON.stringify(picks.map((songId, i) => ({
-        session_id: sessionId, song_id: songId, pick_rank: i + 1, show_slug: 'mad1'
+        session_id: sessionId, song_id: songId, pick_rank: i + 1, show_slug: 'mad3'
       })))
     });
   } catch(e) { console.log('Could not save picks:', e); }
@@ -268,15 +275,15 @@ async function savePicksToSupabase(picks) {
 
 // ---- CONFIRM + SHARE (non-blocking Supabase) ----
 function confirmPicks() {
-  const picks = JSON.parse(localStorage.getItem('bb_mad30_top3') || '[]');
+  const picks = JSON.parse(localStorage.getItem('bb_mad3_top3') || '[]');
   if (!picks.length) return;
-  localStorage.setItem('bb_mad30_confirmed', 'true');
+  localStorage.setItem('bb_mad3_confirmed', 'true');
   savePicksToSupabase(picks).catch(() => {});
   showPredictionResult();
 }
 
 function showPredictionResult() {
-  const picks = JSON.parse(localStorage.getItem('bb_mad30_top3') || '[]');
+  const picks = JSON.parse(localStorage.getItem('bb_mad3_top3') || '[]');
   const songs = getHeatmapSongs();
   // Hide other screens, show result
   ['mode-selection-screen','tour-tracker-screen','global-stats-screen'].forEach(id => {
@@ -312,14 +319,14 @@ function showPredictionResult() {
 function updateShareCard() {}
 
 async function sharePicks() {
-  const picks = JSON.parse(localStorage.getItem('bb_mad30_top3') || '[]');
+  const picks = JSON.parse(localStorage.getItem('bb_mad3_top3') || '[]');
   if (!picks.length) return;
   const songs = getHeatmapSongs();
   const lines = picks.map((id, i) => {
     const s = songs.find(x => x.id === id);
     return `#${i+1} ${s?.emoji || '🎵'} ${s?.title?.split(' (')[0] || id}`;
   });
-  const text = `🔮 Mi predicción para Madrid 30 May — DeBÍ TiRAR MáS FOToS Tour:\n${lines.join('\n')}\n\n¿Cuál crees tú? → https://copaconejo.vercel.app`;
+  const text = `🔮 Mi predicción para Madrid 2 Jun — DeBÍ TiRAR MáS FOToS Tour:\n${lines.join('\n')}\n\n¿Cuál crees tú? → https://copaconejo.vercel.app`;
   const btnShare = document.getElementById('btn-share-prediction');
   if (navigator.share) {
     try { await navigator.share({ title: '🎲 Mi predicción tour Bad Bunny', text }); return; }
@@ -344,7 +351,7 @@ async function fetchSurprisePicksStats() {
         apikey: SUPABASE_ANON_KEY,
         Authorization: `Bearer ${SUPABASE_ANON_KEY}`
       },
-      body: JSON.stringify({ p_show_slug: 'mad1' })
+      body: JSON.stringify({ p_show_slug: 'mad3' })
     });
     if (!res.ok) throw new Error('API error');
     const data = await res.json();
@@ -369,7 +376,7 @@ function renderSurprisePicksStats(data, el) {
   const maxScore = top[0]?.weighted_score || top[0]?.pick_count || 1;
   const medals = ['🥇','🥈','🥉'];
   el.innerHTML = `
-    <p style="font-size:0.6rem;color:#6b7280;margin-bottom:2px;">${total} fan${total!==1?'s':''} ha${total!==1?'n':''} confirmado su Top 3 · Madrid 30 May</p>
+    <p style="font-size:0.6rem;color:#6b7280;margin-bottom:2px;">${total} fan${total!==1?'s':''} ha${total!==1?'n':''} confirmado su Top 3 · Madrid 2 Jun</p>
     <p style="font-size:0.52rem;color:#4b5563;margin-bottom:8px;">Puntuación ponderada: #1 = 3pts · #2 = 2pts · #3 = 1pt</p>
     ${top.map((p, i) => {
       const song = allSongs.find(s => s.id === p.song_id);
@@ -412,7 +419,7 @@ function renderSurpriseSection() {
       </div>`).join('');
   }
 
-  const picks = JSON.parse(localStorage.getItem('bb_mad30_top3') || '[]');
+  const picks = JSON.parse(localStorage.getItem('bb_mad3_top3') || '[]');
   const songs = getHeatmapSongs();
 
   // Group by album theme in order
@@ -425,12 +432,12 @@ function renderSurpriseSection() {
     grouped[t].push(s);
   });
 
-  const confirmed = localStorage.getItem('bb_mad30_confirmed') === 'true';
+  const confirmed = localStorage.getItem('bb_mad3_confirmed') === 'true';
 
   // Top 3 pick bar — locked state if already confirmed
   const pickBar = confirmed
     ? `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;margin-bottom:8px;border-radius:8px;background:rgba(22,163,74,0.1);border:1px solid rgba(22,163,74,0.35);cursor:pointer;" onclick="showPredictionResult()">
-        <span style="font-size:0.65rem;color:#4ade80;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">✅ Predicción confirmada · Madrid 30 May</span>
+        <span style="font-size:0.65rem;color:#4ade80;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">✅ Predicción confirmada · Madrid 2 Jun</span>
         ${[0,1,2].map(i => {
           const id = picks[i];
           const song = id ? songs.find(s => s.id === id) : null;
@@ -439,7 +446,7 @@ function renderSurpriseSection() {
         <span style="margin-left:auto;font-size:0.6rem;color:#4ade80;">Ver picks →</span>
       </div>`
     : `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;margin-bottom:8px;border-radius:8px;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);">
-        <span style="font-size:0.65rem;color:#c084fc;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">🔮 Tu Top 3 · Madrid 30 May</span>
+        <span style="font-size:0.65rem;color:#c084fc;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">🔮 Tu Top 3 · Madrid 2 Jun</span>
         ${[0,1,2].map(i => {
           const id = picks[i];
           const song = id ? songs.find(s => s.id === id) : null;
@@ -507,7 +514,7 @@ function renderSurpriseSection() {
       <thead><tr style="vertical-align:bottom;">
         <th style="text-align:left;padding-bottom:4px;font-size:0.58rem;color:#6b7280;text-transform:uppercase;">Canción</th>
         <th style="min-width:44px;text-align:center;padding-bottom:4px;font-size:0.58rem;color:#fde047;text-transform:uppercase;">★ Tocada</th>
-        <th style="min-width:44px;text-align:center;padding-bottom:4px;font-size:0.58rem;color:#c084fc;text-transform:uppercase;background:rgba(139,92,246,0.08);border-radius:4px 4px 0 0;">🔮 30 May</th>
+        <th style="min-width:44px;text-align:center;padding-bottom:4px;font-size:0.58rem;color:#c084fc;text-transform:uppercase;background:rgba(139,92,246,0.08);border-radius:4px 4px 0 0;">🔮 2 Jun</th>
       </tr></thead>
       <tbody>${rowsHtml}</tbody>
     </table>
@@ -781,7 +788,7 @@ function getCountdownStr(targetDate) {
 
 let _countdownTimer = null;
 function startCountdown() {
-  const target = new Date('2026-05-30T20:00:00+02:00'); // Madrid 30 May 20:00 CEST
+  const target = new Date('2026-06-02T20:00:00+02:00'); // Madrid 2 Jun 20:00 CEST
   function tick() {
     const str = getCountdownStr(target);
     const el = document.getElementById('tracker-countdown');
@@ -1005,8 +1012,8 @@ function setLanguage(lang) {
 document.addEventListener("DOMContentLoaded", () => {
   setLanguage(currentLang);
   // Predictions are session-only (like quizzes): reset on every fresh page load
-  localStorage.removeItem('bb_mad30_top3');
-  localStorage.removeItem('bb_mad30_confirmed');
+  localStorage.removeItem('bb_mad3_top3');
+  localStorage.removeItem('bb_mad3_confirmed');
   // Start home button countdown immediately
   startCountdown();
 });
@@ -1985,9 +1992,9 @@ function setupEventListeners() {
 function validateAlbumSelection() {
   const selectedAlbums = Array.from(document.querySelectorAll(".album-checkbox:checked")).map(cb => cb.value);
   
-  // Filtrar base de datos (y excluir las 3 canciones reservadas para Survivor/Quiz)
+  // Filtrar base de datos (y excluir las canciones que no tienen música incluida)
   const pool = tournament.allSongs.filter(s => 
-    selectedAlbums.includes(s.theme)
+    selectedAlbums.includes(s.theme) && s.previewUrl
   );
   
   const poolCountEl = document.getElementById("pool-count");
@@ -2019,7 +2026,7 @@ function renderConfigScreen() {
 function startTournament() {
   const selectedAlbums = Array.from(document.querySelectorAll(".album-checkbox:checked")).map(cb => cb.value);
   let pool = tournament.allSongs.filter(s => 
-    selectedAlbums.includes(s.theme)
+    selectedAlbums.includes(s.theme) && s.previewUrl
   );
 
   // Desbloquear reproductor global de audio para móviles (requiere interacción directa del usuario)
@@ -2962,15 +2969,15 @@ function startSurvivorMode() {
     window.globalAudioPlayer.pause();
   }).catch(e => { console.log("Unlock failed", e) });
   
-  // 1. Gather all special tour songs that exist in database
+  // 1. Gather all special tour songs that exist in database that have music included
   let pool = [];
   SPECIAL_TOUR_IDS.forEach(id => {
     const song = findSongById(id);
-    if (song) pool.push(song);
+    if (song && song.previewUrl) pool.push(song);
   });
   
-  // 2. Add 1 random song from the rest of the database
-  const availableRandoms = SONGS_DATABASE.filter(s => !SPECIAL_TOUR_IDS.includes(s.id));
+  // 2. Add 1 random song from the rest of the database that has music included
+  const availableRandoms = SONGS_DATABASE.filter(s => !SPECIAL_TOUR_IDS.includes(s.id) && s.previewUrl);
   if (availableRandoms.length > 0) {
     const randomIndex = Math.floor(Math.random() * availableRandoms.length);
     pool.push(availableRandoms[randomIndex]);

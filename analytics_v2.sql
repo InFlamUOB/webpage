@@ -220,7 +220,7 @@ $$;
 GRANT INSERT, SELECT ON public.duel_votes TO anon;
 
 -- ==============================================================================
--- 4. SURPRISE PICKS — Madrid 30 May Predictions
+-- 4. SURPRISE PICKS — Madrid 2 Jun Predictions
 -- ==============================================================================
 
 -- Table: one row per session per pick (up to 3 per session)
@@ -229,7 +229,7 @@ CREATE TABLE IF NOT EXISTS public.surprise_picks (
   session_id   TEXT        NOT NULL,
   song_id      TEXT        NOT NULL,
   pick_rank    SMALLINT    NOT NULL CHECK (pick_rank BETWEEN 1 AND 3),
-  show_slug    TEXT        NOT NULL DEFAULT 'mad1',
+  show_slug    TEXT        NOT NULL DEFAULT 'mad3',
   created_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
   UNIQUE (session_id, show_slug, pick_rank)
 );
@@ -249,7 +249,7 @@ GRANT INSERT, SELECT, DELETE ON public.surprise_picks TO anon;
 GRANT USAGE, SELECT ON SEQUENCE public.surprise_picks_id_seq TO anon;
 
 -- RPC: aggregate top picks per show with weighted scoring (#1=3pts, #2=2pts, #3=1pt)
-CREATE OR REPLACE FUNCTION public.get_surprise_picks_stats(p_show_slug TEXT DEFAULT 'mad1')
+CREATE OR REPLACE FUNCTION public.get_surprise_picks_stats(p_show_slug TEXT DEFAULT 'mad3')
 RETURNS json
 LANGUAGE plpgsql
 SECURITY DEFINER
