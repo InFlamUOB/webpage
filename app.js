@@ -42,9 +42,16 @@ const TOUR_EXCLUSIVE_DATA = {
     { slug:"lis2", flag:"🇵🇹", label:"Lisboa 2",       date:"27 May", exclusive:"ignorantes",        guest:"Sech" },
     { slug:"mad1", flag:"🇪🇸", label:"Madrid 1",       date:"30 May", exclusive:"adivino",           guest:"Myke Towers" },
     { slug:"mad2", flag:"🇪🇸", label:"Madrid 2",       date:"31 May", exclusive:"telefono-nuevo",    guest:"Luar la L" },
+    { slug:"mad3", flag:"🇪🇸", label:"Madrid 3",       date:"2 Jun",  exclusive:"fina",             guest:"Young Miko" },
   ],
   upcomingShows: [
-    { slug:"mad3", flag:"🇪🇸", label:"Madrid 3",       date:"2 Jun" },
+    { slug:"mad4", flag:"🇪🇸", label:"Madrid 4",       date:"3 Jun",  targetDate:"2026-06-03T20:00:00+02:00" },
+    { slug:"mad5", flag:"🇪🇸", label:"Madrid 5",       date:"6 Jun",  targetDate:"2026-06-06T20:00:00+02:00" },
+    { slug:"mad6", flag:"🇪🇸", label:"Madrid 6",       date:"7 Jun",  targetDate:"2026-06-07T20:00:00+02:00" },
+    { slug:"mad7", flag:"🇪🇸", label:"Madrid 7",       date:"10 Jun", targetDate:"2026-06-10T20:00:00+02:00" },
+    { slug:"mad8", flag:"🇪🇸", label:"Madrid 8",       date:"11 Jun", targetDate:"2026-06-11T20:00:00+02:00" },
+    { slug:"mad9", flag:"🇪🇸", label:"Madrid 9",       date:"14 Jun", targetDate:"2026-06-14T20:00:00+02:00" },
+    { slug:"mad10",flag:"🇪🇸", label:"Madrid 10",      date:"15 Jun", targetDate:"2026-06-15T20:00:00+02:00" }
   ],
   columns: [
     { id:"25-8",              label:"25/8",            emoji:"♾️",  played:true },
@@ -103,6 +110,20 @@ const TOUR_EXCLUSIVE_DATA = {
     { id:"rip",            label:"RIP",                emoji:"☠️",  played:false },
   ]
 };
+
+// Dynamic active show selection
+function getActiveUpcomingShow() {
+  const now = new Date();
+  return TOUR_EXCLUSIVE_DATA.upcomingShows.find(show => {
+    const showEnd = new Date(new Date(show.targetDate).getTime() + 3.5 * 60 * 60 * 1000);
+    return showEnd > now;
+  }) || TOUR_EXCLUSIVE_DATA.upcomingShows[0];
+}
+
+const CURRENT_SHOW = getActiveUpcomingShow();
+const PREDS_KEY = `bb_${CURRENT_SHOW.slug}_top3`;
+const CONFIRMED_KEY = `bb_${CURRENT_SHOW.slug}_confirmed`;
+
 
 // IDs in setlist fijo — excluidos del heatmap de predicción
 const SETLIST_IDS = new Set([
@@ -166,14 +187,13 @@ function getHeatmapSongs() {
   return songs;
 }
 
-function toggleMadrid30Pick(songId) {
-  const KEY = 'bb_mad3_top3';
-  let picks = JSON.parse(localStorage.getItem(KEY) || '[]');
+function toggleSurprisePick(songId) {
+  let picks = JSON.parse(localStorage.getItem(PREDS_KEY) || '[]');
   const idx = picks.indexOf(songId);
   if (idx > -1) picks.splice(idx, 1);
   else if (picks.length < 3) picks.push(songId);
   else { picks.shift(); picks.push(songId); } // reemplaza el más antiguo
-  localStorage.setItem(KEY, JSON.stringify(picks));
+  localStorage.setItem(PREDS_KEY, JSON.stringify(picks));
   renderSurpriseSection();
 }
 
@@ -222,6 +242,7 @@ const TOUR_GUESTS = [
   { flag:"🇵🇹", city:"Lisboa 2",       date:"27 May 26", artist:"Sech",                 song:"Ignorantes / Otro Trago",          emoji:"🎶" },
   { flag:"🇪🇸", city:"Madrid 1",       date:"30 May 26", artist:"Myke Towers",          song:"Adivino",                          emoji:"🔮" },
   { flag:"🇪🇸", city:"Madrid 2",       date:"31 May 26", artist:"Luar la L",            song:"Teléfono Nuevo",                   emoji:"📱" },
+  { flag:"🇪🇸", city:"Madrid 3",       date:"2 Jun 26",  artist:"Young Miko",           song:"FINA",                            emoji:"🤫" },
 ];
 
 function renderGuestTracker() {
@@ -267,7 +288,7 @@ async function savePicksToSupabase(picks) {
         'Content-Type': 'application/json', Prefer: 'return=minimal'
       },
       body: JSON.stringify(picks.map((songId, i) => ({
-        session_id: sessionId, song_id: songId, pick_rank: i + 1, show_slug: 'mad3'
+        session_id: sessionId, song_id: songId, pick_rank: i + 1, show_slug: CURRENT_SHOW.slug
       })))
     });
   } catch(e) { console.log('Could not save picks:', e); }
@@ -275,15 +296,15 @@ async function savePicksToSupabase(picks) {
 
 // ---- CONFIRM + SHARE (non-blocking Supabase) ----
 function confirmPicks() {
-  const picks = JSON.parse(localStorage.getItem('bb_mad3_top3') || '[]');
+  const picks = JSON.parse(localStorage.getItem(PREDS_KEY) || '[]');
   if (!picks.length) return;
-  localStorage.setItem('bb_mad3_confirmed', 'true');
+  localStorage.setItem(CONFIRMED_KEY, 'true');
   savePicksToSupabase(picks).catch(() => {});
   showPredictionResult();
 }
 
 function showPredictionResult() {
-  const picks = JSON.parse(localStorage.getItem('bb_mad3_top3') || '[]');
+  const picks = JSON.parse(localStorage.getItem(PREDS_KEY) || '[]');
   const songs = getHeatmapSongs();
   // Hide other screens, show result
   ['mode-selection-screen','tour-tracker-screen','global-stats-screen'].forEach(id => {
@@ -319,14 +340,14 @@ function showPredictionResult() {
 function updateShareCard() {}
 
 async function sharePicks() {
-  const picks = JSON.parse(localStorage.getItem('bb_mad3_top3') || '[]');
+  const picks = JSON.parse(localStorage.getItem(PREDS_KEY) || '[]');
   if (!picks.length) return;
   const songs = getHeatmapSongs();
   const lines = picks.map((id, i) => {
     const s = songs.find(x => x.id === id);
     return `#${i+1} ${s?.emoji || '🎵'} ${s?.title?.split(' (')[0] || id}`;
   });
-  const text = `🔮 Mi predicción para Madrid 2 Jun — DeBÍ TiRAR MáS FOToS Tour:\n${lines.join('\n')}\n\n¿Cuál crees tú? → https://copaconejo.vercel.app`;
+  const text = `🔮 Mi predicción para ${CURRENT_SHOW.label} (${CURRENT_SHOW.date}) — DeBÍ TiRAR MáS FOToS Tour:\n${lines.join('\n')}\n\n¿Cuál crees tú? → https://copaconejo.vercel.app`;
   const btnShare = document.getElementById('btn-share-prediction');
   if (navigator.share) {
     try { await navigator.share({ title: '🎲 Mi predicción tour Bad Bunny', text }); return; }
@@ -351,7 +372,7 @@ async function fetchSurprisePicksStats() {
         apikey: SUPABASE_ANON_KEY,
         Authorization: `Bearer ${SUPABASE_ANON_KEY}`
       },
-      body: JSON.stringify({ p_show_slug: 'mad3' })
+      body: JSON.stringify({ p_show_slug: CURRENT_SHOW.slug })
     });
     if (!res.ok) throw new Error('API error');
     const data = await res.json();
@@ -376,7 +397,7 @@ function renderSurprisePicksStats(data, el) {
   const maxScore = top[0]?.weighted_score || top[0]?.pick_count || 1;
   const medals = ['🥇','🥈','🥉'];
   el.innerHTML = `
-    <p style="font-size:0.6rem;color:#6b7280;margin-bottom:2px;">${total} fan${total!==1?'s':''} ha${total!==1?'n':''} confirmado su Top 3 · Madrid 2 Jun</p>
+    <p style="font-size:0.6rem;color:#6b7280;margin-bottom:2px;">${total} fan${total!==1?'s':''} ha${total!==1?'n':''} confirmado su Top 3 · ${CURRENT_SHOW.label} (${CURRENT_SHOW.date})</p>
     <p style="font-size:0.52rem;color:#4b5563;margin-bottom:8px;">Puntuación ponderada: #1 = 3pts · #2 = 2pts · #3 = 1pt</p>
     ${top.map((p, i) => {
       const song = allSongs.find(s => s.id === p.song_id);
@@ -403,7 +424,6 @@ function renderSurprisePicksStats(data, el) {
     }).join('')}`;
 }
 
-
 function renderSurpriseSection() {
   const heatmapEl = document.getElementById('stat-surprise-heatmap');
   const setlistEl = document.getElementById('stat-core-setlist');
@@ -419,7 +439,7 @@ function renderSurpriseSection() {
       </div>`).join('');
   }
 
-  const picks = JSON.parse(localStorage.getItem('bb_mad3_top3') || '[]');
+  const picks = JSON.parse(localStorage.getItem(PREDS_KEY) || '[]');
   const songs = getHeatmapSongs();
 
   // Group by album theme in order
@@ -432,12 +452,12 @@ function renderSurpriseSection() {
     grouped[t].push(s);
   });
 
-  const confirmed = localStorage.getItem('bb_mad3_confirmed') === 'true';
+  const confirmed = localStorage.getItem(CONFIRMED_KEY) === 'true';
 
   // Top 3 pick bar — locked state if already confirmed
   const pickBar = confirmed
     ? `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;margin-bottom:8px;border-radius:8px;background:rgba(22,163,74,0.1);border:1px solid rgba(22,163,74,0.35);cursor:pointer;" onclick="showPredictionResult()">
-        <span style="font-size:0.65rem;color:#4ade80;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">✅ Predicción confirmada · Madrid 2 Jun</span>
+        <span style="font-size:0.65rem;color:#4ade80;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">✅ Predicción confirmada · ${CURRENT_SHOW.label} (${CURRENT_SHOW.date})</span>
         ${[0,1,2].map(i => {
           const id = picks[i];
           const song = id ? songs.find(s => s.id === id) : null;
@@ -446,7 +466,7 @@ function renderSurpriseSection() {
         <span style="margin-left:auto;font-size:0.6rem;color:#4ade80;">Ver picks →</span>
       </div>`
     : `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;margin-bottom:8px;border-radius:8px;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);">
-        <span style="font-size:0.65rem;color:#c084fc;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">🔮 Tu Top 3 · Madrid 2 Jun</span>
+        <span style="font-size:0.65rem;color:#c084fc;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">🔮 Tu Top 3 · ${CURRENT_SHOW.label} (${CURRENT_SHOW.date})</span>
         ${[0,1,2].map(i => {
           const id = picks[i];
           const song = id ? songs.find(s => s.id === id) : null;
@@ -483,7 +503,7 @@ function renderSurpriseSection() {
         : (isPicked ? 'rgba(139,92,246,0.12)' : 'transparent');
       const rowClickable = !playedShow && !confirmed;
 
-      rowsHtml += `<tr title="${tooltip}" ${rowClickable ? `onclick="toggleMadrid30Pick('${song.id}')"` : ''}
+      rowsHtml += `<tr title="${tooltip}" ${rowClickable ? `onclick="toggleSurprisePick('${song.id}')"` : ''}
         style="background:${rowBg};cursor:${(playedShow||confirmed)?'default':'pointer'};border-radius:4px;${confirmed&&!playedShow?'opacity:0.75':''}"
         ${rowClickable ? `onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='${rowBg}'"` : ''}>
         <td style="padding:3px 6px 3px 2px;white-space:nowrap;">
@@ -514,7 +534,7 @@ function renderSurpriseSection() {
       <thead><tr style="vertical-align:bottom;">
         <th style="text-align:left;padding-bottom:4px;font-size:0.58rem;color:#6b7280;text-transform:uppercase;">Canción</th>
         <th style="min-width:44px;text-align:center;padding-bottom:4px;font-size:0.58rem;color:#fde047;text-transform:uppercase;">★ Tocada</th>
-        <th style="min-width:44px;text-align:center;padding-bottom:4px;font-size:0.58rem;color:#c084fc;text-transform:uppercase;background:rgba(139,92,246,0.08);border-radius:4px 4px 0 0;">🔮 2 Jun</th>
+        <th style="min-width:44px;text-align:center;padding-bottom:4px;font-size:0.58rem;color:#c084fc;text-transform:uppercase;background:rgba(139,92,246,0.08);border-radius:4px 4px 0 0;">🔮 ${CURRENT_SHOW.date}</th>
       </tr></thead>
       <tbody>${rowsHtml}</tbody>
     </table>
@@ -788,7 +808,7 @@ function getCountdownStr(targetDate) {
 
 let _countdownTimer = null;
 function startCountdown() {
-  const target = new Date('2026-06-02T20:00:00+02:00'); // Madrid 2 Jun 20:00 CEST
+  const target = new Date(CURRENT_SHOW.targetDate);
   function tick() {
     const str = getCountdownStr(target);
     const el = document.getElementById('tracker-countdown');
@@ -799,6 +819,25 @@ function startCountdown() {
   tick();
   if (_countdownTimer) clearInterval(_countdownTimer);
   _countdownTimer = setInterval(tick, 1000);
+}
+
+function initDynamicUI() {
+  const homeDescEl = document.getElementById('home-tracker-desc');
+  if (homeDescEl) {
+    homeDescEl.textContent = `¿Qué tocará en ${CURRENT_SHOW.label} (${CURRENT_SHOW.date})? · Canción sorpresa · Invitados`;
+  }
+  const communityTitleEl = document.getElementById('community-predictions-title');
+  if (communityTitleEl) {
+    communityTitleEl.textContent = `🔮 Predicciones de la Comunidad · ${CURRENT_SHOW.label} (${CURRENT_SHOW.date})`;
+  }
+  const trackerShowTitleEl = document.getElementById('tracker-show-title');
+  if (trackerShowTitleEl) {
+    trackerShowTitleEl.innerHTML = `${CURRENT_SHOW.label} &nbsp;·&nbsp; ${CURRENT_SHOW.date} 2026`;
+  }
+  const predResultShowDescEl = document.getElementById('pred-result-show-desc');
+  if (predResultShowDescEl) {
+    predResultShowDescEl.textContent = `${CURRENT_SHOW.label} (${CURRENT_SHOW.date}) · DeBÍ TiRAR MáS FOToS World Tour`;
+  }
 }
 
 function showGlobalStats() {
@@ -1012,10 +1051,11 @@ function setLanguage(lang) {
 document.addEventListener("DOMContentLoaded", () => {
   setLanguage(currentLang);
   // Predictions are session-only (like quizzes): reset on every fresh page load
-  localStorage.removeItem('bb_mad3_top3');
-  localStorage.removeItem('bb_mad3_confirmed');
+  localStorage.removeItem(PREDS_KEY);
+  localStorage.removeItem(CONFIRMED_KEY);
   // Start home button countdown immediately
   startCountdown();
+  initDynamicUI();
 });
 
 // Base de datos de canciones de Bad Bunny con metadatos y estilos visuales por era/álbum (Álbumes y Singles Originales)
@@ -1852,7 +1892,7 @@ const THEME_STYLES = {
 document.addEventListener("DOMContentLoaded", () => {
   setupEventListeners();
   renderConfigScreen();
-  
+  initDynamicUI();
 });
 
 // Registrar eventos
