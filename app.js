@@ -43,9 +43,9 @@ const TOUR_EXCLUSIVE_DATA = {
     { slug:"mad1", flag:"🇪🇸", label:"Madrid 1",       date:"30 May", exclusive:"adivino",           guest:"Myke Towers" },
     { slug:"mad2", flag:"🇪🇸", label:"Madrid 2",       date:"31 May", exclusive:"telefono-nuevo",    guest:"Luar la L" },
     { slug:"mad3", flag:"🇪🇸", label:"Madrid 3",       date:"2 Jun",  exclusive:"fina",             guest:"Young Miko" },
+    { slug:"mad4", flag:"🇪🇸", label:"Madrid 4",       date:"3 Jun",  exclusive:"como-antes",       guest:null },
   ],
   upcomingShows: [
-    { slug:"mad4", flag:"🇪🇸", label:"Madrid 4",       date:"3 Jun",  targetDate:"2026-06-03T20:00:00+02:00" },
     { slug:"mad5", flag:"🇪🇸", label:"Madrid 5",       date:"6 Jun",  targetDate:"2026-06-06T20:00:00+02:00" },
     { slug:"mad6", flag:"🇪🇸", label:"Madrid 6",       date:"7 Jun",  targetDate:"2026-06-07T20:00:00+02:00" },
     { slug:"mad7", flag:"🇪🇸", label:"Madrid 7",       date:"10 Jun", targetDate:"2026-06-10T20:00:00+02:00" },
